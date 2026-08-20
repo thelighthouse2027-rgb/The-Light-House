@@ -1,0 +1,46 @@
+{
+  "HomePage": {
+    "title": "Bienvenue au Light House",
+    "subtitle": "Découvrez la beauté du monde",
+    "badge": "L'expérience Light House",
+    "exploreBtn": "Explorer les circuits",
+    "contactBtn": "Contactez-nous"
+  },
+  "Features": {
+    "heading": "Plongez dans",
+    "headingHighlight": "Hurghada",
+    "subtitle": "Vivez l'aventure sous-marine ultime avec nos services de plongée et de croisière haut de gamme.",
+    "featured": "En vedette",
+    "exploreMore": "En savoir plus",
+    "items": {
+      "diving": {
+        "title": "Plongée Professionnelle",
+        "desc": "Des experts certifiés PADI/SSI guident votre voyage dans les profondeurs."
+      },
+      "coral": {
+        "title": "Exploration des Récifs Coralliens",
+        "desc": "Découvrez des mondes sous-marins cachés et une vie marine vibrante."
+      },
+      "boat": {
+        "title": "Excursions en Bateau de Luxe",
+        "desc": "Confort et style sur la mer Rouge avec notre flotte de premier ordre."
+      },
+      "night": {
+        "title": "Aventures de Plongée de Nuit",
+        "desc": "Vivez la magie de l'océan sous la lumière de la lune."
+      },
+      "snorkeling": {
+        "title": "Évasions de Snorkeling",
+        "desc": "Parfait pour les familles pour explorer des eaux peu profondes et cristallines."
+      },
+      "wreck": {
+        "title": "Plongée sur Épaves",
+        "desc": "Explorez des épaves historiques reposant au fond de l'océan."
+      },
+      "photo": {
+        "title": "Photographie Sous-Marine",
+        "desc": "Capturez vos moments aquatiques inoubliables avec des professionnels."
+      }
+    }
+  }
+}

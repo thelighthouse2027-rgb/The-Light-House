@@ -1,0 +1,46 @@
+{
+  "HomePage": {
+    "title": "Witamy w The Light House",
+    "subtitle": "Odkryj piękno świata",
+    "badge": "Doświadczenie The Light House",
+    "exploreBtn": "Przeglądaj wycieczki",
+    "contactBtn": "Skontaktuj się z nami"
+  },
+  "Features": {
+    "heading": "Zanurz się w",
+    "headingHighlight": "Hurghadzie",
+    "subtitle": "Przeżyj niezwykłą przygodę pod wodą dzięki naszym profesjonalnym usługom nurkowym i rejsom.",
+    "featured": "Wyróżnione",
+    "exploreMore": "Dowiedz się więcej",
+    "items": {
+      "diving": {
+        "title": "Profesjonalne nurkowanie",
+        "desc": "Certyfikowani eksperci PADI/SSI poprowadzą Twoją podwodną wyprawę."
+      },
+      "coral": {
+        "title": "Eksploracja raf koralowych",
+        "desc": "Odkryj ukryte podwodne światy i tętniące życiem morskie ekosystemy."
+      },
+      "boat": {
+        "title": "Luksusowe rejsy łodzią",
+        "desc": "Komfort i styl na Morzu Czerwonym dzięki naszej flocie klasy premium."
+      },
+      "night": {
+        "title": "Nocne przygody nurkowe",
+        "desc": "Poczuj magię oceanu w blasku księżyca."
+      },
+      "snorkeling": {
+        "title": "Wyprawy snorkelingowe",
+        "desc": "Idealne dla rodzin pragnących odkrywać płytkie, krystalicznie czyste wody."
+      },
+      "wreck": {
+        "title": "Nurkowanie w wrakach",
+        "desc": "Odkryj historyczne wraki spoczywające na dnie oceanu."
+      },
+      "photo": {
+        "title": "Fotografia podwodna",
+        "desc": "Uwiecznij swoje niezapomniane chwile pod wodą z profesjonalistami."
+      }
+    }
+  }
+}

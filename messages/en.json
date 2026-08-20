@@ -1,0 +1,46 @@
+{
+  "HomePage": {
+    "title": "Welcome to The Light House",
+    "subtitle": "Discover the beauty of the world",
+    "badge": "The Light House Experience",
+    "exploreBtn": "Explore Tours",
+    "contactBtn": "Contact Us"
+  },
+  "Features": {
+    "heading": "Dive into",
+    "headingHighlight": "Hurghada",
+    "subtitle": "Experience the ultimate underwater adventure with our premium diving and cruise services.",
+    "featured": "Featured",
+    "exploreMore": "Explore More",
+    "items": {
+      "diving": {
+        "title": "Professional Diving",
+        "desc": "Certified PADI/SSI experts guiding your journey in the deep."
+      },
+      "coral": {
+        "title": "Coral Reef Exploration",
+        "desc": "Discover hidden underwater worlds and vibrant marine life."
+      },
+      "boat": {
+        "title": "Luxury Boat Trips",
+        "desc": "Comfort and style on the Red Sea with our premium fleet."
+      },
+      "night": {
+        "title": "Night Dive Adventures",
+        "desc": "Experience the magic of the ocean under the moonlight."
+      },
+      "snorkeling": {
+        "title": "Snorkeling Escapes",
+        "desc": "Perfect for families to explore shallow, crystal-clear waters."
+      },
+      "wreck": {
+        "title": "Wreck Diving",
+        "desc": "Explore historic shipwrecks resting on the ocean floor."
+      },
+      "photo": {
+        "title": "Underwater Photography",
+        "desc": "Capture your unforgettable aquatic moments with pros."
+      }
+    }
+  }
+}

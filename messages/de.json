@@ -1,0 +1,46 @@
+{
+  "HomePage": {
+    "title": "Willkommen im The Light House",
+    "subtitle": "Entdecken Sie die Schönheit der Welt",
+    "badge": "Das Light House Erlebnis",
+    "exploreBtn": "Touren erkunden",
+    "contactBtn": "Kontaktieren Sie uns"
+  },
+  "Features": {
+    "heading": "Tauchen Sie ein in",
+    "headingHighlight": "Hurghada",
+    "subtitle": "Erleben Sie das ultimative Unterwasserabenteuer mit unseren erstklassigen Tauch- und Bootsservices.",
+    "featured": "Empfohlen",
+    "exploreMore": "Mehr entdecken",
+    "items": {
+      "diving": {
+        "title": "Professionelles Tauchen",
+        "desc": "Zertifizierte PADI/SSI-Experten begleiten Ihre Reise in die Tiefe."
+      },
+      "coral": {
+        "title": "Korallenrifferkundung",
+        "desc": "Entdecken Sie versteckte Unterwasserwelten und lebendige Meeresbiologie."
+      },
+      "boat": {
+        "title": "Luxus-Bootstouren",
+        "desc": "Komfort und Stil auf dem Roten Meer mit unserer erstklassigen Flotte."
+      },
+      "night": {
+        "title": "Nachtauchabenteuer",
+        "desc": "Erleben Sie die Magie des Ozeans im Schein des Mondlichts."
+      },
+      "snorkeling": {
+        "title": "Schnorchelausflüge",
+        "desc": "Perfekt für Familien, um flache, kristallklare Gewässer zu erkunden."
+      },
+      "wreck": {
+        "title": "Wracktauchen",
+        "desc": "Erkunden Sie historische Schiffswracks auf dem Meeresboden."
+      },
+      "photo": {
+        "title": "Unterwasserfotografie",
+        "desc": "Halten Sie Ihre unvergesslichen Momente im Wasser mit Profis fest."
+      }
+    }
+  }
+}
