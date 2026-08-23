@@ -42,5 +42,46 @@
         "desc": "Capturez vos moments aquatiques inoubliables avec des professionnels."
       }
     }
+  },
+  "ServicesSection": {
+    "title": "Nos Services Premium",
+    "subtitle": "Choisissez votre prochaine aventure sur la mer Rouge",
+    "learnMore": "Découvrir plus",
+    "items": {
+      "diving-courses": {
+        "title": "Cours de Plongée",
+        "desc": "Obtenez votre certification avec des moniteurs professionnels PADI et SSI."
+      },
+      "boat-trips": {
+        "title": "Excursions en Bateau",
+        "desc": "Profitez de croisières quotidiennes luxueuses à travers les eaux cristallines."
+      },
+      "diving-trips": {
+        "title": "Voyages de Plongée",
+        "desc": "Explorez des récifs coralliens à couper le souffle et une vie marine vibrante."
+      },
+      "safari": {
+        "title": "Safari Désert et Mer",
+        "desc": "Combine des aventures palpitantes dans le désert avec la magie de la mer Rouge."
+      }
+    }
+  },
+  "SafariSection": {
+    "badge": "Aventure Désert et Mer",
+    "title": "Safari dans le Désert de la Mer Rouge",
+    "subtitle": "Embarquez pour un voyage plein d'adrénaline à travers les dunes majestueuses et les eaux cristallines d'Hurghada.",
+    "exploreBtn": "Explorer les Détails du Safari"
+  },
+  "AboutSection": {
+    "badge": "Notre Histoire",
+    "title": "À Propos de The Light House",
+    "subtitle": "Votre passerelle vers les merveilles de la mer Rouge",
+    "description": "Nous sommes un centre de plongée et de safari de premier plan basé à Hurghada, dédié à offrir des aventures inoubliables. Avec des années d'expérience, des instructeurs experts certifiés et une passion pour l'océan, nous garantissons la sécurité, le luxe et des souvenirs à couper le souffle.",
+    "stats": {
+      "experience": "10+ Ans d'expérience",
+      "team": "Équipe professionnelle certifiée",
+      "equipment": "Équipement de sécurité premium"
+    },
+    "exploreBtn": "Lire toute notre histoire"
   }
 }

@@ -42,5 +42,46 @@
         "desc": "Capture your unforgettable aquatic moments with pros."
       }
     }
+  },
+  "ServicesSection": {
+    "title": "Our Premium Services",
+    "subtitle": "Choose your next adventure on the Red Sea",
+    "learnMore": "Discover More",
+    "items": {
+      "diving-courses": {
+        "title": "Diving Courses",
+        "desc": "Get certified with professional PADI and SSI instructors."
+      },
+      "boat-trips": {
+        "title": "Boat Trips",
+        "desc": "Enjoy luxurious daily cruises across the crystal waters."
+      },
+      "diving-trips": {
+        "title": "Diving Trips",
+        "desc": "Explore breathtaking coral reefs and vibrant marine life."
+      },
+      "safari": {
+        "title": "Desert & Sea Safari",
+        "desc": "Combine thrilling desert adventures with Red Sea magic."
+      }
+    }
+  },
+  "SafariSection": {
+    "badge": "Desert & Sea Adventure",
+    "title": "Red Sea Desert Safari",
+    "subtitle": "Embark on an adrenaline-fueled journey across Hurghada's majestic dunes and crystal waters.",
+    "exploreBtn": "Explore Safari Details"
+  },
+  "AboutSection": {
+    "badge": "Our Story",
+    "title": "About The Light House",
+    "subtitle": "Your Gateway to Red Sea Wonders",
+    "description": "We are a premier diving and safari center based in Hurghada, dedicated to providing unforgettable adventures. With years of experience, certified expert instructors, and a passion for the ocean, we guarantee safety, luxury, and breathtaking memories.",
+    "stats": {
+      "experience": "10+ Years Experience",
+      "team": "Professional Certified Team",
+      "equipment": "Premium Safety Gear"
+    },
+    "exploreBtn": "Read Our Full Story"
   }
 }

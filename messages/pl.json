@@ -42,5 +42,46 @@
         "desc": "Uwiecznij swoje niezapomniane chwile pod wodą z profesjonalistami."
       }
     }
+  },
+  "ServicesSection": {
+    "title": "Nasze usługi premium",
+    "subtitle": "Wybierz swoją kolejną przygodę na Morzu Czerwonym",
+    "learnMore": "Dowiedz się więcej",
+    "items": {
+      "diving-courses": {
+        "title": "Kursy nurkowania",
+        "desc": "Zdobywaj certyfikaty z profesjonalnymi instruktorami PADI i SSI."
+      },
+      "boat-trips": {
+        "title": "Rejsy łodzią",
+        "desc": "Ciesz się luksusowymi codziennymi rejsami po krystalicznie czystych wodach."
+      },
+      "diving-trips": {
+        "title": "Wycieczki nurkowe",
+        "desc": "Odkryj zapierające dech w piersiach rafy koralowe i tętniące życiem morze."
+      },
+      "safari": {
+        "title": "Safari pustynne i morskie",
+        "desc": "Połącz ekscytujące przygody na pustyni z magią Morza Czerwonego."
+      }
+    }
+  },
+  "SafariSection": {
+    "badge": "Przygoda na pustyni i morzu",
+    "title": "Pustynne safari nad Morzem Czerwonym",
+    "subtitle": "Wyrusz w pełną adrenaliny podróż przez majestatyczne wydmy i krystalicznie czyste wody Hurghady.",
+    "exploreBtn": "Poznaj szczegóły safari"
+  },
+  "AboutSection": {
+    "badge": "Nasza Historia",
+    "title": "O The Light House",
+    "subtitle": "Twoja brama do cudów Morza Czerwonego",
+    "description": "Jesteśmy wiodącym centrum nurkowym i safari z siedzibą w Hurghadzie, dedykowanym zapewnianiu niezapomnianych przygód. Dzięki wieloletniemu doświadczeniu, certyfikowanym instruktorom i pasji do oceanu, gwarantujemy bezpieczeństwo, luksus i zapierające dech w piersiach wspomnienia.",
+    "stats": {
+      "experience": "10+ Lat doświadczenia",
+      "team": "Profesjonalny certyfikowany zespół",
+      "equipment": "Sprzęt bezpieczeństwa premium"
+    },
+    "exploreBtn": "Przeczytaj naszą pełną historię"
   }
 }

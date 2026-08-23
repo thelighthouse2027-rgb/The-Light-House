@@ -35,12 +35,53 @@
       },
       "wreck": {
         "title": "Wracktauchen",
-        "desc": "Erkunden Sie historische Schiffswracks auf dem Meeresboden."
+        "desc": "Erkunden Sie historische Schiffswracks auf dem Meeredenboden."
       },
       "photo": {
         "title": "Unterwasserfotografie",
         "desc": "Halten Sie Ihre unvergesslichen Momente im Wasser mit Profis fest."
       }
     }
+  },
+  "ServicesSection": {
+    "title": "Unsere Premium-Dienstleistungen",
+    "subtitle": "Wählen Sie Ihr nächstes Abenteuer auf dem Roten Meer",
+    "learnMore": "Mehr entdecken",
+    "items": {
+      "diving-courses": {
+        "title": "Tauchkurse",
+        "desc": "Lassen Sie sich von professionellen PADI- und SSI-Tauchlehrern zertifizieren."
+      },
+      "boat-trips": {
+        "title": "Bootstouren",
+        "desc": "Genießen Sie luxuriöse tägliche Kreuzfahrten auf dem kristallklaren Wasser."
+      },
+      "diving-trips": {
+        "title": "Tauchausflüge",
+        "desc": "Erkunden Sie atemberaubende Korallenriffe und eine lebendige Unterwasserwelt."
+      },
+      "safari": {
+        "title": "Wüsten- & Meeres-Safari",
+        "desc": "Kombinieren Sie aufregende Wüstenabenteuer mit der Magie des Roten Meeres."
+      }
+    }
+  },
+  "SafariSection": {
+    "badge": "Wüsten- & Meeresabenteuer",
+    "title": "Wüstensafari am Roten Meer",
+    "subtitle": "Erleben Sie eine adrenalingeladene Reise durch die majestätischen Dünen von Hurghada und das kristallklare Wasser.",
+    "exploreBtn": "Safari-Details entdecken"
+  },
+  "AboutSection": {
+    "badge": "Unsere Geschichte",
+    "title": "Über The Light House",
+    "subtitle": "Ihr Tor zu den Wundern des Roten Meeres",
+    "description": "Wir sind ein erstklassiges Tauch- und Safari-Zentrum in Hurghada, das sich unvergesslichen Abenteuern widmet. Mit jahrelanger Erfahrung, zertifizierten Fachlehrern und einer Leidenschaft für den Ozean garantieren wir Sicherheit, Luxus und atemberaubende Erinnerungen.",
+    "stats": {
+      "experience": "10+ Jahre Erfahrung",
+      "team": "Professionelles zertifiziertes Team",
+      "equipment": "Hochwertige Sicherheitsausrüstung"
+    },
+    "exploreBtn": "Lesen Sie unsere ganze Geschichte"
   }
 }
