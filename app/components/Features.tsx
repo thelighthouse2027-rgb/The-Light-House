@@ -1,18 +1,23 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl'; // سحبنا useLocale
+import { useRouter } from 'next/navigation'; // للتحكم في توجيه الكارت
+import Link from 'next/link'; // للتحكم في توجيه الزر وتدعم الـ SEO
 
 export default function Features() {
   const t = useTranslations('Features');
+  const locale = useLocale(); // استخدام useLocale لجلب اللغة الحالية
+  const router = useRouter(); 
 
+  // 1. إضافة الـ slug لكل كارت
   const data = [
-    { key: 'diving', img: '/a.webp' },
-    { key: 'coral', img: '/b.webp' },
-    { key: 'boat', img: '/c.webp' },
-    { key: 'night', img: '/d.webp' },
-    { key: 'snorkeling', img: '/e.webp' },
-    { key: 'wreck', img: '/f.webp' },
-    { key: 'photo', img: '/u.webp' },
+    { key: 'diving', img: '/a.webp', slug: 'diving-experience' },
+    { key: 'coral', img: '/b.webp', slug: 'coral-reefs' },
+    { key: 'boat', img: '/c.webp', slug: 'boat-tours' },
+    { key: 'night', img: '/d.webp', slug: 'night-diving' },
+    { key: 'snorkeling', img: '/e.webp', slug: 'snorkeling' },
+    { key: 'wreck', img: '/f.webp', slug: 'wreck-diving' },
+    { key: 'photo', img: '/u.webp', slug: 'underwater-photography' },
   ];
 
   const [active, setActive] = useState(0);
@@ -45,7 +50,15 @@ export default function Features() {
           return (
             <div
               key={index}
-              onClick={() => setActive(index)}
+              onClick={() => {
+                // 2. التحقق من حالة الكارت عند الضغط
+                if (!isActive) {
+                  setActive(index); // إذا كان مغلقاً -> افتحه
+                } else {
+                  // إذا كان مفتوحاً -> انتقل لصفحة السلج مع تضمين اللغة
+                  router.push(`/${locale}/features/${item.slug}`); 
+                }
+              }}
               className={`relative cursor-pointer overflow-hidden rounded-2xl md:rounded-[2rem] transition-all duration-[800ms] ease-[cubic-bezier(0.25,1,0.5,1)] ${
                 isActive 
                   ? 'flex-[4] md:flex-[5] shadow-[0_0_40px_rgba(220,38,38,0.2)]' 
@@ -86,21 +99,25 @@ export default function Features() {
                   </p>
                   
                   <div className="mt-3 md:mt-6">
-                    <button className="px-5 py-2 md:px-8 md:py-3 bg-white/10 hover:bg-red-600 border border-white/20 hover:border-red-500 backdrop-blur-md rounded-xl md:rounded-2xl text-white text-xs md:text-sm font-bold transition-all duration-300">
-                      {t('exploreMore')}
-                    </button>
+                    {/* 3. تغليف الزر برابط مع تضمين اللغة */}
+                    <Link 
+                      href={`/${locale}/features/${item.slug}`}
+                      onClick={(e) => e.stopPropagation()} 
+                    >
+                      <button className="px-5 py-2 md:px-8 md:py-3 bg-white/10 hover:bg-red-600 border border-white/20 hover:border-red-500 backdrop-blur-md rounded-xl md:rounded-2xl text-white text-xs md:text-sm font-bold transition-all duration-300">
+                        {t('exploreMore')}
+                      </button>
+                    </Link>
                   </div>
                 </div>
 
-                {/* تصميم الكارت غير النشط (أنيق وبسيط بدون نصوص مقصوصة) */}
+                {/* تصميم الكارت غير النشط */}
                 {!isActive && (
                   <div className="absolute inset-0 flex flex-col items-center justify-between p-4">
-                    {/* رقم الكارت في الأعلى */}
                     <span className="text-white/60 font-mono text-xs font-bold tracking-widest bg-white/10 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/10">
                       0{index + 1}
                     </span>
                     
-                    {/* نقطة مضيئة في الأسفل تدل على الكارت */}
                     <div className="w-2 h-2 rounded-full bg-red-500/80 shadow-[0_0_10px_rgba(220,38,38,0.8)] animate-pulse mb-4"></div>
                   </div>
                 )}

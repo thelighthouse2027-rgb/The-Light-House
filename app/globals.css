@@ -24,3 +24,24 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* أضف هذه الأجزاء هنا لتشغيل السلايدر المتحرك عرضياً */
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 25s linear infinite;
+}
+
+/* إيقاف الحركة مؤقتاً عند وضع الماوس على السلايدر */
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
