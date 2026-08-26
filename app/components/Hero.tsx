@@ -6,7 +6,6 @@ export default async function Hero() {
   return (
     <section className="relative h-[85vh] w-full flex items-center justify-center text-center overflow-hidden rounded-3xl border border-zinc-800/80 shadow-[0_25px_60px_rgba(0,0,0,0.9)] bg-black">
       
-      {/* تشغيل الفيديو بصيغتي WebM و MP4 لأفضل أداء وتوافق */}
       <video
         autoPlay
         loop
@@ -14,16 +13,13 @@ export default async function Hero() {
         playsInline
         className="absolute inset-0 w-full h-full object-cover z-0 scale-105 filter brightness-90"
       >
-        {/* تم تصحيح المسار هنا بإضافة مجلد videos */}
-        <source src="/videos/hero.webm" type="video/webm" />
-        <source src="/videos/hero.mp4" type="video/mp4" />
+        <source src="/videos/q.mp4" type="video/mp4" />
+        <source src="/videos/q.mp4" type="video/mp4" />
         Your browser does not support the video tag.
       </video>
 
-      {/* طبقة تعتيم متدرجة */}
       <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-black/40 z-10"></div>
 
-      {/* محتوى الهيرو */}
       <div className="relative z-20 flex flex-col items-center gap-6 px-4 max-w-4xl mx-auto mt-10">
         
         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-zinc-900/80 border border-red-600/40 text-red-500 text-xs font-bold uppercase tracking-widest backdrop-blur-md shadow-[0_0_15px_rgba(220,38,38,0.2)]">

@@ -2,7 +2,6 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 
-// قائمة اللغات المتاحة
 const languages = [
   { code: 'en', name: 'English' },
   { code: 'de', name: 'Deutsch' },
@@ -15,7 +14,6 @@ export default function Header({ locale }: { locale: string }) {
   const [langDropdownOpen, setLangDropdownOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   
-  // مرجع لإغلاق قائمة اللغات عند الضغط خارجها
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -43,12 +41,10 @@ export default function Header({ locale }: { locale: string }) {
         scrolled ? 'bg-white/30 backdrop-blur-xl border border-white/50 shadow-lg' : 'bg-white/15 backdrop-blur-md border border-white/30 shadow-sm'
       }`}>
         
-        {/* اللوجو */}
         <Link href={`/${locale}`}>
-          <img src="/logo.png" alt="Logo" className="h-10 w-auto object-contain filter drop-shadow-sm hover:scale-105 transition-transform duration-300" />
+          <img src="/logoo.webp" alt="Logoo" className="h-10 w-auto object-contain filter drop-shadow-sm hover:scale-105 transition-transform duration-300" />
         </Link>
 
-        {/* القائمة الرئيسية (ديسكتوب فقط) - تصميم محسّن للروابط */}
         <nav className="hidden md:flex gap-8 text-white font-medium text-sm">
           <Link href={`/${locale}`} className="hover:text-red-400 transition-colors drop-shadow-sm">Home</Link>
           <Link href={`/${locale}/about`} className="text-white/90 hover:text-red-400 transition-colors drop-shadow-sm">About Us</Link>
@@ -56,10 +52,8 @@ export default function Header({ locale }: { locale: string }) {
           <Link href={`/${locale}/contact`} className="text-white/90 hover:text-red-400 transition-colors drop-shadow-sm">Contact</Link>
         </nav>
 
-        {/* الجزء الأيمن: زر اللغات + زر الهمبرجر */}
         <div className="flex items-center gap-3 md:gap-4">
           
-          {/* قائمة الدول (تظهر في الموبايل والديسكتوب بالخارج) */}
           <div className="relative" ref={dropdownRef}>
             <button 
               onClick={() => setLangDropdownOpen(!langDropdownOpen)}
@@ -71,7 +65,6 @@ export default function Header({ locale }: { locale: string }) {
               </svg>
             </button>
 
-            {/* القائمة المنسدلة للغات (شكل زجاجي أنيق) */}
             {langDropdownOpen && (
               <div className="absolute right-0 mt-2 w-32 md:w-40 bg-white/20 backdrop-blur-2xl text-white rounded-xl shadow-2xl py-2 border border-white/40 animate-in fade-in slide-in-from-top-2 duration-200 z-50">
                 {languages.map((l) => (
@@ -90,7 +83,6 @@ export default function Header({ locale }: { locale: string }) {
             )}
           </div>
 
-          {/* زر الهمبرجر للموبايل فقط */}
           <button 
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)} 
             className="md:hidden text-white p-1 hover:text-red-400 transition-colors focus:outline-none"
@@ -105,7 +97,6 @@ export default function Header({ locale }: { locale: string }) {
         </div>
       </div>
 
-      {/* قائمة الموبايل الزجاجية (تظهر فقط عند الضغط على الهمبرجر) */}
       {mobileMenuOpen && (
         <div className="md:hidden mt-3 max-w-7xl mx-auto bg-white/20 backdrop-blur-2xl border border-white/40 rounded-2xl p-6 shadow-2xl animate-in fade-in slide-in-from-top-4 duration-200">
           <nav className="flex flex-col gap-5 text-center">

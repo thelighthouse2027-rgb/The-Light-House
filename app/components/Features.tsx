@@ -1,19 +1,18 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { useTranslations, useLocale } from 'next-intl'; // سحبنا useLocale
-import { useRouter } from 'next/navigation'; // للتحكم في توجيه الكارت
-import Link from 'next/link'; // للتحكم في توجيه الزر وتدعم الـ SEO
+import { useTranslations, useLocale } from 'next-intl';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import Image from 'next/image'; 
 
 export default function Features() {
   const t = useTranslations('Features');
-  const locale = useLocale(); // استخدام useLocale لجلب اللغة الحالية
-  const router = useRouter(); 
+  const locale = useLocale();
+  const router = useRouter();
 
-  // 1. إضافة الـ slug لكل كارت
   const data = [
     { key: 'diving', img: '/a.webp', slug: 'diving-experience' },
     { key: 'coral', img: '/b.webp', slug: 'coral-reefs' },
-    { key: 'boat', img: '/c.webp', slug: 'boat-tours' },
     { key: 'night', img: '/d.webp', slug: 'night-diving' },
     { key: 'snorkeling', img: '/e.webp', slug: 'snorkeling' },
     { key: 'wreck', img: '/f.webp', slug: 'wreck-diving' },
@@ -21,13 +20,18 @@ export default function Features() {
   ];
 
   const [active, setActive] = useState(0);
+  const [isPaused, setIsPaused] = useState(false); 
 
   useEffect(() => {
+  
+    if (isPaused) return;
+
     const interval = setInterval(() => {
       setActive((prev) => (prev === data.length - 1 ? 0 : prev + 1));
     }, 4500);
+    
     return () => clearInterval(interval);
-  }, [data.length]);
+  }, [data.length, isPaused]); 
 
   return (
     <section className="py-24 px-6 max-w-7xl mx-auto">
@@ -42,8 +46,13 @@ export default function Features() {
         </p>
       </div>
 
-      {/* السلايدر المتمدد */}
-      <div className="flex flex-col md:flex-row w-full h-[850px] md:h-[650px] gap-2 md:gap-3">
+      <div 
+        className="flex flex-col md:flex-row w-full h-[850px] md:h-[650px] gap-2 md:gap-3"
+        onMouseEnter={() => setIsPaused(true)} 
+        onMouseLeave={() => setIsPaused(false)} 
+        onTouchStart={() => setIsPaused(true)} 
+        onTouchEnd={() => setIsPaused(false)} 
+      >
         {data.map((item, index) => {
           const isActive = active === index;
           
@@ -51,11 +60,9 @@ export default function Features() {
             <div
               key={index}
               onClick={() => {
-                // 2. التحقق من حالة الكارت عند الضغط
                 if (!isActive) {
-                  setActive(index); // إذا كان مغلقاً -> افتحه
+                  setActive(index);
                 } else {
-                  // إذا كان مفتوحاً -> انتقل لصفحة السلج مع تضمين اللغة
                   router.push(`/${locale}/features/${item.slug}`); 
                 }
               }}
@@ -65,22 +72,22 @@ export default function Features() {
                   : 'flex-[1] opacity-70 hover:opacity-100 hover:flex-[1.2]'
               }`}
             >
-              {/* الصورة */}
-              <img
+              <Image
                 src={item.img}
                 alt={t(`items.${item.key}.title`)}
-                className={`absolute inset-0 w-full h-full object-cover transition-transform duration-[1200ms] ${
+                fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                className={`object-cover transition-transform duration-[1200ms] ${
                   isActive ? 'scale-105' : 'scale-100 grayscale-[40%]'
                 }`}
+                priority={index === 0} 
               />
               
-              {/* التعتيم الزجاجي */}
-              <div className={`absolute inset-0 bg-gradient-to-t transition-opacity duration-700 ${
+              <div className={`absolute inset-0 bg-gradient-to-t transition-opacity duration-700 z-10 ${
                 isActive ? 'from-black/90 via-black/40 to-transparent' : 'from-black/90 via-black/30 to-transparent'
               }`} />
 
-              {/* المحتوى النصي داخل الكارت النشط */}
-              <div className="absolute bottom-0 left-0 w-full h-full flex flex-col justify-end p-5 md:p-8">
+              <div className="absolute z-20 bottom-0 left-0 w-full h-full flex flex-col justify-end p-5 md:p-8">
                 <div 
                   className={`transition-all duration-[800ms] delay-100 ${
                     isActive ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0 pointer-events-none'
@@ -99,7 +106,6 @@ export default function Features() {
                   </p>
                   
                   <div className="mt-3 md:mt-6">
-                    {/* 3. تغليف الزر برابط مع تضمين اللغة */}
                     <Link 
                       href={`/${locale}/features/${item.slug}`}
                       onClick={(e) => e.stopPropagation()} 
@@ -111,9 +117,8 @@ export default function Features() {
                   </div>
                 </div>
 
-                {/* تصميم الكارت غير النشط */}
                 {!isActive && (
-                  <div className="absolute inset-0 flex flex-col items-center justify-between p-4">
+                  <div className="absolute inset-0 flex flex-col items-center justify-between p-4 z-20">
                     <span className="text-white/60 font-mono text-xs font-bold tracking-widest bg-white/10 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/10">
                       0{index + 1}
                     </span>
