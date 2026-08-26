@@ -3,8 +3,9 @@ import Services from '../components/Services';
 import Features from '../components/Features';
 import SafariSection from '../components/SafariSection';
 import InfoSection from '../components/InfoSection';
+import VideoGallery from '../components/VideoGallery';
 import PromoBanner from '../components/PromoBanner';
-import PromoPopup from '../components/PromoPopup'; // مكون النافذة المنبثقة للصورة
+import PromoPopup from '../components/PromoPopup';
 import { client } from '@/sanity/lib/client';
 
 export const revalidate = 0;
@@ -24,10 +25,10 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   return (
     <main className="w-full">
       
-      {/* 1. النافذة المنبثقة (تظهر أول ما يفتح الموقع وتتضمن الصورة وزر الإغلاق) */}
+      {/* 1. النافذة المنبثقة */}
       <PromoPopup data={bannerData} locale={locale} />
       
-      {/* 2. شريط العرض الأزرق (المستطيل الذي يوجد تحت الهيدر مباشرة) */}
+      {/* 2. شريط العرض الأزرق */}
       <div className="w-full">
         <PromoBanner data={bannerData} locale={locale} />
       </div>
@@ -52,7 +53,12 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         <SafariSection locale={locale} />
       </div>
 
-      {/* 7. السكشن الخامس: من نحن */}
+      {/* 7. سكشن معرض الفيديوهات المتحرك (تم تمرير الـ locale بنجاح هنا) */}
+      <div className="w-full">
+        <VideoGallery locale={locale} />
+      </div>
+
+      {/* 8. السكشن الخامس: من نحن */}
       <div className="w-full pb-20 px-2 md:px-6">
         <InfoSection locale={locale} />
       </div>

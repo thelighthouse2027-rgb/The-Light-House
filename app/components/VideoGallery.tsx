@@ -1,0 +1,133 @@
+'use client';
+
+import { useState } from 'react';
+
+// المسارات الصحيحة بناءً على وجود الفيديوهات داخل مجلد public/videos/
+const videoFiles = [
+  '/videos/aaa.mp4', 
+  '/videos/aaaa.mp4', 
+  '/videos/bg.mp4', 
+  '/videos/c.mp4', 
+  '/videos/dd.mp4', 
+  '/videos/g.mp4', 
+  '/videos/h.mp4', 
+  '/videos/hero.mp4', 
+  '/videos/i.mp4', 
+  '/videos/jhgf.mp4', 
+  '/videos/kk.mp4', 
+  '/videos/p.mp4', 
+  '/videos/pg.mp4', 
+  '/videos/q.mp4', 
+  '/videos/safari.mp4', 
+  '/videos/v.mp4', 
+  '/videos/z.mp4'
+];
+
+// النصوص مترجمة للغات الأربع المطلوبة (en, de, fr, pl)
+const translations = {
+  en: {
+    title: "Lens of Our Adventures",
+    subtitle: "Discover the beauty of the depths and nature through exclusive live footage from our past trips."
+  },
+  de: {
+    title: "Linse unserer Abenteuer",
+    subtitle: "Entdecken Sie die Schönheit der Tiefen und der Natur durch exklusive Live-Aufnahmen unserer vergangenen Reisen."
+  },
+  fr: {
+    title: "L'objectif de nos aventures",
+    subtitle: "Découvrez la beauté des profondeurs et de la nature grâce à des images en direct exclusives de nos précédents voyages."
+  },
+  pl: {
+    title: "Obiektyw naszych przygód",
+    subtitle: "Odkryj piękno głębin i natury dzięki ekskluzywnym nagraniom na żywo z naszych ostatnich podróży."
+  }
+};
+
+export default function VideoGallery({ locale }: { locale: string }) {
+  const [activeVideo, setActiveVideo] = useState<string | null>(null);
+
+  // تحديد اللغة الحالية أو الاعتماد على الإنجليزية كافتراضي
+  const currentLang = (['en', 'de', 'fr', 'pl'].includes(locale) ? locale : 'en') as 'en' | 'de' | 'fr' | 'pl';
+  const t = translations[currentLang];
+
+  const closeModal = () => setActiveVideo(null);
+
+  return (
+    <section className="py-24 bg-[#0b0f19] overflow-hidden relative">
+      
+      {/* عنوان السكشن والوصف حسب اللغة */}
+      <div className="text-center mb-16 relative z-10 px-6">
+        <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-4 tracking-tight">
+          {t.title.split(' ')[0]} <span className="text-indigo-500">{t.title.split(' ').slice(1).join(' ')}</span>
+        </h2>
+        <p className="text-zinc-400 text-lg max-w-2xl mx-auto">
+          {t.subtitle}
+        </p>
+      </div>
+
+      {/* شريط الفيديوهات المتحرك (Marquee) */}
+      <div className="relative w-full flex whitespace-nowrap overflow-hidden group">
+        
+        {/* تدرج الأطراف لإخفاء الحواف بشكل أنيق */}
+        <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-[#0b0f19] to-transparent z-10 pointer-events-none" />
+        <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-[#0b0f19] to-transparent z-10 pointer-events-none" />
+
+        <div className="flex gap-6 animate-marquee hover:[animation-play-state:paused] w-max px-3">
+          {[...videoFiles, ...videoFiles].map((src, index) => (
+            <div 
+              key={index} 
+              className="relative w-[300px] md:w-[400px] aspect-video flex-shrink-0 rounded-2xl overflow-hidden cursor-pointer border border-indigo-500/20 shadow-lg group/video transition-transform duration-500 hover:scale-105 hover:shadow-[0_0_25px_rgba(79,70,229,0.4)] hover:border-indigo-500/50 bg-slate-900"
+              onClick={() => setActiveVideo(src)}
+            >
+              {/* فيديو مصغر يعمل تلقائياً وبدون صوت */}
+              <video 
+                src={src} 
+                className="w-full h-full object-cover pointer-events-none"
+                autoPlay 
+                loop 
+                muted 
+                playsInline
+              />
+              
+              {/* أيقونة التشغيل عند تمرير الماوس */}
+              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/video:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-[2px]">
+                <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-md border border-white/30">
+                  <svg className="w-8 h-8 text-white translate-x-0.5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* النافذة المنبثقة (Modal) لعرض الفيديو بحجم كامل */}
+      {activeVideo && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center px-4 bg-black/90 backdrop-blur-sm animate-in fade-in duration-300">
+          
+          <div className="absolute inset-0" onClick={closeModal} />
+          
+          <button 
+            onClick={closeModal}
+            className="absolute top-6 right-6 md:top-10 md:right-10 w-12 h-12 bg-white/10 hover:bg-red-600 rounded-full flex items-center justify-center text-white backdrop-blur-md transition-colors z-50 cursor-pointer"
+          >
+            ✕
+          </button>
+
+          <div className="relative z-10 w-full max-w-5xl aspect-video rounded-2xl overflow-hidden shadow-[0_0_50px_rgba(79,70,229,0.3)] border border-white/10 bg-black">
+            <video 
+              key={activeVideo}
+              src={activeVideo} 
+              className="w-full h-full object-contain"
+              controls 
+              autoPlay 
+              playsInline
+            />
+          </div>
+
+        </div>
+      )}
+    </section>
+  );
+}
