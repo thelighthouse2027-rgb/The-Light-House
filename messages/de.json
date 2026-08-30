@@ -83,5 +83,29 @@
       "equipment": "Hochwertige Sicherheitsausrüstung"
     },
     "exploreBtn": "Lesen Sie unsere ganze Geschichte"
+  },
+  "Contact": {
+    "title": "Lassen Sie uns sprechen",
+    "subtitle": "Füllen Sie die folgenden Details aus und unser Team wird sich umgehend bei Ihnen melden.",
+    "name": "Vollständiger Name *",
+    "namePlaceholder": "Geben Sie Ihren Namen ein",
+    "email": "E-Mail-Adresse *",
+    "emailPlaceholder": "beispiel@email.com",
+    "phone": "Telefonnummer *",
+    "phonePlaceholder": "+49 151 00000000",
+    "country": "Land *",
+    "countryPlaceholder": "Ihr Land",
+    "service": "Gewünschter Service / Tour *",
+    "selectService": "Wählen Sie einen Service oder eine Tour",
+    "safari": "Wüstensafari",
+    "boat": "Bootstour",
+    "city": "Stadtrundfahrt",
+    "other": "Anderer Service",
+    "message": "Ihre Nachricht / Notizen",
+    "messagePlaceholder": "Zusätzliche Details oder spezielle Wünsche...",
+    "submitBtn": "Nachricht senden",
+    "sending": "Wird gesendet...",
+    "successMessage": "Erfolg! Ihre Nachricht wurde erfolgreich gesendet.",
+    "errorMessage": "Etwas ist schief gelaufen. Bitte versuchen Sie es erneut."
   }
 }

@@ -83,5 +83,29 @@
       "equipment": "Sprzęt bezpieczeństwa premium"
     },
     "exploreBtn": "Przeczytaj naszą pełną historię"
+  },
+  "Contact": {
+    "title": "Rozpocznijmy rozmowę",
+    "subtitle": "Wypełnij poniższe dane, a nasz zespół skontaktuje się z Tobą tak szybko, jak to możliwe.",
+    "name": "Imię i nazwisko *",
+    "namePlaceholder": "Wpisz swoje imię",
+    "email": "Adres e-mail *",
+    "emailPlaceholder": "przyklad@email.com",
+    "phone": "Numer telefonu *",
+    "phonePlaceholder": "+48 600 000 000",
+    "country": "Kraj *",
+    "countryPlaceholder": "Twój kraj",
+    "service": "Wymagana usługa / Wycieczka *",
+    "selectService": "Wybierz usługę lub wycieczkę",
+    "safari": "Safari pustynne",
+    "boat": "Rejs łodzią",
+    "city": "Wycieczka po mieście",
+    "other": "Inna usługa",
+    "message": "Twoja wiadomość / Notatki",
+    "messagePlaceholder": "Wszelkie dodatkowe szczegóły lub specjalne życzenia...",
+    "submitBtn": "Wyślij wiadomość",
+    "sending": "Wysyłanie...",
+    "successMessage": "Sukces! Twoja wiadomość została wysłana pomyślnie.",
+    "errorMessage": "Coś poszło nie tak. Spróbuj ponownie."
   }
 }

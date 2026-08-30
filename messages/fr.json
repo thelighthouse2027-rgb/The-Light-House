@@ -83,5 +83,29 @@
       "equipment": "Équipement de sécurité premium"
     },
     "exploreBtn": "Lire toute notre histoire"
+  },
+  "Contact": {
+    "title": "Commençons une discussion",
+    "subtitle": "Remplissez les informations ci-dessous et notre équipe vous contactera dans les plus brefs délais.",
+    "name": "Nom complet *",
+    "namePlaceholder": "Entrez votre nom",
+    "email": "Adresse e-mail *",
+    "emailPlaceholder": "exemple@email.com",
+    "phone": "Numéro de téléphone *",
+    "phonePlaceholder": "+33 6 00 00 00 00",
+    "country": "Pays *",
+    "countryPlaceholder": "Votre pays",
+    "service": "Service / Tour souhaité *",
+    "selectService": "Sélectionnez un service ou un circuit",
+    "safari": "Safari dans le désert",
+    "boat": "Excursion en bateau",
+    "city": "Visite de la ville",
+    "other": "Autre service",
+    "message": "Votre message / Notes",
+    "messagePlaceholder": "Détails supplémentaires ou demandes spéciales...",
+    "submitBtn": "Envoyer le message",
+    "sending": "Envoi en cours...",
+    "successMessage": "Succès ! Votre message a été envoyé avec succès.",
+    "errorMessage": "Une erreur s'est produite. Veuillez réessayer."
   }
 }
