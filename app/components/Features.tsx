@@ -23,7 +23,6 @@ export default function Features() {
   const [isPaused, setIsPaused] = useState(false); 
 
   useEffect(() => {
-  
     if (isPaused) return;
 
     const interval = setInterval(() => {
@@ -76,7 +75,7 @@ export default function Features() {
                 src={item.img}
                 alt={t(`items.${item.key}.title`)}
                 fill
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 30vw, 20vw"
                 className={`object-cover transition-transform duration-[1200ms] ${
                   isActive ? 'scale-105' : 'scale-100 grayscale-[40%]'
                 }`}
@@ -110,7 +109,7 @@ export default function Features() {
                       href={`/${locale}/features/${item.slug}`}
                       onClick={(e) => e.stopPropagation()} 
                     >
-                      <button className="px-5 py-2 md:px-8 md:py-3 bg-white/10 hover:bg-red-600 border border-white/20 hover:border-red-500 backdrop-blur-md rounded-xl md:rounded-2xl text-white text-xs md:text-sm font-bold transition-all duration-300">
+                      <button className="px-5 py-2 md:px-8 md:py-3 bg-white/10 hover:bg-red-600 border border-white/20 hover:border-red-500 backdrop-blur-md rounded-xl md:rounded-2xl text-white text-xs md:text-sm font-bold transition-all duration-300 cursor-pointer">
                         {t('exploreMore')}
                       </button>
                     </Link>

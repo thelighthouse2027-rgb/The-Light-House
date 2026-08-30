@@ -255,11 +255,11 @@ export default {
           ]
         },
 
-        // 4. سكشن شبكة الكروت (Grid Cards)
+        // 4. سكشن شبكة الكروت (Grid Cards) - محدث لدعم الحجز والدفع
         {
           type: 'object',
           name: 'gridCardsSection',
-          title: 'Grid Cards Section (شبكة الكروت)',
+          title: 'Grid Cards Section (شبكة الكروت والخدمات)',
           fields: [
             {
               name: 'sectionTitle',
@@ -274,16 +274,16 @@ export default {
             },
             {
               name: 'cards',
-              title: 'الكروت',
+              title: 'الكروت أو الخدمات',
               type: 'array',
               of: [
                 {
                   type: 'object',
-                  title: 'كارت',
+                  title: 'كارت / خدمة',
                   fields: [
                     {
                       name: 'cardTitle',
-                      title: 'عنوان الكارت',
+                      title: 'عنوان الكارت / الخدمة',
                       type: 'object',
                       fields: [
                         { name: 'en', title: 'English', type: 'string' },
@@ -294,7 +294,7 @@ export default {
                     },
                     {
                       name: 'cardDesc',
-                      title: 'وصف الكارت',
+                      title: 'وصف الكارت / نبذة مختصرة',
                       type: 'object',
                       fields: [
                         { name: 'en', title: 'English', type: 'text' },
@@ -310,8 +310,18 @@ export default {
                       options: { hotspot: true }
                     },
                     {
+                      name: 'servicePrice',
+                      title: 'سعر الخدمة ($)',
+                      type: 'number'
+                    },
+                    {
+                      name: 'serviceSlug',
+                      title: 'معرف الخدمة في الرابط (مثل: diving-courses أو boat-trips)',
+                      type: 'string'
+                    },
+                    {
                       name: 'cardCtaText',
-                      title: 'نص زر الكارت (CTA)',
+                      title: 'نص زر الكارت (CTA مثل: Book Now)',
                       type: 'object',
                       fields: [
                         { name: 'en', title: 'English', type: 'string' },
