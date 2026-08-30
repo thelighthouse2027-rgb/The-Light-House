@@ -18,18 +18,19 @@ export default async function LocaleLayout({
       <body className="bg-black text-white antialiased min-h-screen relative selection:bg-red-600 selection:text-white">
         <NextIntlClientProvider messages={messages} locale={locale}>
           
+          {/* فيديو الخلفية المعدل بأداء خفيف وسريع */}
           <div className="fixed top-0 left-0 w-full h-full z-[-1] overflow-hidden pointer-events-none">
             <video
               autoPlay
               loop
               muted
               playsInline
-              preload="auto"
+              preload="none"
               className="absolute inset-0 w-full h-full object-cover scale-105"
             >
               <source src="/videos/bg.mp4" type="video/mp4" />
             </video>
-            <div className="absolute inset-0 bg-black/60 backdrop-blur-[6px]"></div>
+            <div className="absolute inset-0 bg-black/80"></div>
           </div>
 
           <Header locale={locale} />

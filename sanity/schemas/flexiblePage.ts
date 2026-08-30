@@ -66,12 +66,12 @@ export default {
             },
             {
               name: 'bgVideoUrl',
-              title: 'رابط فيديو يوتيوب للخلفية',
+              title: 'رابط فيديو خارجي للخلفية (موصى به لتفادي ثقل الموقع)',
               type: 'url'
             },
             {
               name: 'bgVideoFile',
-              title: 'أو رفع فيديو للخلفية من الجهاز',
+              title: 'أو رفع فيديو للخلفية من الجهاز (تأكد أن يكون مساحته صغيرة)',
               type: 'file',
               options: { accept: 'video/*' }
             },
@@ -86,7 +86,6 @@ export default {
                 { name: 'pl', title: 'Polish', type: 'string' },
               ]
             },
-            // تم تحويل الرابط ليدعم اللغات
             {
               name: 'ctaUrl',
               title: 'رابط زر الانتقال المتعدد اللغات (URL)',
@@ -122,12 +121,13 @@ export default {
             },
             {
               name: 'mediaType',
-              title: 'نوع الوسائط (صورة أم فيديو؟)',
+              title: 'نوع الوسائط (صورة، فيديو مرفوع، أم رابط خارجي؟)',
               type: 'string',
               options: {
                 list: [
                   { title: 'صورة', value: 'image' },
-                  { title: 'فيديو مرفوع', value: 'videoFile' }
+                  { title: 'فيديو مرفوع', value: 'videoFile' },
+                  { title: 'رابط فيديو خارجي', value: 'videoUrl' }
                 ],
                 layout: 'radio'
               },
@@ -142,10 +142,16 @@ export default {
             },
             {
               name: 'videoFile',
-              title: 'ملف الفيديو',
+              title: 'ملف الفيديو المرفوع',
               type: 'file',
               options: { accept: 'video/*' },
               hidden: ({ parent }: { parent?: any }) => parent?.mediaType !== 'videoFile'
+            },
+            {
+              name: 'videoUrl',
+              title: 'رابط الفيديو الخارجي',
+              type: 'url',
+              hidden: ({ parent }: { parent?: any }) => parent?.mediaType !== 'videoUrl'
             },
             {
               name: 'title',
@@ -180,7 +186,6 @@ export default {
                 { name: 'pl', title: 'Polish', type: 'string' },
               ]
             },
-            // تم تحويل الرابط ليدعم اللغات
             {
               name: 'ctaUrl',
               title: 'رابط الزر المتعدد اللغات (URL)',
@@ -232,7 +237,6 @@ export default {
                         { name: 'pl', title: 'Polish', type: 'string' },
                       ]
                     },
-                    // تم تحويل الرابط ليدعم اللغات
                     {
                       name: 'slideUrl',
                       title: 'رابط الشريحة المتعدد اللغات',
@@ -316,7 +320,6 @@ export default {
                         { name: 'pl', title: 'Polish', type: 'string' },
                       ]
                     },
-                    // تم تحويل الرابط ليدعم اللغات
                     {
                       name: 'cardCtaUrl',
                       title: 'رابط زر الكارت المتعدد اللغات (URL)',
