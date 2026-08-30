@@ -107,5 +107,27 @@
     "sending": "Wysyłanie...",
     "successMessage": "Sukces! Twoja wiadomość została wysłana pomyślnie.",
     "errorMessage": "Coś poszło nie tak. Spróbuj ponownie."
+  },
+  "AboutPage": {
+    "badge": "Historia The Light House",
+    "titlePart1": "O",
+    "titleHighlight": "The Light House",
+    "subtitle": "W The Light House wierzymy, że nurkowanie to coś więcej niż tylko aktywność w wodzie. To niezwykłe doświadczenie, które otwiera drzwi do zupełnie innego świata pod powierzchnią.",
+    "heading1": "Profesjonalizm, Bezpieczeństwo i Przyjemność",
+    "p1": "Dlatego z zaangażowaniem oferujemy wyprawy nurkowe łączące profesjonalizm, bezpieczeństwo i przyjemność, zwracając uwagę na każdy detal.",
+    "p2": "Nasz zespół składa się z wysoko wykwalifikowanych nurków i instruktorów z ogromną wiedzą na temat Morza Czerwonego i jego podwodnych ekosystemów.",
+    "card1Title": "Prawdziwe doświadczenie pod powierzchnią",
+    "card1Desc": "Zespół The Light House wnosi lata praktycznego doświadczenia zdobytego podczas niezliczonych nurkowan i eksploracji miejsc na Morzu Czerwonym.",
+    "card2Title": "Profesjonalny zespół",
+    "card2Desc": "Niezależnie od tego, czy nurkujesz po raz pierwszy, chcesz rozwijać swoje umiejętności, czy jesteś ekspertem szukającym przygód, nasz zespół jest gotowy.",
+    "safetyTitle": "Bezpieczeństwo przede wszystkim",
+    "safetyDesc": "W The Light House bezpieczeństwo jest naszym najwyższym priorytetem. Dbamy o warunki na morzu i przestrzegamy procedur bezpieczeństwa.",
+    "discoverTitle": "Odkryj Morze Czerwone",
+    "discoverDesc": "Morze Czerwone to niezwykły podwodny świat pełen kolorowych raf koralowych i unikalnych miejsc nurkowych.",
+    "levelTitle": "Nurkowanie dla każdego poziomu",
+    "levelDesc": "Od początkujących po zaawansowanych – dopasowujemy się do Twoich umiejętności i zainteresowań.",
+    "passionTitle": "Pasja do nurkowania wykraczająca poza pracę",
+    "passionDesc": "To, co wyróżnia nasz zespół, to nie tylko doświadczenie, ale prawdziwa pasja do oceanu i dzielenia się pięknem Morza Czerwonego.",
+    "ctaBtn": "Rozpocznij swoją przygodę z nami"
   }
 }

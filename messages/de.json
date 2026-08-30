@@ -107,5 +107,27 @@
     "sending": "Wird gesendet...",
     "successMessage": "Erfolg! Ihre Nachricht wurde erfolgreich gesendet.",
     "errorMessage": "Etwas ist schief gelaufen. Bitte versuchen Sie es erneut."
+  },
+  "AboutPage": {
+    "badge": "Die Light House Geschichte",
+    "titlePart1": "Über",
+    "titleHighlight": "The Light House",
+    "subtitle": "Bei The Light House glauben wir, dass Tauchen mehr als nur eine Wasseraktivität ist. Es ist ein außergewöhnliches Erlebnis, das die Tür zu einer völlig anderen Welt unter der Oberfläche öffnet.",
+    "heading1": "Professionalität, Sicherheit und Spaß",
+    "p1": "Aus diesem Grund haben wir uns verpflichtet, Taucherlebnisse zu bieten, die Professionalität, Sicherheit und Spaß verbinden und gleichzeitig auf jedes Detail achten, das jeden Tauchgang unvergesslich macht.",
+    "p2": "Unser Team besteht aus hoch erfahrenen Tauchern und Tauchlehrern mit umfassenden Kenntnissen des Roten Meeres und seiner vielfältigen Unterwasserwelten. Ihre Erfahrung ermöglicht es uns, geeignete Tauchplätze auszuwählen und Taucher aller Erfahrungsstufen zu betreuen.",
+    "card1Title": "Echte Erfahrung unter der Oberfläche",
+    "card1Desc": "Das Team von The Light House bringt jahrelange praktische Taucherfahrung mit, die durch unzählige Tauchgänge und Erkundungen verschiedener Plätze im Roten Meeres gewonnen wurde.",
+    "card2Title": "Ein professionelles Team",
+    "card2Desc": "Egal, ob Sie zum ersten Mal tauchen, Ihre Fähigkeiten verbessern oder neue Abenteuer suchen, unser Team ist bereit, Ihr Erlebnis sicherer und angenehmer zu gestalten.",
+    "safetyTitle": "Sicherheit steht an erster Stelle",
+    "safetyDesc": "Bei The Light House hat Sicherheit immer oberste Priorität. Unser erfahrenes Team berücksichtigt sorgfältig die Meeresbedingungen und befolgt etablierte Sicherheitsverfahren.",
+    "discoverTitle": "Entdecken Sie das Rote Meer",
+    "discoverDesc": "Das Rote Meer beherbergt eine unglaubliche Unterwasserwelt voller farbenfroher Korallenriffe und einzigartiger Tauchplätze, die darauf warten, entdeckt zu werden.",
+    "levelTitle": "Tauchen für jedes Niveau",
+    "levelDesc": "Vom Anfänger, der seinen ersten Atemzug unter Wasser genießt, bis zum erfahrenen Profi – wir passen uns Ihren Fähigkeiten und Interessen an.",
+    "passionTitle": "Eine Leidenschaft für das Tauchen",
+    "passionDesc": "Was das Team von The Light House auszeichnet, ist unsere echte Leidenschaft für den Ozean, die sich in jedem Detail unseres Services widerspiegelt.",
+    "ctaBtn": "Starten Sie Ihr Abenteuer mit uns"
   }
 }

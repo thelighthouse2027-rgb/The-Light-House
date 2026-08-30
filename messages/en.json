@@ -107,5 +107,27 @@
     "sending": "Sending...",
     "successMessage": "Success! Your message has been sent successfully.",
     "errorMessage": "Something went wrong. Please try again."
+  },
+  "AboutPage": {
+    "badge": "The Light House Story",
+    "titlePart1": "About",
+    "titleHighlight": "The Light House",
+    "subtitle": "At The Light House, we believe that diving is more than just a water activity. It is an extraordinary experience that opens the door to a completely different world beneath the surface.",
+    "heading1": "Professionalism, Safety, and Enjoyment",
+    "p1": "That is why we are committed to providing diving experiences that combine professionalism, safety, and enjoyment, while paying attention to every detail that makes each dive truly memorable.",
+    "p2": "Our team consists of highly experienced divers and instructors with extensive knowledge of diving in the Red Sea and its diverse underwater environments. Their experience allows us to select suitable dive sites, provide the right guidance, and accommodate divers of different experience levels, from complete beginners to advanced and experienced divers.",
+    "card1Title": "Real Experience Beneath the Surface",
+    "card1Desc": "The Light House team brings years of practical diving experience gained through countless dives and extensive time spent exploring different sites across the Red Sea.",
+    "card2Title": "A Professional Team",
+    "card2Desc": "Whether you are trying diving for the first time, looking to develop your skills, or an experienced diver searching for new adventures, our team is ready to make it safer and more enjoyable.",
+    "safetyTitle": "Safety Comes First",
+    "safetyDesc": "At The Light House, safety is always our highest priority. Our experienced team carefully considers sea conditions and dive sites while following established safety procedures.",
+    "discoverTitle": "Discover the Red Sea",
+    "discoverDesc": "The Red Sea is home to an incredible underwater world filled with colorful coral reefs, diverse marine life, and unique dive sites waiting to be discovered.",
+    "levelTitle": "Diving for Every Level",
+    "levelDesc": "Whether you are a beginner enjoying your first breath underwater or an expert looking for new challenges, we match your skills and interests perfectly.",
+    "passionTitle": "A Passion for Diving Beyond the Job",
+    "passionDesc": "What makes The Light House team special is not only our experience, but also our genuine passion for the sea and diving.",
+    "ctaBtn": "Start Your Adventure With Us"
   }
 }

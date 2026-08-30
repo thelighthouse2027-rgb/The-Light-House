@@ -107,5 +107,27 @@
     "sending": "Envoi en cours...",
     "successMessage": "Succès ! Votre message a été envoyé avec succès.",
     "errorMessage": "Une erreur s'est produite. Veuillez réessayer."
+  },
+  "AboutPage": {
+    "badge": "L'histoire de The Light House",
+    "titlePart1": "À propos de",
+    "titleHighlight": "The Light House",
+    "subtitle": "Chez The Light House, nous croyons que la plongée est bien plus qu'une simple activité aquatique. C'est une expérience extraordinaire qui ouvre la porte à un monde totalement différent sous la surface.",
+    "heading1": "Professionnalisme, Sécurité et Plaisir",
+    "p1": "C'est pourquoi nous nous engageons à offrir des expériences de plongée qui combinent professionnalisme, sécurité et plaisir, tout en prêtant attention à chaque détail qui rend chaque plongée mémorable.",
+    "p2": "Notre équipe est composée de plongeurs et d'instructeurs hautement expérimentés possédant une vaste connaissance de la mer Rouge et de ses environnements sous-marins diversifiés.",
+    "card1Title": "Une véritable expérience sous la surface",
+    "card1Desc": "L'équipe apporte des années d'expérience pratique acquises grâce à d'innombrables plongées et à l'exploration de différents sites à travers la mer Rouge.",
+    "card2Title": "Une équipe professionnelle",
+    "card2Desc": "Que vous essayiez la plongée pour la première fois, que vous cherchiez à développer vos compétences ou que vous soyez un plongeur expérimenté, notre équipe est prête.",
+    "safetyTitle": "La sécurité avant tout",
+    "safetyDesc": "Chez The Light House, la sécurité est notre plus grande priorité. Notre équipe prend en compte toutes les conditions de mer et suit des procédures strictes.",
+    "discoverTitle": "Découvrez la Mer Rouge",
+    "discoverDesc": "La mer Rouge abrite un monde sous-marin incroyable rempli de récifs coralliens colorés, d'une vie marine diverse et de sites de plongée uniques.",
+    "levelTitle": "Plongée pour tous les niveaux",
+    "levelDesc": "Que vous soyez débutant profitant de sa première immersion ou expert cherchant de nouveaux défis, nous nous adaptons à vos compétences.",
+    "passionTitle": "Une passion pour la plongée au-delà du métier",
+    "passionDesc": "Ce qui rend notre équipe spéciale, c'est notre véritable passion pour l'océan, se reflétant dans la façon dont nous prenons soin de nos clients.",
+    "ctaBtn": "Commencez votre aventure avec nous"
   }
 }
