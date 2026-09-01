@@ -72,7 +72,6 @@ export default function PromoPopup({ data, locale }: PromoPopupProps) {
           )}
         </div>
 
-        {/* تفاصيل العرض والزر */}
         <div className="p-6 text-center flex flex-col items-center gap-3">
           {title && (
             <h3 className="text-xl md:text-2xl font-bold text-white">

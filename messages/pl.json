@@ -129,5 +129,37 @@
     "passionTitle": "Pasja do nurkowania wykraczająca poza pracę",
     "passionDesc": "To, co wyróżnia nasz zespół, to nie tylko doświadczenie, ale prawdziwa pasja do oceanu i dzielenia się pięknem Morza Czerwonego.",
     "ctaBtn": "Rozpocznij swoją przygodę z nami"
+  },
+  "Location": {
+    "titlePart1": "Nasza",
+    "titlePart2": "Lokalizacja i Mapa",
+    "subtitle": "Znajdź nas na mapie, uzyskaj wskazówki dojazdu do naszego profesjonalnego centrum nurkowego w Hurghadzie lub skontaktuj się z nami natychmiast.",
+    "centerName": "Centrum The Light House",
+    "officialAddress": "Oficjalny adres",
+    "addressText": "The Light House, Hurghada, Prowincja Morze Czerwone, Egipt",
+    "phoneTitle": "Telefon i WhatsApp",
+    "connect": "Połącz się z nami",
+    "directions": "Wyznacz trasę"
+  },
+  "Footer": {
+    "description": "Najlepsze centrum nurkowe oferujące profesjonalne kursy nurkowania, wycieczki statkiem i ekscytujące safari.",
+    "quickLinksTitle": "Szybkie Linki",
+    "servicesTitle": "Nasze Usługi",
+    "about": "O Nas",
+    "services": "Usługi",
+    "exploreAndBook": "Odkrywaj i Rezerwuj",
+    "contact": "Kontakt",
+    "safari": "Pustynne Safari",
+    "divingTrips": "Wycieczki Nurkowe",
+    "boatTrips": "Rejsy Statkiem",
+    "divingCourses": "Kursy Nurkowania",
+    "rights": "Wszelkie prawa zastrzeżone."
+  },
+  "Header": {
+    "home": "Strona główna",
+    "about": "O nas",
+    "services": "Usługi",
+    "exploreAndBook": "Odkrywaj i Rezerwuj",
+    "contact": "Kontakt"
   }
 }

@@ -129,5 +129,37 @@
     "passionTitle": "A Passion for Diving Beyond the Job",
     "passionDesc": "What makes The Light House team special is not only our experience, but also our genuine passion for the sea and diving.",
     "ctaBtn": "Start Your Adventure With Us"
+  },
+  "Location": {
+    "titlePart1": "Our",
+    "titlePart2": "Location & Map",
+    "subtitle": "Find us on the map, get directions to our professional diving center in Hurghada, or reach out to us instantly.",
+    "centerName": "The Light House Center",
+    "officialAddress": "Official Address",
+    "addressText": "The Light House, Hurghada, Red Sea Governorate, Egypt",
+    "phoneTitle": "Phone & WhatsApp",
+    "connect": "Connect With Us",
+    "directions": "Get Directions"
+  },
+  "Footer": {
+    "description": "Premier diving center offering professional diving courses, boat tours, and exciting safari trips.",
+    "quickLinksTitle": "Quick Links",
+    "servicesTitle": "Our Services",
+    "about": "About Us",
+    "services": "Services",
+    "exploreAndBook": "Explore & Book",
+    "contact": "Contact Us",
+    "safari": "Desert Safari",
+    "divingTrips": "Diving Trips",
+    "boatTrips": "Boat Tours",
+    "divingCourses": "Diving Courses",
+    "rights": "All rights reserved."
+  },
+  "Header": {
+    "home": "Home",
+    "about": "About Us",
+    "services": "Services",
+    "exploreAndBook": "Explore & Book",
+    "contact": "Contact"
   }
 }

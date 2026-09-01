@@ -52,10 +52,10 @@ export default {
               title: 'الوصف أو العنوان الفرعي',
               type: 'object',
               fields: [
-                { name: 'en', title: 'English', type: 'text' },
-                { name: 'de', title: 'German', type: 'text' },
-                { name: 'fr', title: 'French', type: 'text' },
-                { name: 'pl', title: 'Polish', type: 'text' },
+                { name: 'en', title: 'English', type: 'array', of: [{ type: 'block' }] },
+                { name: 'de', title: 'German', type: 'array', of: [{ type: 'block' }] },
+                { name: 'fr', title: 'French', type: 'array', of: [{ type: 'block' }] },
+                { name: 'pl', title: 'Polish', type: 'array', of: [{ type: 'block' }] },
               ]
             },
             {
@@ -166,13 +166,13 @@ export default {
             },
             {
               name: 'description',
-              title: 'الوصف',
+              title: 'الوصف (يدعم التنسيق والتنقيط)',
               type: 'object',
               fields: [
-                { name: 'en', title: 'English', type: 'text' },
-                { name: 'de', title: 'German', type: 'text' },
-                { name: 'fr', title: 'French', type: 'text' },
-                { name: 'pl', title: 'Polish', type: 'text' },
+                { name: 'en', title: 'English', type: 'array', of: [{ type: 'block' }] },
+                { name: 'de', title: 'German', type: 'array', of: [{ type: 'block' }] },
+                { name: 'fr', title: 'French', type: 'array', of: [{ type: 'block' }] },
+                { name: 'pl', title: 'Polish', type: 'array', of: [{ type: 'block' }] },
               ]
             },
             {
@@ -294,13 +294,13 @@ export default {
                     },
                     {
                       name: 'cardDesc',
-                      title: 'وصف الكارت / نبذة مختصرة',
+                      title: 'وصف الكارت / نبذة مختصرة (يدعم التنسيق والتنقيط)',
                       type: 'object',
                       fields: [
-                        { name: 'en', title: 'English', type: 'text' },
-                        { name: 'de', title: 'German', type: 'text' },
-                        { name: 'fr', title: 'French', type: 'text' },
-                        { name: 'pl', title: 'Polish', type: 'text' },
+                        { name: 'en', title: 'English', type: 'array', of: [{ type: 'block' }] },
+                        { name: 'de', title: 'German', type: 'array', of: [{ type: 'block' }] },
+                        { name: 'fr', title: 'French', type: 'array', of: [{ type: 'block' }] },
+                        { name: 'pl', title: 'Polish', type: 'array', of: [{ type: 'block' }] },
                       ]
                     },
                     {

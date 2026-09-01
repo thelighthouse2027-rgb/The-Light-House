@@ -129,5 +129,37 @@
     "passionTitle": "Eine Leidenschaft für das Tauchen",
     "passionDesc": "Was das Team von The Light House auszeichnet, ist unsere echte Leidenschaft für den Ozean, die sich in jedem Detail unseres Services widerspiegelt.",
     "ctaBtn": "Starten Sie Ihr Abenteuer mit uns"
+  },
+  "Location": {
+    "titlePart1": "Unser",
+    "titlePart2": "Standort & Karte",
+    "subtitle": "Finden Sie uns auf der Karte, erhalten Sie Wegbeschreibungen zu unserem professionellen Tauchzentrum in Hurghada oder kontaktieren Sie uns sofort.",
+    "centerName": "The Light House Zentrum",
+    "officialAddress": "Offizielle Adresse",
+    "addressText": "The Light House, Hurghada, Gouvernement Rotes Meer, Ägypten",
+    "phoneTitle": "Telefon & WhatsApp",
+    "connect": "Verbinden Sie sich mit uns",
+    "directions": "Route berechnen"
+  },
+  "Footer": {
+    "description": "Ein erstklassiges Tauchzentrum, das professionelle Tauchkurse, Bootstouren und aufregende Safari-Ausflüge anbietet.",
+    "quickLinksTitle": "Schnelllinks",
+    "servicesTitle": "Unsere Dienstleistungen",
+    "about": "Über uns",
+    "services": "Dienstleistungen",
+    "exploreAndBook": "Erkunden & Buchen",
+    "contact": "Kontakt",
+    "safari": "Wüstensafari",
+    "divingTrips": "Tauchausflüge",
+    "boatTrips": "Bootstouren",
+    "divingCourses": "Tauchkurse",
+    "rights": "Alle Rechte vorbehalten."
+  },
+  "Header": {
+    "home": "Startseite",
+    "about": "Über uns",
+    "services": "Dienstleistungen",
+    "exploreAndBook": "Erkunden & Buchen",
+    "contact": "Kontakt"
   }
 }

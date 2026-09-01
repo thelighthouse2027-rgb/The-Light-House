@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 export default function Hero() {
   const t = useTranslations('HomePage');
-  const locale = useLocale(); // يجيب اللعة الحالية تلقائياً وبأمان تام
+  const locale = useLocale();
 
   return (
     <section className="relative h-[85vh] w-full flex items-center justify-center text-center overflow-hidden rounded-3xl border border-zinc-800/80 shadow-[0_25px_60px_rgba(0,0,0,0.9)] bg-black">
@@ -44,7 +44,6 @@ export default function Hero() {
             Explore Tours
           </button>
           
-          {/* رابط Contact Us باللغة الصحيحة تلقائياً */}
           <Link 
             href={`/${locale}/contact`}
             className="w-full sm:w-auto px-10 py-4 bg-zinc-900/80 hover:bg-zinc-800 text-white font-bold rounded-2xl transition-all duration-300 border border-zinc-700 hover:border-zinc-500 backdrop-blur-md cursor-pointer inline-flex items-center justify-center"

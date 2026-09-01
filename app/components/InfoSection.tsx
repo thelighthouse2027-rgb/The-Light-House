@@ -10,11 +10,9 @@ export default function AboutSection({ locale }: { locale: string }) {
     <section className="py-24 px-6 max-w-7xl mx-auto overflow-hidden">
       <div className="flex flex-col lg:flex-row items-center gap-16">
         
-        {/* قسم الصورة ببرواز 3D وتأثيرات الإضاءة */}
         <div className="w-full lg:w-1/2 relative group perspective-1000">
           <div className="relative aspect-[3/4] w-full max-w-md mx-auto rounded-[2.5rem] overflow-hidden border border-white/10 shadow-[0_30px_60px_rgba(220,38,38,0.15)] transition-all duration-700 group-hover:shadow-[0_40px_80px_rgba(220,38,38,0.3)] group-hover:-translate-y-2">
             
-            {/* استخدام مكون Image المحسن من Next.js */}
             <Image 
               src="/aboutus.webp" 
               alt="About The Light House" 

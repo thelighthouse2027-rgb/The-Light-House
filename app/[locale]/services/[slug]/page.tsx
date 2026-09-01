@@ -1,5 +1,39 @@
-import { getTranslations } from 'next-intl/server';
+import { client } from '@/sanity/lib/client';
 import Link from 'next/link';
+import Image from 'next/image';
+import { PortableText } from '@portabletext/react';
+
+// استعلام سانتي شامل لجلب حقول الـ CTA الخاصة بسكشن الهيرو وباقي الأقسام
+async function getFlexiblePage(slug: string) {
+  const cleanSlug = decodeURIComponent(slug).trim();
+  const query = `*[_type == "flexiblePage" && lower(slug.current) == lower($cleanSlug)][0]{
+    "name": pageTitle,
+    "slug": slug.current,
+    sections[]{
+      _type,
+      title,
+      subtitle,
+      description,
+      "imageUrl": image.asset->url,
+      "bgImageUrl": bgImage.asset->url,
+      layoutDirection,
+      mediaType,
+      ctaText,
+      ctaUrl,
+      sectionTitle,
+      cards[]{
+        cardTitle,
+        cardDesc,
+        "cardImageUrl": cardImage.asset->url,
+        servicePrice,
+        serviceSlug,
+        cardCtaText,
+        cardCtaUrl
+      }
+    }
+  }`;
+  return await client.fetch(query, { cleanSlug });
+}
 
 export default async function ServiceDetailPage({
   params,
@@ -7,59 +41,139 @@ export default async function ServiceDetailPage({
   params: Promise<{ locale: string; slug: string }>;
 }) {
   const { locale, slug } = await params;
-  
-  // جلب الترجمات الخاصة بالخدمات
-  const t = await getTranslations('ServicesSection');
+  const pageData = await getFlexiblePage(slug);
 
-  // خريطة الصور الخاصة بكل خدمة
-  const imagesMap: Record<string, string> = {
-    'diving-courses': '/divingcourses.webp',
-    'boat-trips': '/cruises.webp',
-    'diving-trips': '/diving.webp',
-    'safari': '/safari.webp',
+  if (!pageData) {
+    return (
+      <main className="min-h-screen pt-40 text-center text-white">
+        <h1 className="text-3xl font-bold mb-4">Service Not Found</h1>
+        <p className="text-zinc-400 mb-6">Could not find service with slug: {slug}</p>
+        <Link href={`/${locale}`} className="text-red-500 underline">Back to Home</Link>
+      </main>
+    );
+  }
+
+  const currentLang = ['en', 'de', 'fr', 'pl'].includes(locale) ? locale : 'en';
+  const backText = locale === 'ar' ? 'العودة للرئيسية' : locale === 'de' ? 'Zurück zur Startseite' : locale === 'fr' ? 'Retour à l\'accueil' : 'Back to Home';
+
+  // دالة مساعدة لتصحيح وربط الـ URL بشكل مطلق وصحيح حسب اللغة الحالية
+  const formatUrl = (rawUrl: string | undefined, defaultSlug: string) => {
+    const target = rawUrl || defaultSlug;
+    if (target.startsWith('http')) return target;
+    // تنظيف المسار والتأكد من عدم تكرار اللغة أو المسارات الفرعية
+    const cleanPath = target.startsWith('/') ? target : `/${target}`;
+    if (cleanPath.startsWith(`/${locale}/`)) return cleanPath;
+    return `/${locale}${cleanPath}`;
   };
 
-  const currentImage = imagesMap[slug] || '/a.webp';
-
-  // التأكد من وجود مفتاح الترجمة للخدمة لتفادي الأخطاء، أو عرض القيمة الافتراضية
-  const serviceTitle = t.has(`items.${slug}.title`) ? t(`items.${slug}.title`) : slug.replace('-', ' ');
-  const serviceDesc = t.has(`items.${slug}.desc`) ? t(`items.${slug}.desc`) : "Explore our exclusive service and live an unforgettable experience.";
-
   return (
-    <main className="min-h-screen pt-32 pb-20 px-6 max-w-5xl mx-auto text-white">
+    <main className="min-h-screen pt-32 pb-20 px-6 max-w-7xl mx-auto text-white">
       {/* زر العودة */}
       <Link href={`/${locale}`} className="inline-flex items-center gap-2 text-zinc-400 hover:text-white mb-8 transition-colors">
         <svg className="w-5 h-5 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
         </svg>
-        <span>{locale === 'ar' ? 'العودة للرئيسية' : locale === 'de' ? 'Zurück zur Startseite' : locale === 'fr' ? 'Retour à l\'accueil' : 'Back to Home'}</span>
+        <span>{backText}</span>
       </Link>
 
-      <div className="bg-white/5 backdrop-blur-2xl border border-white/10 rounded-3xl overflow-hidden p-6 md:p-12 shadow-2xl">
-        
-        {/* صورة الخدمة */}
-        <div className="relative h-[350px] md:h-[450px] rounded-2xl overflow-hidden mb-8 border border-white/10">
-          <img src={currentImage} alt={serviceTitle} className="w-full h-full object-cover" />
-        </div>
+      <h1 className="text-4xl md:text-6xl font-extrabold mb-12 text-center text-white drop-shadow-md">
+        {pageData.name}
+      </h1>
 
-        {/* عنوان الخدمة مترجم */}
-        <h1 className="text-3xl md:text-5xl font-extrabold mb-4 text-red-500 capitalize">
-          {serviceTitle}
-        </h1>
+      {/* عرض الأقسام ديناميكياً */}
+      <div className="space-y-16">
+        {pageData.sections?.map((section: any, index: number) => {
+          
+          // 1. Split Section
+          if (section._type === 'splitSection') {
+            const isImageLeft = section.layoutDirection === 'imageLeft';
+            const buttonText = section.ctaText?.[currentLang] || 'Book Now';
+            const buttonUrl = formatUrl(section.ctaUrl?.[currentLang], `/contact?service=${slug}`);
+            const resolvedImage = section.imageUrl || section.bgImageUrl;
 
-        {/* وصف الخدمة مترجم */}
-        <p className="text-zinc-300 text-lg leading-relaxed mb-8">
-          {serviceDesc}
-        </p>
+            return (
+              <div key={index} className={`bg-zinc-900/60 backdrop-blur-2xl border border-red-600/30 rounded-3xl overflow-hidden p-8 md:p-12 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center ${isImageLeft ? 'lg:grid-flow-dense' : ''}`}>
+                <div className={`relative aspect-[4/3] w-full rounded-2xl overflow-hidden border border-red-600/20 shadow-xl ${isImageLeft ? 'lg:order-1' : 'lg:order-none'}`}>
+                  {resolvedImage ? <Image src={resolvedImage} alt="Image" fill className="object-cover" /> : <div className="w-full h-full bg-zinc-800 flex items-center justify-center text-zinc-500">No Image</div>}
+                </div>
+                <div className={`flex flex-col items-start text-start ${isImageLeft ? 'lg:order-2' : 'lg:order-none'}`}>
+                  <h2 className="text-3xl md:text-5xl font-extrabold mb-6 text-white">{section.title?.[currentLang] || pageData.name}</h2>
+                  <div className="prose prose-invert max-w-none text-zinc-300 text-base md:text-lg mb-8 [&>ul]:list-disc [&>ul]:pl-5">
+                    {section.description?.[currentLang] && <PortableText value={section.description[currentLang]} />}
+                  </div>
+                  <Link href={buttonUrl} className="px-8 py-4 bg-red-600 hover:bg-red-700 text-white font-bold rounded-2xl transition-all shadow-lg flex items-center gap-3">
+                    <span>{buttonText}</span>
+                  </Link>
+                </div>
+              </div>
+            );
+          }
 
-        {/* زر الانتقال لصفحة الحجز والبيانات */}
-        <Link
-          href={`/${locale}/book/${slug}`}
-          className="inline-flex items-center justify-center px-8 py-4 bg-red-600 hover:bg-red-700 text-white font-bold rounded-2xl transition-all shadow-[0_0_20px_rgba(220,38,38,0.4)] cursor-pointer"
-        >
-          {locale === 'ar' ? 'احجز هذه الخدمة الآن' : locale === 'de' ? 'Diesen Service jetzt buchen' : locale === 'fr' ? 'Réserver ce service maintenant' : 'Book This Service Now'}
-        </Link>
-        
+          // 2. Hero Section
+          if (section._type === 'heroSection') {
+            const resolvedHeroImage = section.imageUrl || section.bgImageUrl;
+            const heroBtnText = section.ctaText?.[currentLang];
+            const heroBtnUrl = formatUrl(section.ctaUrl?.[currentLang], `/contact?service=${slug}`);
+
+            return (
+              <div key={index} className="bg-zinc-900/60 border border-red-600/30 rounded-3xl p-8 md:p-12 text-center shadow-xl flex flex-col items-center">
+                <h2 className="text-3xl md:text-5xl font-bold mb-4">{section.title?.[currentLang]}</h2>
+                <div className="text-zinc-300 max-w-2xl mx-auto mb-8">
+                  {section.subtitle?.[currentLang] && <PortableText value={section.subtitle[currentLang]} />}
+                </div>
+
+                {/* عرض زر الكول تو اكشن مع معالجة الرابط البرمجي */}
+                {heroBtnText && (
+                  <Link 
+                    href={heroBtnUrl} 
+                    className="mb-8 px-8 py-4 bg-red-600 hover:bg-red-700 text-white font-bold rounded-2xl transition-all shadow-[0_0_25px_rgba(220,38,38,0.4)] hover:shadow-[0_0_40px_rgba(220,38,38,0.7)] flex items-center gap-3"
+                  >
+                    <span>{heroBtnText}</span>
+                    <svg className="w-5 h-5 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                  </Link>
+                )}
+
+                {resolvedHeroImage && (
+                  <div className="relative w-full h-[400px] md:h-[500px] rounded-2xl overflow-hidden mt-2 border border-white/10 shadow-2xl">
+                    <Image src={resolvedHeroImage} alt="Hero Section Image" fill className="object-cover" />
+                  </div>
+                )}
+              </div>
+            );
+          }
+
+          // 3. Grid Cards Section
+          if (section._type === 'gridCardsSection') {
+            return (
+              <div key={index} className="space-y-8">
+                {section.sectionTitle?.[currentLang] && (
+                  <h2 className="text-3xl font-bold text-center mb-8">{section.sectionTitle[currentLang]}</h2>
+                )}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {section.cards?.map((card: any, cIdx: number) => (
+                    <div key={cIdx} className="bg-zinc-900 border border-white/10 rounded-2xl p-6 flex flex-col justify-between shadow-lg">
+                      <div>
+                        {card.cardImageUrl && (
+                          <div className="relative aspect-video rounded-xl overflow-hidden mb-4">
+                            <Image src={card.cardImageUrl} alt="Card Image" fill className="object-cover" />
+                          </div>
+                        )}
+                        <h3 className="text-xl font-bold mb-3">{card.cardTitle?.[currentLang]}</h3>
+                        <div className="text-zinc-400 text-sm mb-6">
+                          {card.cardDesc?.[currentLang] && <PortableText value={card.cardDesc[currentLang]} />}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            );
+          }
+
+          return null;
+        })}
       </div>
     </main>
   );

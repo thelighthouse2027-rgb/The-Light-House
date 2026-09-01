@@ -17,7 +17,6 @@ export default function ContactPage() {
     const form = e.currentTarget;
     const formData = new FormData(form);
     
-    // مفتاح الـ Access Key الخاص بك
     formData.append("access_key", "fa1cb842-131e-4cff-8891-a9eddc67babc");
 
     try {
@@ -44,7 +43,6 @@ export default function ContactPage() {
   return (
     <main className="w-full min-h-[85vh] py-24 px-4 md:px-8 flex flex-col items-center justify-center relative">
       
-      {/* عنوان الصفحة الترحيبي */}
       <div className="text-center max-w-2xl mx-auto mb-10">
         <h1 className="text-4xl md:text-5xl font-extrabold text-white tracking-tight mb-4">
           {t('title').split(' ')[0]} <span className="text-red-600">{t('title').split(' ').slice(1).join(' ')}</span>
@@ -54,16 +52,13 @@ export default function ContactPage() {
         </p>
       </div>
 
-      {/* صندوق الفورم */}
       <div className="w-full max-w-2xl p-8 rounded-[2rem] bg-zinc-900/40 backdrop-blur-xl border border-white/10 shadow-[0_20px_40px_rgba(0,0,0,0.4)] relative overflow-hidden group">
         
-        {/* إضاءات حمراء خفيفة في الخلفية */}
         <div className="absolute -top-20 -right-20 w-40 h-40 bg-red-600/10 blur-[80px] rounded-full pointer-events-none transition-all duration-700 group-hover:bg-red-600/20"></div>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-5 relative z-10">
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            {/* حقل الاسم */}
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-zinc-400 mb-2">{t('name')}</label>
               <input 
@@ -76,7 +71,6 @@ export default function ContactPage() {
               />
             </div>
 
-            {/* حقل البريد الإلكتروني */}
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-zinc-400 mb-2">{t('email')}</label>
               <input 
@@ -91,7 +85,6 @@ export default function ContactPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            {/* حقل رقم الهاتف */}
             <div>
               <label htmlFor="phone" className="block text-sm font-medium text-zinc-400 mb-2">{t('phone')}</label>
               <input 
@@ -104,7 +97,6 @@ export default function ContactPage() {
               />
             </div>
 
-            {/* حقل البلد */}
             <div>
               <label htmlFor="country" className="block text-sm font-medium text-zinc-400 mb-2">{t('country')}</label>
               <input 
@@ -118,16 +110,16 @@ export default function ContactPage() {
             </div>
           </div>
 
-          {/* حقل الخدمة المطلوبة */}
           <div>
             <label htmlFor="service" className="block text-sm font-medium text-zinc-400 mb-2">{t('service')}</label>
             <select 
               name="service" 
               id="service"
               required
+              defaultValue=""
               className="w-full px-5 py-3.5 bg-black border border-white/10 rounded-xl text-white focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-all cursor-pointer"
             >
-              <option value="" disabled selected>{t('selectService')}</option>
+              <option value="" disabled>{t('selectService')}</option>
               <option value="Desert Safari">{t('safari')}</option>
               <option value="Boat Trip">{t('boat')}</option>
               <option value="City Tour">{t('city')}</option>
@@ -135,7 +127,6 @@ export default function ContactPage() {
             </select>
           </div>
 
-          {/* حقل الرسالة */}
           <div>
             <label htmlFor="message" className="block text-sm font-medium text-zinc-400 mb-2">{t('message')}</label>
             <textarea 
@@ -147,7 +138,6 @@ export default function ContactPage() {
             ></textarea>
           </div>
 
-          {/* رسالة النجاح */}
           {successMessage && (
             <div className="p-4 rounded-xl bg-green-500/10 border border-green-500/30 text-green-400 text-sm font-medium flex items-center gap-2">
               <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
@@ -155,7 +145,6 @@ export default function ContactPage() {
             </div>
           )}
 
-          {/* رسالة الخطأ */}
           {errorMessage && (
             <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-sm font-medium flex items-center gap-2">
               <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
@@ -163,7 +152,6 @@ export default function ContactPage() {
             </div>
           )}
 
-          {/* زر الإرسال */}
           <button 
             type="submit" 
             disabled={isSubmitting}

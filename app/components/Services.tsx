@@ -32,7 +32,6 @@ export default function Services({ locale }: { locale: string }) {
             href={`/${locale}/services/${service.slug}`}
             className="group relative h-[420px] rounded-3xl overflow-hidden border border-white/10 shadow-2xl transition-all duration-500 hover:-translate-y-3 hover:shadow-[0_0_30px_rgba(220,38,38,0.3)] block"
           >
-            {/* استخدام Image الخاص بـ Next.js مع تحديد أبعاد الـ sizes لتفادي مشاكل الأداء */}
             <div className="absolute inset-0 w-full h-full">
               <Image
                 src={service.img}

@@ -1,6 +1,8 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import { FaWhatsapp, FaFacebookF, FaYoutube } from 'react-icons/fa';
+import { useTranslations } from 'next-intl';
 
 const languages = [
   { code: 'en', name: 'English' },
@@ -10,6 +12,7 @@ const languages = [
 ];
 
 export default function Header({ locale }: { locale: string }) {
+  const t = useTranslations('Header');
   const [scrolled, setScrolled] = useState(false);
   const [langDropdownOpen, setLangDropdownOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -38,31 +41,48 @@ export default function Header({ locale }: { locale: string }) {
   return (
     <header className="fixed top-0 left-0 w-full z-50 px-4 sm:px-8 pt-4 transition-all duration-500">
       <div className={`max-w-7xl mx-auto flex items-center justify-between px-6 py-3 rounded-2xl transition-all duration-500 ${
-        scrolled ? 'bg-zinc-900/80 backdrop-blur-xl border border-white/20 shadow-2xl' : 'bg-zinc-900/40 backdrop-blur-md border border-white/10 shadow-lg'
+        scrolled 
+          ? 'bg-black/80 backdrop-blur-xl border border-red-600/60 shadow-[0_10px_30px_rgba(220,38,38,0.4)]' 
+          : 'bg-black/50 backdrop-blur-md border border-red-600/30 shadow-[0_5px_20px_rgba(220,38,38,0.2)]'
       }`}>
         
-        {/* اللوجو بالشكل والشطبة الطبيعية */}
         <Link href={`/${locale}`}>
           <img 
             src="/logoo.webp" 
-            alt="Logoo" 
-            className="h-30 w-auto object-contain hover:scale-105 transition-transform duration-300" 
+            alt="The Light House Logo" 
+            className="h-20 w-auto object-contain hover:scale-105 drop-shadow-[0_0_10px_rgba(220,38,38,0.5)] transition-transform duration-300" 
           />
         </Link>
 
-        <nav className="hidden md:flex gap-8 text-white font-medium text-sm">
-          <Link href={`/${locale}`} className="hover:text-red-500 transition-colors">Home</Link>
-          <Link href={`/${locale}/about`} className="text-white/90 hover:text-red-500 transition-colors">About Us</Link>
-          <Link href={`/${locale}/services`} className="text-white/90 hover:text-red-500 transition-colors">Services</Link>
-          <Link href={`/${locale}/contact`} className="text-white/90 hover:text-red-500 transition-colors">Contact</Link>
+        {/* القائمة الرئيسية - الديسكتوب (كل العناصر بنفس السمك العادي) */}
+        <nav className="hidden lg:flex items-center gap-8 text-white font-medium text-sm">
+          <Link href={`/${locale}`} className="hover:text-red-500 hover:drop-shadow-[0_0_8px_rgba(220,38,38,0.8)] transition-all">{t('home')}</Link>
+          <Link href={`/${locale}/about`} className="text-white/90 hover:text-red-500 hover:drop-shadow-[0_0_8px_rgba(220,38,38,0.8)] transition-all">{t('about')}</Link>
+          <Link href={`/${locale}/services`} className="text-white/90 hover:text-red-500 hover:drop-shadow-[0_0_8px_rgba(220,38,38,0.8)] transition-all">{t('services')}</Link>
+          <Link href={`/${locale}/search`} className="text-white/90 hover:text-red-500 hover:drop-shadow-[0_0_8px_rgba(220,38,38,0.8)] transition-all">{t('exploreAndBook')}</Link>
+          <Link href={`/${locale}/contact`} className="text-white/90 hover:text-red-500 hover:drop-shadow-[0_0_8px_rgba(220,38,38,0.8)] transition-all">{t('contact')}</Link>
         </nav>
 
-        <div className="flex items-center gap-3 md:gap-4">
+        <div className="flex items-center gap-4 md:gap-5">
           
+          <div className="hidden md:flex items-center gap-3">
+            <a href="https://wa.me/201273327311" target="_blank" rel="noopener noreferrer" className="text-zinc-300 hover:text-red-500 hover:drop-shadow-[0_0_8px_rgba(220,38,38,0.8)] transition-all">
+              <FaWhatsapp className="text-lg" />
+            </a>
+            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="text-zinc-300 hover:text-red-500 hover:drop-shadow-[0_0_8px_rgba(220,38,38,0.8)] transition-all">
+              <FaFacebookF className="text-md" />
+            </a>
+            <a href="https://www.youtube.com/@TheLightHouse-v8b" target="_blank" rel="noopener noreferrer" className="text-zinc-300 hover:text-red-500 hover:drop-shadow-[0_0_8px_rgba(220,38,38,0.8)] transition-all">
+              <FaYoutube className="text-lg" />
+            </a>
+          </div>
+
+          <div className="hidden md:block w-px h-5 bg-red-600/30"></div>
+
           <div className="relative" ref={dropdownRef}>
             <button 
               onClick={() => setLangDropdownOpen(!langDropdownOpen)}
-              className="flex items-center gap-1 text-white font-semibold text-xs sm:text-sm bg-white/10 px-3 py-2 rounded-xl hover:bg-white/20 transition-colors cursor-pointer"
+              className="flex items-center gap-1 text-white font-semibold text-xs sm:text-sm bg-red-600/10 border border-red-600/30 px-3 py-2 rounded-xl hover:bg-red-600/20 hover:border-red-500 transition-all cursor-pointer shadow-[0_0_10px_rgba(220,38,38,0.2)]"
             >
               <span>{currentLang.name}</span>
               <svg className={`w-3.5 h-3.5 transition-transform duration-200 ${langDropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -71,14 +91,14 @@ export default function Header({ locale }: { locale: string }) {
             </button>
 
             {langDropdownOpen && (
-              <div className="absolute right-0 mt-2 w-36 bg-zinc-900/90 backdrop-blur-2xl text-white rounded-xl shadow-2xl py-2 border border-white/20 z-50">
+              <div className="absolute right-0 mt-2 w-36 bg-black/90 backdrop-blur-2xl text-white rounded-xl shadow-[0_10px_30px_rgba(220,38,38,0.4)] py-2 border border-red-600/50 z-50">
                 {languages.map((l) => (
                   <Link 
                     key={l.code} 
                     href={`/${l.code}`} 
                     onClick={() => setLangDropdownOpen(false)}
                     className={`block px-4 py-2 text-xs md:text-sm font-medium transition-colors ${
-                      locale === l.code ? 'bg-red-600 text-white font-bold' : 'text-zinc-300 hover:bg-white/10 hover:text-white'
+                      locale === l.code ? 'bg-red-600 text-white font-bold' : 'text-zinc-300 hover:bg-red-950/50 hover:text-red-400'
                     }`}
                   >
                     {l.name}
@@ -90,7 +110,7 @@ export default function Header({ locale }: { locale: string }) {
 
           <button 
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)} 
-            className="md:hidden text-white p-1 hover:text-red-500 transition-colors focus:outline-none cursor-pointer"
+            className="lg:hidden text-white p-1 hover:text-red-500 transition-colors focus:outline-none cursor-pointer drop-shadow-[0_0_5px_rgba(220,38,38,0.5)]"
           >
             <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               {mobileMenuOpen 
@@ -103,13 +123,27 @@ export default function Header({ locale }: { locale: string }) {
       </div>
 
       {mobileMenuOpen && (
-        <div className="md:hidden mt-3 max-w-7xl mx-auto bg-zinc-900/90 backdrop-blur-2xl border border-white/20 rounded-2xl p-6 shadow-2xl">
+        <div className="lg:hidden mt-3 max-w-7xl mx-auto bg-black/95 backdrop-blur-2xl border border-red-600/50 rounded-2xl p-6 shadow-[0_10px_40px_rgba(220,38,38,0.4)]">
+          {/* قائمة الموبايل - كل العناصر بنفس السمك العادي */}
           <nav className="flex flex-col gap-5 text-center">
-            <Link href={`/${locale}`} onClick={() => setMobileMenuOpen(false)} className="text-white font-semibold text-lg hover:text-red-500 transition-colors">Home</Link>
-            <Link href={`/${locale}/about`} onClick={() => setMobileMenuOpen(false)} className="text-white/90 text-lg hover:text-red-500 transition-colors">About Us</Link>
-            <Link href={`/${locale}/services`} onClick={() => setMobileMenuOpen(false)} className="text-white/90 text-lg hover:text-red-500 transition-colors">Services</Link>
-            <Link href={`/${locale}/contact`} onClick={() => setMobileMenuOpen(false)} className="text-white/90 text-lg hover:text-red-500 transition-colors">Contact Us</Link>
+            <Link href={`/${locale}`} onClick={() => setMobileMenuOpen(false)} className="text-white/90 text-lg hover:text-red-500 transition-colors drop-shadow-md">{t('home')}</Link>
+            <Link href={`/${locale}/about`} onClick={() => setMobileMenuOpen(false)} className="text-white/90 text-lg hover:text-red-500 transition-colors drop-shadow-md">{t('about')}</Link>
+            <Link href={`/${locale}/services`} onClick={() => setMobileMenuOpen(false)} className="text-white/90 text-lg hover:text-red-500 transition-colors drop-shadow-md">{t('services')}</Link>
+            <Link href={`/${locale}/search`} onClick={() => setMobileMenuOpen(false)} className="text-white/90 text-lg hover:text-red-500 transition-colors drop-shadow-md">{t('exploreAndBook')}</Link>
+            <Link href={`/${locale}/contact`} onClick={() => setMobileMenuOpen(false)} className="text-white/90 text-lg hover:text-red-500 transition-colors drop-shadow-md">{t('contact')}</Link>
           </nav>
+          
+          <div className="mt-6 pt-6 border-t border-red-600/30 flex justify-center gap-6">
+            <a href="https://wa.me/201273327311" target="_blank" rel="noopener noreferrer" className="p-3 bg-red-600/10 border border-red-600/30 text-white hover:bg-red-600 hover:border-red-500 rounded-xl transition-all shadow-[0_0_10px_rgba(220,38,38,0.2)]">
+              <FaWhatsapp className="text-xl" />
+            </a>
+            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="p-3 bg-red-600/10 border border-red-600/30 text-white hover:bg-red-600 hover:border-red-500 rounded-xl transition-all shadow-[0_0_10px_rgba(220,38,38,0.2)]">
+              <FaFacebookF className="text-lg" />
+            </a>
+            <a href="https://www.youtube.com/@TheLightHouse-v8b" target="_blank" rel="noopener noreferrer" className="p-3 bg-red-600/10 border border-red-600/30 text-white hover:bg-red-600 hover:border-red-500 rounded-xl transition-all shadow-[0_0_10px_rgba(220,38,38,0.2)]">
+              <FaYoutube className="text-xl" />
+            </a>
+          </div>
         </div>
       )}
     </header>

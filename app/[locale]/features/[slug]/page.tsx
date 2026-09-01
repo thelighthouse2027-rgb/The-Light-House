@@ -65,7 +65,6 @@ export default async function FeaturePage({
           const titleText = section.title?.[lang] || section.title?.en;
           const subtitleText = section.subtitle?.[lang] || section.subtitle?.en;
           const ctaText = section.ctaText?.[lang] || section.ctaText?.en;
-          // جلب الرابط حسب اللغة
           const ctaUrl = section.ctaUrl?.[lang] || section.ctaUrl?.en; 
 
           let youtubeEmbedUrl = '';
@@ -123,7 +122,6 @@ export default async function FeaturePage({
           );
         }
 
-        // 2. Split Section
         if (section._type === 'splitSection') {
           const titleText = section.title?.[lang] || section.title?.en;
           const descText = section.description?.[lang] || section.description?.en;
@@ -173,7 +171,6 @@ export default async function FeaturePage({
           );
         }
 
-        // 3. Slider Section
         if (section._type === 'sliderSection') {
           const secTitle = section.sectionTitle?.[lang] || section.sectionTitle?.en;
 
@@ -188,7 +185,6 @@ export default async function FeaturePage({
                 <div className="flex gap-6 animate-marquee w-max">
                   {[...(section.slides || []), ...(section.slides || [])].map((slide: any, sIdx: number) => {
                     const captionText = slide.caption?.[lang] || slide.caption?.en;
-                    // جلب الرابط حسب اللغة
                     const slideUrl = slide.slideUrl?.[lang] || slide.slideUrl?.en; 
                     
                     const slideContent = (
@@ -234,7 +230,6 @@ export default async function FeaturePage({
                   const cardTitle = card.cardTitle?.[lang] || card.cardTitle?.en;
                   const cardDesc = card.cardDesc?.[lang] || card.cardDesc?.en;
                   const cardCtaText = card.cardCtaText?.[lang] || card.cardCtaText?.en;
-                  // جلب الرابط حسب اللغة
                   const cardCtaUrl = card.cardCtaUrl?.[lang] || card.cardCtaUrl?.en;
 
                   return (

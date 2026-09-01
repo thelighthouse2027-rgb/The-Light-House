@@ -129,5 +129,37 @@
     "passionTitle": "Une passion pour la plongée au-delà du métier",
     "passionDesc": "Ce qui rend notre équipe spéciale, c'est notre véritable passion pour l'océan, se reflétant dans la façon dont nous prenons soin de nos clients.",
     "ctaBtn": "Commencez votre aventure avec nous"
+  },
+  "Location": {
+    "titlePart1": "Notre",
+    "titlePart2": "Emplacement & Carte",
+    "subtitle": "Trouvez-nous sur la carte, obtenez l’itinéraire vers notre centre de plongée professionnel à Hurghada ou contactez-nous instantanément.",
+    "centerName": "Centre The Light House",
+    "officialAddress": "Adresse officielle",
+    "addressText": "The Light House, Hurghada, Gouvernorat de la Mer Rouge, Égypte",
+    "phoneTitle": "Téléphone & WhatsApp",
+    "connect": "Suivez-nous",
+    "directions": "Obtenir l’itinéraire"
+  },
+  "Footer": {
+    "description": "Centre de plongée de premier plan proposant des cours de plongée professionnels, des excursions en bateau et des safaris passionnants.",
+    "quickLinksTitle": "Liens Rapides",
+    "servicesTitle": "Nos Services",
+    "about": "À Propos de Nous",
+    "services": "Services",
+    "exploreAndBook": "Explorer et Réserver",
+    "contact": "Contactez-nous",
+    "safari": "Safari dans le Désert",
+    "divingTrips": "Voyages de Plongée",
+    "boatTrips": "Excursions en Bateau",
+    "divingCourses": "Cours de Plongée",
+    "rights": "Tous droits réservés."
+  },
+  "Header": {
+    "home": "Accueil",
+    "about": "À propos",
+    "services": "Services",
+    "exploreAndBook": "Explorer et Réserver",
+    "contact": "Contact"
   }
 }

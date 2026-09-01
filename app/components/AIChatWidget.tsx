@@ -5,7 +5,6 @@ export default function AIChatWidget() {
   useEffect(() => {
     if (document.getElementById('mojeeb-chat-widget')) return;
 
-    // حقن السكريبت بطريقة تضمن عدم تجميد المتصفح نهائياً
     const script = document.createElement('script');
     script.id = 'mojeeb-chat-widget';
     script.src = 'https://mojeebcdn.z7.web.core.windows.net/mojeeb-widget.js';
@@ -54,7 +53,6 @@ export default function AIChatWidget() {
       }
     }
     
-    // محاولة ثانية لو لم يتم الربط بعد
     const btn = document.getElementById('my-chat-button');
     if (btn) {
       btn.click();
@@ -64,15 +62,16 @@ export default function AIChatWidget() {
   return (
     <>
       <style jsx global>{`
-        /* تنسيق نافذة الشات لتكون خفيفة وسريعة في العرض */
         iframe[src*="mojeeb"], 
         .mojeeb-widget-window,
         div[id*="mojeeb"] {
           max-width: 380px !important;
           max-height: 520px !important;
           border-radius: 1.5rem !important;
-          box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6) !important;
-          transition: transform 0.3s ease, opacity 0.3s ease !important;
+          box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7) !important;
+          opacity: 1 !important;
+          visibility: visible !important;
+          transition: none !important; /* إلغاء أي تأخير في العرض */
         }
         @media (max-width: 768px) {
           iframe[src*="mojeeb"], 
@@ -86,7 +85,6 @@ export default function AIChatWidget() {
         }
       `}</style>
 
-      {/* الزر الأحمر الفخم */}
       <button
         id="my-chat-button"
         onClick={handleClick}
