@@ -17,6 +17,10 @@ export default async function LocaleLayout({
 
   return (
     <html lang={locale} dir={locale === 'ar' ? 'rtl' : 'ltr'}>
+      <head>
+        {/* اتصالات مسبقة ضرورية ومحدودة لتحسين أداء تحميل صور Sanity */}
+        <link rel="preconnect" href="https://cdn.sanity.io" crossOrigin="anonymous" />
+      </head>
       <body className="bg-black text-white antialiased min-h-screen relative selection:bg-red-600 selection:text-white overflow-x-hidden">
         <NextIntlClientProvider messages={messages} locale={locale}>
           
