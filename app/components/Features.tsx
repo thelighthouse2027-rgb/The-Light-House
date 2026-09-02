@@ -38,7 +38,7 @@ export default function Features() {
       {/* عنوان السيكشن */}
       <div className="text-center mb-16">
         <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-4 tracking-tight">
-          {t('heading')} <span className="text-red-600">{t('headingHighlight')}</span>
+          {t('heading')} <span className="text-blue-500">{t('headingHighlight')}</span>
         </h2>
         <p className="text-zinc-400 text-lg max-w-xl mx-auto">
           {t('subtitle')}
@@ -67,7 +67,7 @@ export default function Features() {
               }}
               className={`relative cursor-pointer overflow-hidden rounded-2xl md:rounded-[2rem] transition-all duration-[800ms] ease-[cubic-bezier(0.25,1,0.5,1)] ${
                 isActive 
-                  ? 'flex-[4] md:flex-[5] shadow-[0_0_40px_rgba(220,38,38,0.2)]' 
+                  ? 'flex-[4] md:flex-[5] shadow-[0_0_40px_rgba(37,99,235,0.25)]' 
                   : 'flex-[1] opacity-70 hover:opacity-100 hover:flex-[1.2]'
               }`}
             >
@@ -92,8 +92,8 @@ export default function Features() {
                     isActive ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0 pointer-events-none'
                   }`}
                 >
-                  <div className="hidden md:inline-block px-3 py-1 mb-4 rounded-full bg-red-600/20 border border-red-500/50 backdrop-blur-md">
-                    <span className="text-red-400 text-xs font-bold uppercase tracking-wider">{t('featured')}</span>
+                  <div className="hidden md:inline-block px-3 py-1 mb-4 rounded-full bg-blue-600/20 border border-blue-500/50 backdrop-blur-md">
+                    <span className="text-blue-400 text-xs font-bold uppercase tracking-wider">{t('featured')}</span>
                   </div>
                   
                   <h3 className="text-xl md:text-3xl lg:text-4xl font-extrabold text-white mb-2 md:mb-3 drop-shadow-lg leading-tight">
@@ -109,7 +109,7 @@ export default function Features() {
                       href={`/${locale}/features/${item.slug}`}
                       onClick={(e) => e.stopPropagation()} 
                     >
-                      <button className="px-5 py-2 md:px-8 md:py-3 bg-white/10 hover:bg-red-600 border border-white/20 hover:border-red-500 backdrop-blur-md rounded-xl md:rounded-2xl text-white text-xs md:text-sm font-bold transition-all duration-300 cursor-pointer">
+                      <button className="px-5 py-2 md:px-8 md:py-3 bg-white/10 hover:bg-blue-600 border border-white/20 hover:border-blue-500 backdrop-blur-md rounded-xl md:rounded-2xl text-white text-xs md:text-sm font-bold transition-all duration-300 cursor-pointer shadow-[0_0_15px_rgba(37,99,235,0.2)]">
                         {t('exploreMore')}
                       </button>
                     </Link>
@@ -122,7 +122,7 @@ export default function Features() {
                       0{index + 1}
                     </span>
                     
-                    <div className="w-2 h-2 rounded-full bg-red-500/80 shadow-[0_0_10px_rgba(220,38,38,0.8)] animate-pulse mb-4"></div>
+                    <div className="w-2 h-2 rounded-full bg-blue-500 shadow-[0_0_10px_rgba(37,99,235,0.9)] animate-pulse mb-4"></div>
                   </div>
                 )}
               </div>

@@ -13,13 +13,13 @@ export default function LocationSection({ locale }: { locale?: string }) {
 
   return (
     <section className="w-full bg-black text-white py-28 px-6 relative overflow-hidden border-t border-white/10" dir={isRtl ? 'rtl' : 'ltr'}>
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-red-600/15 blur-[160px] pointer-events-none rounded-full" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-600/15 blur-[160px] pointer-events-none rounded-full" />
 
       <div className="max-w-7xl mx-auto relative z-10">
 
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-5xl font-extrabold mb-4">
-            {t('titlePart1')} <span className="text-red-600">{t('titlePart2')}</span>
+            {t('titlePart1')} <span className="text-blue-500">{t('titlePart2')}</span>
           </h2>
           <p className="text-zinc-400 max-w-xl mx-auto">
             {t('subtitle')}
@@ -35,7 +35,7 @@ export default function LocationSection({ locale }: { locale?: string }) {
               </h3>
 
               <div className="flex items-start space-x-4 space-x-reverse mb-6">
-                <div className="p-3 bg-red-600/20 border border-red-600/40 text-red-500 rounded-2xl shrink-0">
+                <div className="p-3 bg-blue-600/20 border border-blue-600/40 text-blue-400 rounded-2xl shrink-0">
                   <FaMapMarkerAlt className="text-xl" />
                 </div>
                 <div>
@@ -47,7 +47,7 @@ export default function LocationSection({ locale }: { locale?: string }) {
               </div>
 
               <div className="flex items-start space-x-4 space-x-reverse mb-6">
-                <div className="p-3 bg-red-600/20 border border-red-600/40 text-red-500 rounded-2xl shrink-0">
+                <div className="p-3 bg-blue-600/20 border border-blue-600/40 text-blue-400 rounded-2xl shrink-0">
                   <FaPhoneAlt className="text-xl" />
                 </div>
                 <div>
@@ -56,7 +56,7 @@ export default function LocationSection({ locale }: { locale?: string }) {
                     href="https://wa.me/201273327311" 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="text-red-400 hover:text-red-300 font-mono text-lg transition-colors block"
+                    className="text-blue-400 hover:text-blue-300 font-mono text-lg transition-colors block"
                   >
                     +20 127 332 7311
                   </a>
@@ -94,7 +94,7 @@ export default function LocationSection({ locale }: { locale?: string }) {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="YouTube"
-                  className="w-12 h-12 rounded-2xl bg-zinc-900 border border-white/10 flex items-center justify-center text-zinc-300 hover:text-white hover:bg-red-600 hover:border-red-500 transition-all duration-300 shadow-lg"
+                  className="w-12 h-12 rounded-2xl bg-zinc-900 border border-white/10 flex items-center justify-center text-zinc-300 hover:text-white hover:bg-blue-600 hover:border-blue-500 transition-all duration-300 shadow-lg"
                 >
                   <FaYoutube className="text-xl" />
                 </a>
@@ -103,9 +103,9 @@ export default function LocationSection({ locale }: { locale?: string }) {
 
           </div>
 
-          <div className="relative w-full h-[420px] lg:h-[470px] rounded-3xl overflow-hidden border-2 border-red-600/40 shadow-[0_30px_70px_rgba(220,38,38,0.35)] bg-zinc-900 group">
+          <div className="relative w-full h-[420px] lg:h-[470px] rounded-3xl overflow-hidden border-2 border-blue-600/40 shadow-[0_30px_70px_rgba(37,99,235,0.35)] bg-zinc-900 group">
 
-            <div className="absolute inset-0 border border-white/20 rounded-3xl pointer-events-none z-10 shadow-[inset_0_0_30px_rgba(220,38,38,0.25)]" />
+            <div className="absolute inset-0 border border-white/20 rounded-3xl pointer-events-none z-10 shadow-[inset_0_0_30px_rgba(37,99,235,0.25)]" />
 
             <iframe
               title="The Light House Map Location"
@@ -123,7 +123,7 @@ export default function LocationSection({ locale }: { locale?: string }) {
               href={googleMapsDirectionsUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="absolute bottom-4 right-4 z-20 bg-red-600 hover:bg-red-700 text-white px-5 py-3 rounded-2xl font-semibold text-sm flex items-center gap-2 shadow-2xl transition-all duration-300 transform hover:-translate-y-1 active:scale-95 cursor-pointer"
+              className="absolute bottom-4 right-4 z-20 bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-2xl font-semibold text-sm flex items-center gap-2 shadow-2xl transition-all duration-300 transform hover:-translate-y-1 active:scale-95 cursor-pointer"
             >
               <FaDirections className="text-lg" />
               <span>{t('directions')}</span>

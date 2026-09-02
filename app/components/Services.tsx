@@ -30,12 +30,12 @@ export default function Services({ locale }: { locale: string }) {
           <Link
             key={service.slug}
             href={`/${locale}/services/${service.slug}`}
-            className="group relative h-[420px] rounded-3xl overflow-hidden border border-white/10 shadow-2xl transition-all duration-500 hover:-translate-y-3 hover:shadow-[0_0_30px_rgba(220,38,38,0.3)] block"
+            className="group relative h-[420px] rounded-3xl overflow-hidden border border-white/10 shadow-2xl transition-all duration-500 hover:-translate-y-3 hover:shadow-[0_0_35px_rgba(37,99,235,0.35)] block"
           >
             <div className="absolute inset-0 w-full h-full">
-              <Image
-                src={service.img}
-                alt={t(`items.${service.key}.title`)}
+              <Image 
+                src={service.img} 
+                alt={t(`items.${service.key}.title`)} 
                 fill
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
                 className="object-cover transition-transform duration-700 group-hover:scale-110"
@@ -44,7 +44,7 @@ export default function Services({ locale }: { locale: string }) {
 
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent p-6 flex flex-col justify-end transition-colors group-hover:from-black/95 z-10">
               
-              <h3 className="text-2xl font-bold text-white mb-2 group-hover:text-red-500 transition-colors">
+              <h3 className="text-2xl font-bold text-white mb-2 group-hover:text-blue-400 transition-colors">
                 {t(`items.${service.key}.title`)}
               </h3>
 
@@ -52,7 +52,7 @@ export default function Services({ locale }: { locale: string }) {
                 {t(`items.${service.key}.desc`)}
               </p>
 
-              <div className="flex items-center gap-2 text-red-400 font-semibold text-sm group-hover:translate-x-1 transition-transform rtl:group-hover:-translate-x-1">
+              <div className="flex items-center gap-2 text-blue-400 font-semibold text-sm group-hover:translate-x-1 transition-transform rtl:group-hover:-translate-x-1">
                 <span>{t('learnMore')}</span>
                 <svg className="w-4 h-4 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />

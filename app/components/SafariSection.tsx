@@ -23,8 +23,8 @@ export default function SafariSection({ locale }: { locale: string }) {
 
       <div className="relative z-20 flex flex-col items-center gap-6 px-4 max-w-4xl mx-auto">
         
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-zinc-900/80 border border-red-600/40 text-red-500 text-xs font-bold uppercase tracking-widest backdrop-blur-md shadow-[0_0_15px_rgba(220,38,38,0.2)]">
-          <span className="w-2 h-2 rounded-full bg-red-600 animate-pulse"></span>
+        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-zinc-900/80 border border-blue-600/40 text-blue-400 text-xs font-bold uppercase tracking-widest backdrop-blur-md shadow-[0_0_15px_rgba(37,99,235,0.2)]">
+          <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
           {t('badge')}
         </div>
 
@@ -39,7 +39,7 @@ export default function SafariSection({ locale }: { locale: string }) {
         <div className="mt-6">
           <Link
             href={`/${locale}/services/safari`}
-            className="inline-flex px-10 py-4 bg-red-600 hover:bg-red-700 text-white font-bold rounded-2xl transition-all duration-300 shadow-[0_0_25px_rgba(220,38,38,0.5)] hover:shadow-[0_0_40px_rgba(220,38,38,0.8)] hover:-translate-y-1 active:translate-y-0 border border-red-500 items-center gap-3 text-lg cursor-pointer"
+            className="inline-flex px-10 py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-2xl transition-all duration-300 shadow-[0_0_25px_rgba(37,99,235,0.5)] hover:shadow-[0_0_40px_rgba(37,99,235,0.8)] hover:-translate-y-1 active:translate-y-0 border border-blue-500 items-center gap-3 text-lg cursor-pointer"
           >
             <span>{t('exploreBtn')}</span>
             <svg className="w-6 h-6 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
