@@ -41,6 +41,7 @@ export default function Footer() {
                 src="/logoo.webp" 
                 alt="The Light House Logo" 
                 fill 
+                sizes="80px"
                 className="object-contain"
               />
             </div>

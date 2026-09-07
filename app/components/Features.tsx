@@ -58,11 +58,24 @@ export default function Features() {
           return (
             <div
               key={index}
+              role="button"
+              tabIndex={0}
+              aria-pressed={isActive}
               onClick={() => {
                 if (!isActive) {
                   setActive(index);
                 } else {
                   router.push(`/${locale}/features/${item.slug}`); 
+                }
+              }}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  if (!isActive) {
+                    setActive(index);
+                  } else {
+                    router.push(`/${locale}/features/${item.slug}`);
+                  }
                 }
               }}
               className={`relative cursor-pointer overflow-hidden rounded-2xl md:rounded-[2rem] transition-all duration-[800ms] ease-[cubic-bezier(0.25,1,0.5,1)] ${
@@ -117,7 +130,7 @@ export default function Features() {
                 </div>
 
                 {!isActive && (
-                  <div className="absolute inset-0 flex flex-col items-center justify-between p-4 z-20">
+                  <div className="absolute inset-0 flex flex-col items-center justify-between p-4 z-25">
                     <span className="text-white/60 font-mono text-xs font-bold tracking-widest bg-white/10 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/10">
                       0{index + 1}
                     </span>

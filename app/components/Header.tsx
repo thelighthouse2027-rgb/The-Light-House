@@ -39,7 +39,7 @@ export default function Header({ locale }: { locale: string }) {
       <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-3 rounded-2xl bg-black/90 backdrop-blur-2xl border-2 border-blue-600/40 shadow-[0_10px_30px_rgba(37,99,235,0.2)]">
         
         {/* اللوجو مع الإضاءة الزرقاء القوية الملتصقة بالحواف */}
-        <Link href={`/${locale}`} className="py-1 inline-block">
+        <Link href={`/${locale}`} className="py-1 inline-block" aria-label="The Light House Home">
           <Image 
             src="/logoo.webp" 
             alt="The Light House Logo" 
@@ -61,15 +61,16 @@ export default function Header({ locale }: { locale: string }) {
 
         <div className="flex items-center gap-4 md:gap-5">
           
+          {/* روابط السوشيال ميديا - ديسكتوب */}
           <div className="hidden md:flex items-center gap-3">
-            <a href="https://wa.me/201273327311" target="_blank" rel="noopener noreferrer" className="text-zinc-300 hover:text-blue-400 hover:drop-shadow-[0_0_8px_rgba(59,130,246,0.8)] transition-all">
-              <FaWhatsapp className="text-lg" />
+            <a href="https://wa.me/201273327311" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" className="text-zinc-300 hover:text-blue-400 hover:drop-shadow-[0_0_8px_rgba(59,130,246,0.8)] transition-all">
+              <FaWhatsapp className="text-lg" aria-hidden="true" />
             </a>
-            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="text-zinc-300 hover:text-blue-400 hover:drop-shadow-[0_0_8px_rgba(59,130,246,0.8)] transition-all">
-              <FaFacebookF className="text-md" />
+            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="text-zinc-300 hover:text-blue-400 hover:drop-shadow-[0_0_8px_rgba(59,130,246,0.8)] transition-all">
+              <FaFacebookF className="text-md" aria-hidden="true" />
             </a>
-            <a href="https://www.youtube.com/@TheLightHouse-v8b" target="_blank" rel="noopener noreferrer" className="text-zinc-300 hover:text-blue-400 hover:drop-shadow-[0_0_8px_rgba(59,130,246,0.8)] transition-all">
-              <FaYoutube className="text-lg" />
+            <a href="https://www.youtube.com/@TheLightHouse-v8b" target="_blank" rel="noopener noreferrer" aria-label="YouTube" className="text-zinc-300 hover:text-blue-400 hover:drop-shadow-[0_0_8px_rgba(59,130,246,0.8)] transition-all">
+              <FaYoutube className="text-lg" aria-hidden="true" />
             </a>
           </div>
 
@@ -78,10 +79,11 @@ export default function Header({ locale }: { locale: string }) {
           <div className="relative" ref={dropdownRef}>
             <button 
               onClick={() => setLangDropdownOpen(!langDropdownOpen)}
+              aria-label="Select Language"
               className="flex items-center gap-1 text-white font-semibold text-xs sm:text-sm bg-blue-600/20 border border-blue-500 px-3 py-2 rounded-xl hover:bg-blue-600/30 hover:border-blue-400 transition-all cursor-pointer shadow-[0_0_15px_rgba(37,99,235,0.4)]"
             >
               <span>{currentLang.name}</span>
-              <svg className={`w-3.5 h-3.5 transition-transform duration-200 ${langDropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className={`w-3.5 h-3.5 transition-transform duration-200 ${langDropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
               </svg>
             </button>
@@ -129,15 +131,16 @@ export default function Header({ locale }: { locale: string }) {
             <Link href={`/${locale}/contact`} onClick={() => setMobileMenuOpen(false)} className="text-white/90 text-lg hover:text-blue-400 transition-colors drop-shadow-md">{t('contact')}</Link>
           </nav>
           
+          {/* روابط السوشيال ميديا - موبايل */}
           <div className="mt-6 pt-6 border-t border-blue-600/40 flex justify-center gap-6">
-            <a href="https://wa.me/201273327311" target="_blank" rel="noopener noreferrer" className="p-3 bg-blue-600/10 border border-blue-500 text-white hover:bg-blue-600 rounded-xl transition-all shadow-[0_0_15px_rgba(37,99,235,0.3)]">
-              <FaWhatsapp className="text-xl" />
+            <a href="https://wa.me/201273327311" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" className="p-3 bg-blue-600/10 border border-blue-500 text-white hover:bg-blue-600 rounded-xl transition-all shadow-[0_0_15px_rgba(37,99,235,0.3)]">
+              <FaWhatsapp className="text-xl" aria-hidden="true" />
             </a>
-            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="p-3 bg-blue-600/10 border border-blue-500 text-white hover:bg-blue-600 rounded-xl transition-all shadow-[0_0_15px_rgba(37,99,235,0.3)]">
-              <FaFacebookF className="text-lg" />
+            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="p-3 bg-blue-600/10 border border-blue-500 text-white hover:bg-blue-600 rounded-xl transition-all shadow-[0_0_15px_rgba(37,99,235,0.3)]">
+              <FaFacebookF className="text-lg" aria-hidden="true" />
             </a>
-            <a href="https://www.youtube.com/@TheLightHouse-v8b" target="_blank" rel="noopener noreferrer" className="p-3 bg-blue-600/10 border border-blue-500 text-white hover:bg-blue-600 rounded-xl transition-all shadow-[0_0_15px_rgba(37,99,235,0.3)]">
-              <FaYoutube className="text-xl" />
+            <a href="https://www.youtube.com/@TheLightHouse-v8b" target="_blank" rel="noopener noreferrer" aria-label="YouTube" className="p-3 bg-blue-600/10 border border-blue-500 text-white hover:bg-blue-600 rounded-xl transition-all shadow-[0_0_15px_rgba(37,99,235,0.3)]">
+              <FaYoutube className="text-xl" aria-hidden="true" />
             </a>
           </div>
         </div>
