@@ -48,7 +48,7 @@ export default function Footer() {
               <h2 className="text-3xl font-extrabold text-white tracking-wide drop-shadow-md">
                 The Light House
               </h2>
-              <p className="text-zinc-400 text-sm mt-2 max-w-sm leading-relaxed">
+              <p className="text-zinc-200 text-sm mt-2 max-w-sm leading-relaxed">
                 {t('description')}
               </p>
             </div>
@@ -57,24 +57,24 @@ export default function Footer() {
           <div className="flex flex-wrap items-center justify-center gap-4">
             {/* الإيميل */}
             <a href="mailto:thelighthouse2027@gmail.com" className="flex items-center gap-3 bg-zinc-900/80 border border-blue-600/30 hover:border-blue-500 shadow-[0_0_15px_rgba(37,99,235,0.15)] hover:shadow-[0_0_25px_rgba(37,99,235,0.4)] transition-all duration-300 px-5 py-3 rounded-2xl">
-              <FaEnvelope className="text-blue-500" />
-              <span className="text-zinc-200 text-sm font-medium">thelighthouse2027@gmail.com</span>
+              <FaEnvelope className="text-blue-400" />
+              <span className="text-zinc-100 text-sm font-medium">thelighthouse2027@gmail.com</span>
             </a>
             
             <a href="https://wa.me/201273327311" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 bg-zinc-900/80 border border-blue-600/30 hover:border-blue-500 shadow-[0_0_15px_rgba(37,99,235,0.15)] hover:shadow-[0_0_25px_rgba(37,99,235,0.4)] transition-all duration-300 px-5 py-3 rounded-2xl">
-              <FaPhoneAlt className="text-blue-500" />
-              <span className="text-zinc-200 text-sm font-mono">+20 127 332 7311</span>
+              <FaPhoneAlt className="text-blue-400" />
+              <span className="text-zinc-100 text-sm font-mono">+20 127 332 7311</span>
             </a>
 
             <div className="flex items-center gap-3 ml-2">
-              <a href="https://wa.me/201273327311" target="_blank" rel="noopener noreferrer" className="p-3 bg-zinc-900/80 border border-blue-600/30 text-blue-400 hover:bg-blue-600 hover:text-white rounded-xl transition-all shadow-[0_0_15px_rgba(37,99,235,0.15)] hover:shadow-[0_0_25px_rgba(37,99,235,0.4)]">
-                <FaWhatsapp className="text-xl" />
+              <a href="https://wa.me/201273327311" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" className="p-3 bg-zinc-900/80 border border-blue-600/30 text-blue-400 hover:bg-blue-600 hover:text-white rounded-xl transition-all shadow-[0_0_15px_rgba(37,99,235,0.15)] hover:shadow-[0_0_25px_rgba(37,99,235,0.4)]">
+                <FaWhatsapp className="text-xl" aria-hidden="true" />
               </a>
-              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="p-3 bg-zinc-900/80 border border-blue-600/30 text-blue-400 hover:bg-blue-600 hover:text-white rounded-xl transition-all shadow-[0_0_15px_rgba(37,99,235,0.15)] hover:shadow-[0_0_25px_rgba(37,99,235,0.4)]">
-                <FaFacebookF className="text-xl" />
+              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="p-3 bg-zinc-900/80 border border-blue-600/30 text-blue-400 hover:bg-blue-600 hover:text-white rounded-xl transition-all shadow-[0_0_15px_rgba(37,99,235,0.15)] hover:shadow-[0_0_25px_rgba(37,99,235,0.4)]">
+                <FaFacebookF className="text-xl" aria-hidden="true" />
               </a>
-              <a href="https://www.youtube.com/@TheLightHouse-v8b" target="_blank" rel="noopener noreferrer" className="p-3 bg-zinc-900/80 border border-blue-600/30 text-blue-400 hover:bg-blue-600 hover:text-white rounded-xl transition-all shadow-[0_0_15px_rgba(37,99,235,0.15)] hover:shadow-[0_0_25px_rgba(37,99,235,0.4)]">
-                <FaYoutube className="text-xl" />
+              <a href="https://www.youtube.com/@TheLightHouse-v8b" target="_blank" rel="noopener noreferrer" aria-label="YouTube" className="p-3 bg-zinc-900/80 border border-blue-600/30 text-blue-400 hover:bg-blue-600 hover:text-white rounded-xl transition-all shadow-[0_0_15px_rgba(37,99,235,0.15)] hover:shadow-[0_0_25px_rgba(37,99,235,0.4)]">
+                <FaYoutube className="text-xl" aria-hidden="true" />
               </a>
             </div>
           </div>
@@ -93,7 +93,7 @@ export default function Footer() {
                 <Link 
                   key={index} 
                   href={`/${locale}/${link.slug}`}
-                  className="bg-zinc-900/60 backdrop-blur-md border border-blue-600/20 shadow-[0_0_15px_rgba(37,99,235,0.05)] hover:border-blue-500 hover:bg-blue-950/40 hover:shadow-[0_0_25px_rgba(37,99,235,0.3)] text-zinc-300 hover:text-white transition-all duration-300 px-5 py-3 rounded-xl flex items-center justify-center text-sm font-semibold hover:-translate-y-1"
+                  className="bg-zinc-900/60 backdrop-blur-md border border-blue-600/20 shadow-[0_0_15px_rgba(37,99,235,0.05)] hover:border-blue-500 hover:bg-blue-950/40 hover:shadow-[0_0_25px_rgba(37,99,235,0.3)] text-zinc-200 hover:text-white transition-all duration-300 px-5 py-3 rounded-xl flex items-center justify-center text-sm font-semibold hover:-translate-y-1"
                 >
                   {link.name}
                 </Link>
@@ -110,7 +110,7 @@ export default function Footer() {
                 <Link 
                   key={index} 
                   href={`/${locale}/${link.slug}`}
-                  className="bg-zinc-900/60 backdrop-blur-md border border-blue-600/20 shadow-[0_0_15px_rgba(37,99,235,0.05)] hover:border-blue-500 hover:bg-blue-950/40 hover:shadow-[0_0_25px_rgba(37,99,235,0.3)] text-zinc-300 hover:text-white transition-all duration-300 px-5 py-3 rounded-xl flex items-center justify-center text-sm font-semibold hover:-translate-y-1"
+                  className="bg-zinc-900/60 backdrop-blur-md border border-blue-600/20 shadow-[0_0_15px_rgba(37,99,235,0.05)] hover:border-blue-500 hover:bg-blue-950/40 hover:shadow-[0_0_25px_rgba(37,99,235,0.3)] text-zinc-200 hover:text-white transition-all duration-300 px-5 py-3 rounded-xl flex items-center justify-center text-sm font-semibold hover:-translate-y-1"
                 >
                   {link.name}
                 </Link>
@@ -121,11 +121,11 @@ export default function Footer() {
         </div>
 
         <div className="mt-16 pt-6 border-t border-blue-600/20 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-zinc-500 text-xs font-medium">
+          <p className="text-zinc-300 text-xs font-medium">
             © {new Date().getFullYear()} The Light House. {t('rights')}
           </p>
-          <p className="text-zinc-600 text-xs font-medium flex items-center gap-1">
-            Made with <span className="text-blue-500 animate-pulse drop-shadow-[0_0_8px_rgba(37,99,235,0.8)]">❤</span> in Hurghada
+          <p className="text-zinc-300 text-xs font-medium flex items-center gap-1">
+            Made with <span className="text-blue-400 animate-pulse drop-shadow-[0_0_8px_rgba(37,99,235,0.8)]">❤</span> in Hurghada
           </p>
         </div>
 

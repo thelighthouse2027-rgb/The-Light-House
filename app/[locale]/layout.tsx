@@ -4,6 +4,12 @@ import { getMessages } from 'next-intl/server';
 import Header from '@/app/components/Header';
 import Footer from '@/app/components/Footer'; 
 import AIChatWidget from '@/app/components/AIChatWidget';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'The Light House | Diving & Safari Center',
+  description: 'Explore and book your diving, snorkeling, and safari adventures with The Light House.',
+};
 
 export default async function LocaleLayout({
   children,
@@ -17,10 +23,6 @@ export default async function LocaleLayout({
 
   return (
     <html lang={locale} dir={locale === 'ar' ? 'rtl' : 'ltr'}>
-      <head>
-        {/* اتصالات مسبقة ضرورية ومحدودة لتحسين أداء تحميل صور Sanity */}
-        <link rel="preconnect" href="https://cdn.sanity.io" crossOrigin="anonymous" />
-      </head>
       <body className="bg-black text-white antialiased min-h-screen relative selection:bg-red-600 selection:text-white overflow-x-hidden">
         <NextIntlClientProvider messages={messages} locale={locale}>
           
