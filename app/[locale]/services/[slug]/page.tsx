@@ -9,7 +9,7 @@ async function getFlexiblePage(slug: string, locale: string) {
   const currentLang = ['en', 'de', 'fr', 'pl'].includes(locale) ? locale : 'en';
 
   const query = `*[_type == "flexiblePage" && lower(slug.current) == lower($cleanSlug)][0]{
-    "name": pageTitle[$currentLang],
+    "name": pageTitle,
     "slug": slug.current,
     sections[]{
       _type,
@@ -36,7 +36,7 @@ async function getFlexiblePage(slug: string, locale: string) {
       defaultAdultPrice,
       defaultChildPrice,
       pages[]->{
-        "title": pageTitle[$currentLang],
+        "title": pageTitle,
         "slug": slug.current,
         "imageUrl": coalesce(
           sections[_type == "heroSection"][0].image.asset->url,
@@ -71,6 +71,11 @@ export default async function ServiceDetailPage({
   const currentLang = ['en', 'de', 'fr', 'pl'].includes(locale) ? locale : 'en';
   const backText = locale === 'ar' ? 'العودة للرئيسية' : locale === 'de' ? 'Zurück zur Startseite' : locale === 'fr' ? 'Retour à l\'accueil' : 'Back to Home';
 
+  // استخراج اسم الصفحة باللغة الحالية بدقة لمنع خطأ الـ Objects
+  const pageName = typeof pageData.name === 'object' 
+    ? (pageData.name?.[currentLang] || pageData.name?.en || 'Service') 
+    : pageData.name;
+
   const formatUrl = (rawUrl: string | undefined, defaultSlug: string) => {
     const target = rawUrl || defaultSlug;
     if (!target) return `/${locale}`;
@@ -95,7 +100,7 @@ export default async function ServiceDetailPage({
       </Link>
 
       <h1 className="text-4xl md:text-6xl font-extrabold mb-12 text-center text-white drop-shadow-md">
-        {pageData.name}
+        {pageName}
       </h1>
 
       {bookingSection ? (
@@ -110,7 +115,7 @@ export default async function ServiceDetailPage({
                 adultPrice={bookingSection.defaultAdultPrice || 150}
                 childPrice={bookingSection.defaultChildPrice || 150}
                 locale={locale}
-                serviceName={pageData.name}
+                serviceName={pageName}
               />
             </div>
           </div>
@@ -207,7 +212,7 @@ function renderSingleSection(section: any, currentLang: string, locale: string, 
         {section.sectionTitle?.[currentLang] && (
           <h2 className="text-3xl font-bold text-start mb-8">{section.sectionTitle[currentLang]}</h2>
         )}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {section.cards?.map((card: any, cIdx: number) => {
             const cardBtnText = card.cardCtaText?.[currentLang];
             const cardBtnUrl = formatUrl(card.cardCtaUrl?.[currentLang], card.serviceSlug || '#');
@@ -254,7 +259,6 @@ function renderSingleSection(section: any, currentLang: string, locale: string, 
     );
   }
 
-  // قسم الروابط الداخلية (Internal Links) مع ضبط الشبكة لتكون 3 كروت في الصف الواحد
   if (section._type === 'internalLinksSection') {
     return (
       <div key={index} className="space-y-8 pt-12 border-t border-white/10 w-full">
@@ -267,6 +271,9 @@ function renderSingleSection(section: any, currentLang: string, locale: string, 
           {section.pages?.map((page: any, pIdx: number) => {
             if (!page?.slug) return null;
             const pageUrl = `/${locale}/services/${page.slug}`;
+            const pageTitle = typeof page.title === 'object' 
+              ? (page.title?.[currentLang] || page.title?.en || 'Service') 
+              : page.title;
 
             return (
               <Link 
@@ -279,7 +286,7 @@ function renderSingleSection(section: any, currentLang: string, locale: string, 
                     <div className="relative aspect-video rounded-xl overflow-hidden mb-4 border border-white/10">
                       <Image 
                         src={page.imageUrl} 
-                        alt={page.title || 'Service'} 
+                        alt={pageTitle || 'Service'} 
                         fill 
                         className="object-cover transition-transform duration-500 group-hover:scale-105" 
                       />
@@ -290,7 +297,7 @@ function renderSingleSection(section: any, currentLang: string, locale: string, 
                     </div>
                   )}
                   <h3 className="text-xl font-bold text-white mb-2 group-hover:text-red-500 transition-colors">
-                    {page.title}
+                    {pageTitle}
                   </h3>
                 </div>
 
