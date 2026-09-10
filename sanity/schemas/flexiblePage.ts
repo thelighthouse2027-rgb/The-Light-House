@@ -1,18 +1,38 @@
+// دالة مساعدة لإنشاء حقول اللغات المتكررة بشكل صحيح لكل نوع
+const createMultiLangField = (name: string, title: string, isArray: boolean = false) => ({
+  name,
+  title,
+  type: 'object',
+  fields: ['en', 'de', 'fr', 'pl'].map((langCode) => ({
+    name: langCode,
+    title: langCode.toUpperCase(),
+    type: isArray ? 'array' : 'string',
+    ...(isArray ? { of: [{ type: 'block' }] } : {})
+  }))
+});
+
+// دالة مشتركة لأزرار الـ CTA والروابط
+const createCtaFields = () => ([
+  createMultiLangField('ctaText', 'نص زر الانتقال (CTA Text)'),
+  createMultiLangField('ctaUrl', 'رابط زر الانتقال المتعدد اللغات (URL)')
+]);
+
 export default {
   name: 'flexiblePage',
   title: 'Flexible Pages (الصفحات المرنة)',
   type: 'document',
   fields: [
     {
-      name: 'pageTitle',
-      title: 'اسم الصفحة (داخلي لوحة التحكم)',
-      type: 'string',
+      ...createMultiLangField('pageTitle', 'اسم الصفحة باللغات الأربع (Page Title)'),
     },
     {
       name: 'slug',
       title: 'رابط الصفحة (Slug)',
       type: 'slug',
-      options: { source: 'pageTitle', maxLength: 96 }
+      options: { 
+        source: (doc: any) => doc.pageTitle?.en || 'page', 
+        maxLength: 96 
+      }
     },
     {
       name: 'sections',
@@ -25,39 +45,9 @@ export default {
           name: 'heroSection',
           title: 'Hero Section (الهيرو)',
           fields: [
-            {
-              name: 'badge',
-              title: 'الشارة العليا (Badge)',
-              type: 'object',
-              fields: [
-                { name: 'en', title: 'English', type: 'string' },
-                { name: 'de', title: 'German', type: 'string' },
-                { name: 'fr', title: 'French', type: 'string' },
-                { name: 'pl', title: 'Polish', type: 'string' },
-              ]
-            },
-            {
-              name: 'title',
-              title: 'العنوان الرئيسي',
-              type: 'object',
-              fields: [
-                { name: 'en', title: 'English', type: 'string' },
-                { name: 'de', title: 'German', type: 'string' },
-                { name: 'fr', title: 'French', type: 'string' },
-                { name: 'pl', title: 'Polish', type: 'string' },
-              ]
-            },
-            {
-              name: 'subtitle',
-              title: 'الوصف أو العنوان الفرعي',
-              type: 'object',
-              fields: [
-                { name: 'en', title: 'English', type: 'array', of: [{ type: 'block' }] },
-                { name: 'de', title: 'German', type: 'array', of: [{ type: 'block' }] },
-                { name: 'fr', title: 'French', type: 'array', of: [{ type: 'block' }] },
-                { name: 'pl', title: 'Polish', type: 'array', of: [{ type: 'block' }] },
-              ]
-            },
+            createMultiLangField('badge', 'الشارة العليا (Badge)'),
+            createMultiLangField('title', 'العنوان الرئيسي'),
+            createMultiLangField('subtitle', 'الوصف أو العنوان الفرعي', true),
             {
               name: 'bgImage',
               title: 'صورة الخلفية',
@@ -75,28 +65,7 @@ export default {
               type: 'file',
               options: { accept: 'video/*' }
             },
-            {
-              name: 'ctaText',
-              title: 'نص زر الانتقال (CTA Text)',
-              type: 'object',
-              fields: [
-                { name: 'en', title: 'English', type: 'string' },
-                { name: 'de', title: 'German', type: 'string' },
-                { name: 'fr', title: 'French', type: 'string' },
-                { name: 'pl', title: 'Polish', type: 'string' },
-              ]
-            },
-            {
-              name: 'ctaUrl',
-              title: 'رابط زر الانتقال المتعدد اللغات (URL)',
-              type: 'object',
-              fields: [
-                { name: 'en', title: 'English URL', type: 'string' },
-                { name: 'de', title: 'German URL', type: 'string' },
-                { name: 'fr', title: 'French URL', type: 'string' },
-                { name: 'pl', title: 'Polish URL', type: 'string' },
-              ]
-            }
+            ...createCtaFields()
           ]
         },
 
@@ -153,50 +122,9 @@ export default {
               type: 'url',
               hidden: ({ parent }: { parent?: any }) => parent?.mediaType !== 'videoUrl'
             },
-            {
-              name: 'title',
-              title: 'العنوان',
-              type: 'object',
-              fields: [
-                { name: 'en', title: 'English', type: 'string' },
-                { name: 'de', title: 'German', type: 'string' },
-                { name: 'fr', title: 'French', type: 'string' },
-                { name: 'pl', title: 'Polish', type: 'string' },
-              ]
-            },
-            {
-              name: 'description',
-              title: 'الوصف (يدعم التنسيق والتنقيط)',
-              type: 'object',
-              fields: [
-                { name: 'en', title: 'English', type: 'array', of: [{ type: 'block' }] },
-                { name: 'de', title: 'German', type: 'array', of: [{ type: 'block' }] },
-                { name: 'fr', title: 'French', type: 'array', of: [{ type: 'block' }] },
-                { name: 'pl', title: 'Polish', type: 'array', of: [{ type: 'block' }] },
-              ]
-            },
-            {
-              name: 'ctaText',
-              title: 'نص الزر (CTA Text)',
-              type: 'object',
-              fields: [
-                { name: 'en', title: 'English', type: 'string' },
-                { name: 'de', title: 'German', type: 'string' },
-                { name: 'fr', title: 'French', type: 'string' },
-                { name: 'pl', title: 'Polish', type: 'string' },
-              ]
-            },
-            {
-              name: 'ctaUrl',
-              title: 'رابط الزر المتعدد اللغات (URL)',
-              type: 'object',
-              fields: [
-                { name: 'en', title: 'English URL', type: 'string' },
-                { name: 'de', title: 'German URL', type: 'string' },
-                { name: 'fr', title: 'French URL', type: 'string' },
-                { name: 'pl', title: 'Polish URL', type: 'string' },
-              ]
-            }
+            createMultiLangField('title', 'العنوان'),
+            createMultiLangField('description', 'الوصف (يدعم التنسيق والتنقيط)', true),
+            ...createCtaFields()
           ]
         },
 
@@ -206,17 +134,7 @@ export default {
           name: 'sliderSection',
           title: 'Moving Slider / Marquee (السلايدر المتحرك)',
           fields: [
-            {
-              name: 'sectionTitle',
-              title: 'عنوان السكشن',
-              type: 'object',
-              fields: [
-                { name: 'en', title: 'English', type: 'string' },
-                { name: 'de', title: 'German', type: 'string' },
-                { name: 'fr', title: 'French', type: 'string' },
-                { name: 'pl', title: 'Polish', type: 'string' },
-              ]
-            },
+            createMultiLangField('sectionTitle', 'عنوان السكشن'),
             {
               name: 'slides',
               title: 'الشرائح',
@@ -226,28 +144,8 @@ export default {
                   type: 'object',
                   fields: [
                     { name: 'image', title: 'صورة الشريحة', type: 'image' },
-                    { 
-                      name: 'caption', 
-                      title: 'عنوان فرعي', 
-                      type: 'object',
-                      fields: [
-                        { name: 'en', title: 'English', type: 'string' },
-                        { name: 'de', title: 'German', type: 'string' },
-                        { name: 'fr', title: 'French', type: 'string' },
-                        { name: 'pl', title: 'Polish', type: 'string' },
-                      ]
-                    },
-                    {
-                      name: 'slideUrl',
-                      title: 'رابط الشريحة المتعدد اللغات',
-                      type: 'object',
-                      fields: [
-                        { name: 'en', title: 'English URL', type: 'string' },
-                        { name: 'de', title: 'German URL', type: 'string' },
-                        { name: 'fr', title: 'French URL', type: 'string' },
-                        { name: 'pl', title: 'Polish URL', type: 'string' },
-                      ]
-                    }
+                    createMultiLangField('caption', 'عنوان فرعي'),
+                    createMultiLangField('slideUrl', 'رابط الشريحة المتعدد اللغات')
                   ]
                 }
               ]
@@ -255,23 +153,13 @@ export default {
           ]
         },
 
-        // 4. سكشن شبكة الكروت (Grid Cards) - محدث لدعم الحجز والدفع
+        // 4. سكشن شبكة الكروت (Grid Cards)
         {
           type: 'object',
           name: 'gridCardsSection',
           title: 'Grid Cards Section (شبكة الكروت والخدمات)',
           fields: [
-            {
-              name: 'sectionTitle',
-              title: 'عنوان السكشن',
-              type: 'object',
-              fields: [
-                { name: 'en', title: 'English', type: 'string' },
-                { name: 'de', title: 'German', type: 'string' },
-                { name: 'fr', title: 'French', type: 'string' },
-                { name: 'pl', title: 'Polish', type: 'string' },
-              ]
-            },
+            createMultiLangField('sectionTitle', 'عنوان السكشن'),
             {
               name: 'cards',
               title: 'الكروت أو الخدمات',
@@ -281,28 +169,8 @@ export default {
                   type: 'object',
                   title: 'كارت / خدمة',
                   fields: [
-                    {
-                      name: 'cardTitle',
-                      title: 'عنوان الكارت / الخدمة',
-                      type: 'object',
-                      fields: [
-                        { name: 'en', title: 'English', type: 'string' },
-                        { name: 'de', title: 'German', type: 'string' },
-                        { name: 'fr', title: 'French', type: 'string' },
-                        { name: 'pl', title: 'Polish', type: 'string' },
-                      ]
-                    },
-                    {
-                      name: 'cardDesc',
-                      title: 'وصف الكارت / نبذة مختصرة (يدعم التنسيق والتنقيط)',
-                      type: 'object',
-                      fields: [
-                        { name: 'en', title: 'English', type: 'array', of: [{ type: 'block' }] },
-                        { name: 'de', title: 'German', type: 'array', of: [{ type: 'block' }] },
-                        { name: 'fr', title: 'French', type: 'array', of: [{ type: 'block' }] },
-                        { name: 'pl', title: 'Polish', type: 'array', of: [{ type: 'block' }] },
-                      ]
-                    },
+                    createMultiLangField('cardTitle', 'عنوان الكارت / الخدمة'),
+                    createMultiLangField('cardDesc', 'وصف الكارت / نبذة مختصرة', true),
                     {
                       name: 'cardImage',
                       title: 'صورة الكارت',
@@ -311,36 +179,16 @@ export default {
                     },
                     {
                       name: 'servicePrice',
-                      title: 'سعر الخدمة ($)',
+                      title: 'سعر الخدمة (€)',
                       type: 'number'
                     },
                     {
                       name: 'serviceSlug',
-                      title: 'معرف الخدمة في الرابط (مثل: diving-courses أو boat-trips)',
+                      title: 'معرف الخدمة في الرابط',
                       type: 'string'
                     },
-                    {
-                      name: 'cardCtaText',
-                      title: 'نص زر الكارت (CTA مثل: Book Now)',
-                      type: 'object',
-                      fields: [
-                        { name: 'en', title: 'English', type: 'string' },
-                        { name: 'de', title: 'German', type: 'string' },
-                        { name: 'fr', title: 'French', type: 'string' },
-                        { name: 'pl', title: 'Polish', type: 'string' },
-                      ]
-                    },
-                    {
-                      name: 'cardCtaUrl',
-                      title: 'رابط زر الكارت المتعدد اللغات (URL)',
-                      type: 'object',
-                      fields: [
-                        { name: 'en', title: 'English URL', type: 'string' },
-                        { name: 'de', title: 'German URL', type: 'string' },
-                        { name: 'fr', title: 'French URL', type: 'string' },
-                        { name: 'pl', title: 'Polish URL', type: 'string' },
-                      ]
-                    },
+                    createMultiLangField('cardCtaText', 'نص زر الكارت'),
+                    createMultiLangField('cardCtaUrl', 'رابط زر الكارت المتعدد اللغات'),
                     {
                       name: 'hasMiniSlider',
                       title: 'سلايدر مصغر داخل الكارت؟',
@@ -359,8 +207,63 @@ export default {
               ]
             }
           ]
+        },
+
+        // 5. سكشن نموذج الحجز والاستعلام
+        {
+          type: 'object',
+          name: 'bookingFormSection',
+          title: 'Booking Inquiry Form (نموذج الحجز والاستعلام)',
+          fields: [
+            createMultiLangField('formTitle', 'عنوان نموذج الحجز (مثل: Send an Inquiry)'),
+            {
+              name: 'defaultAdultPrice',
+              title: 'سعر البالغ الافتراضي (€)',
+              type: 'number',
+              initialValue: 150
+            },
+            {
+              name: 'defaultChildPrice',
+              title: 'سعر الطفل الافتراضي (€)',
+              type: 'number',
+              initialValue: 150
+            }
+          ]
+        },
+
+        // 6. سكشن الروابط الداخلية
+        {
+          type: 'object',
+          name: 'internalLinksSection',
+          title: 'Related Services / Internal Links (الروابط الداخلية)',
+          fields: [
+            createMultiLangField('sectionTitle', 'عنوان السكشن (مثل: Discover More Services)'),
+            {
+              name: 'pages',
+              title: 'اختر الصفحات (ابحث بالاسم وأضفها)',
+              type: 'array',
+              of: [
+                {
+                  type: 'reference',
+                  to: [{ type: 'flexiblePage' }]
+                }
+              ]
+            }
+          ]
         }
       ]
     }
-  ]
+  ],
+  preview: {
+    select: {
+      title: 'pageTitle.en',
+      subtitle: 'slug.current'
+    },
+    prepare(selection: { title?: string; subtitle?: string }) {
+      return {
+        title: selection.title || 'Untitled Page',
+        subtitle: selection.subtitle ? `/${selection.subtitle}` : ''
+      };
+    }
+  }
 };

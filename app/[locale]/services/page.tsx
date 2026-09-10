@@ -13,7 +13,7 @@ export default async function ServicesPage({
   const services = [
     { slug: 'diving-courses', img: '/divingcourses.webp', key: 'diving-courses' },
     { slug: 'boat-trips', img: '/cruises.webp', key: 'boat-trips' },
-    { slug: 'diving-trips', img: '/diving.webp', key: 'diving-trips' },
+    { slug: 'daily-diving', img: '/diving.webp', key: 'diving-trips' },
     { slug: 'safari', img: '/safari.webp', key: 'safari' },
   ];
 
