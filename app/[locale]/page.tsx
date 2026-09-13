@@ -11,32 +11,7 @@ import { client } from '@/sanity/lib/client';
 
 export const revalidate = 0;
 
-// ترجمة الـ Meta Description للغات الأربع
-const metaDescriptions: Record<string, string> = {
-  en: "Explore and book your diving, snorkeling, and safari adventures with The Light House.",
-  de: "Entdecken und buchen Sie Ihre Tauch-, Schnorchel- und Safari-Abenteuer mit The Light House.",
-  fr: "Explorez et réservez vos aventures de plongée, de snorkeling et de safari avec The Light House.",
-  pl: "Odkryj i zarezerwuj swoje przygody nurkowe, snorkelingowe i safari z The Light House."
-};
-
-const metaTitles: Record<string, string> = {
-  en: "The Light House - Diving & Safari Adventures",
-  de: "The Light House - Tauch- & Safari-Abenteuer",
-  fr: "The Light House - Plongée & Aventures Safari",
-  pl: "The Light House - Nurkowanie i Przygody Safari"
-};
-
-// توليد العنوان والوصف تلقائياً حسب لغة المستخدم
-export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
-  const { locale } = await params;
-  const lang = ['en', 'de', 'fr', 'pl'].includes(locale) ? locale : 'en';
-
-  return {
-    title: metaTitles[lang] || metaTitles.en,
-    description: metaDescriptions[lang] || metaDescriptions.en,
-  };
-}
-
+// جلب بيانات البنر والعروض
 async function getPromoBanner() {
   const query = `*[_type == "promoBanner"][0]{
     ...,
@@ -45,13 +20,49 @@ async function getPromoBanner() {
   return await client.fetch(query);
 }
 
+// جلب إعدادات الـ SEO الخاصة بالصفحة الرئيسية
+async function getHomeSeo(locale: string) {
+  const currentLang = ['en', 'de', 'fr', 'pl'].includes(locale) ? locale : 'en';
+  const query = `*[_type == "homeSeo"][0]{
+    "metaTitle": metaTitle[$currentLang],
+    "metaDescription": metaDescription[$currentLang]
+  }`;
+  return await client.fetch(query, { currentLang });
+}
+
+// توليد الميتا ديسكربشن والعنوان للرئيسية ديناميكياً لكل لغة
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  const seoData = await getHomeSeo(locale);
+
+  const defaultTitles: Record<string, string> = {
+    en: "The Light House - Diving & Safari Adventures",
+    de: "The Light House - Tauch- & Safari-Abenteuer",
+    fr: "The Light House - Plongée & Aventures Safari",
+    pl: "The Light House - Nurkowanie i Przygody Safari"
+  };
+
+  const defaultDescriptions: Record<string, string> = {
+    en: "Explore and book your ultimate diving, snorkeling, and desert safari adventures in Hurghada with The Light House.",
+    de: "Entdecken und buchen Sie Ihre ultimativen Tauch-, Schnorchel- und Wüstensafari-Abenteuer in Hurghada mit The Light House.",
+    fr: "Explorez et réservez vos aventures ultimes de plongée, de snorkeling et de safari dans le désert à Hurghada avec The Light House.",
+    pl: "Odkryj i zarezerwuj swoje niezapomniane przygody nurkowe, snorkelingowe oraz safari w Hurghadzie z The Light House."
+  };
+
+  const currentLang = ['en', 'de', 'fr', 'pl'].includes(locale) ? locale : 'en';
+
+  return {
+    title: seoData?.metaTitle || defaultTitles[currentLang],
+    description: seoData?.metaDescription || defaultDescriptions[currentLang],
+  };
+}
+
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   const bannerData = await getPromoBanner();
 
   return (
     <main className="w-full">
-      
       <PromoPopup data={bannerData} locale={locale} />
       
       <div className="w-full">
@@ -85,7 +96,6 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       <div className="w-full pb-20 px-2 md:px-6 relative z-10">
         <LocationSection />
       </div>
-
     </main>
   );
 }

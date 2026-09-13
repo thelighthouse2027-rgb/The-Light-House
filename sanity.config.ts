@@ -3,6 +3,7 @@ import { structureTool } from 'sanity/structure';
 import { visionTool } from '@sanity/vision';
 import promoBanner from './sanity/schemas/promoBanner';
 import flexiblePage from './sanity/schemas/flexiblePage';
+import homeSeo from './sanity/schemas/homeSeo'; // 1. استورد الملف هنا
 
 export default defineConfig({
   name: 'default',
@@ -11,6 +12,6 @@ export default defineConfig({
   dataset: 'production',
   plugins: [structureTool(), visionTool()],
   schema: {
-    types: [promoBanner, flexiblePage],
+    types: [promoBanner, flexiblePage, homeSeo], // 2. أضفه داخل المصفوفة هنا
   },
 });
