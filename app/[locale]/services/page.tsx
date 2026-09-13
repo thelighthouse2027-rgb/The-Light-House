@@ -11,7 +11,7 @@ export default async function ServicesPage({
   const t = await getTranslations('ServicesSection');
 
   const services = [
-    { slug: 'diving-courses', img: '/divingcourses.webp', key: 'diving-courses' },
+    { slug: 'courses', img: '/divingcourses.webp', key: 'diving-courses' },
     { slug: 'boat-trips', img: '/cruises.webp', key: 'boat-trips' },
     { slug: 'daily-diving', img: '/diving.webp', key: 'diving-trips' },
     { slug: 'safari', img: '/safari.webp', key: 'safari' },
