@@ -60,7 +60,6 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 
   const currentLang = ['en', 'de', 'fr', 'pl'].includes(locale) ? locale : 'en';
   
-  // استخراج العنوان الاحتياطي في حال لم يتم كتابة عنوان SEO خاص
   const fallbackTitle = typeof pageData?.name === 'object' 
     ? (pageData.name?.[currentLang] || pageData.name?.en || 'The Light House') 
     : (pageData?.name || 'The Light House');
@@ -84,7 +83,7 @@ export default async function ServiceDetailPage({
       <main className="min-h-screen pt-40 text-center text-white">
         <h1 className="text-3xl font-bold mb-4">Service Not Found</h1>
         <p className="text-zinc-400 mb-6">Could not find service with slug: {slug}</p>
-        <Link href={`/${locale}`} className="text-red-500 underline">Back to Home</Link>
+        <Link href={`/${locale}`} title="Back to Home" aria-label="Back to Home" className="text-red-500 underline">Back to Home</Link>
       </main>
     );
   }
@@ -112,7 +111,7 @@ export default async function ServiceDetailPage({
   return (
     <main className="min-h-screen pt-32 pb-20 px-6 max-w-7xl mx-auto text-white">
       {/* زر العودة */}
-      <Link href={`/${locale}`} className="inline-flex items-center gap-2 text-zinc-400 hover:text-white mb-8 transition-colors">
+      <Link href={`/${locale}`} title={backText} aria-label={backText} className="inline-flex items-center gap-2 text-zinc-400 hover:text-white mb-8 transition-colors">
         <svg className="w-5 h-5 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
         </svg>
@@ -127,7 +126,7 @@ export default async function ServiceDetailPage({
         <div className="space-y-16">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start relative">
             <div className="lg:col-span-2 space-y-16">
-              {renderSections(mainSections, currentLang, locale, slug, formatUrl)}
+              {renderSections(mainSections, currentLang, locale, slug, formatUrl, pageName)}
             </div>
             
             <div className="lg:col-span-1 lg:sticky lg:top-28">
@@ -140,34 +139,62 @@ export default async function ServiceDetailPage({
             </div>
           </div>
 
-          {internalLinksSection && renderSingleSection(internalLinksSection, currentLang, locale, formatUrl)}
+          {internalLinksSection && renderSingleSection(internalLinksSection, currentLang, locale, formatUrl, slug, 0, pageName)}
         </div>
       ) : (
         <div className="max-w-6xl mx-auto space-y-16">
-          {renderSections(mainSections, currentLang, locale, slug, formatUrl)}
-          {internalLinksSection && renderSingleSection(internalLinksSection, currentLang, locale, formatUrl)}
+          {renderSections(mainSections, currentLang, locale, slug, formatUrl, pageName)}
+          {internalLinksSection && renderSingleSection(internalLinksSection, currentLang, locale, formatUrl, slug, 0, pageName)}
         </div>
       )}
     </main>
   );
 }
 
-function renderSections(sections: any[], currentLang: string, locale: string, slug: string, formatUrl: Function) {
-  return sections.map((section: any, index: number) => renderSingleSection(section, currentLang, locale, formatUrl, slug, index));
+function renderSections(sections: any[], currentLang: string, locale: string, slug: string, formatUrl: Function, pageName: string) {
+  return sections.map((section: any, index: number) => renderSingleSection(section, currentLang, locale, formatUrl, slug, index, pageName));
 }
 
-function renderSingleSection(section: any, currentLang: string, locale: string, formatUrl: Function, slug?: string, index: number = 0) {
-  // ... (باقي دوال عرض الأقسام كما هي تماماً بدون تغيير)
+// تخصيص Portable Text بحيث تأخذ الروابط داخل المقالات الـ title تلقائياً من النص
+const portableTextComponents = {
+  marks: {
+    link: ({ value, children }: any) => {
+      const href = value?.href || '#';
+      const linkTitle = typeof children === 'string' ? children : 'External Link';
+      return (
+        <Link href={href} title={linkTitle} aria-label={linkTitle} className="text-red-400 hover:underline">
+          {children}
+        </Link>
+      );
+    },
+  },
+};
+
+function renderSingleSection(section: any, currentLang: string, locale: string, formatUrl: Function, slug?: string, index: number = 0, pageName: string = 'Service') {
+  
   if (section._type === 'splitSection') {
     const isImageLeft = section.layoutDirection === 'imageLeft';
     const buttonText = section.ctaText?.[currentLang] || 'Book Now';
     const buttonUrl = formatUrl(section.ctaUrl?.[currentLang], `/contact?service=${slug}`);
     const resolvedImage = section.imageUrl || section.bgImageUrl;
+    
+    const imageAltTitle = section.title?.[currentLang] || pageName;
 
     return (
       <div key={index} className={`bg-zinc-900/60 backdrop-blur-2xl border border-red-600/30 rounded-3xl overflow-hidden p-8 md:p-12 grid grid-cols-1 md:grid-cols-2 gap-8 items-center ${isImageLeft ? 'md:grid-flow-dense' : ''}`}>
         <div className={`relative aspect-[4/3] w-full rounded-2xl overflow-hidden border border-red-600/20 shadow-xl ${isImageLeft ? 'md:order-1' : 'md:order-none'}`}>
-          {resolvedImage ? <Image src={resolvedImage} alt="Image" fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover" /> : <div className="w-full h-full bg-zinc-800 flex items-center justify-center text-zinc-500">No Image</div>}
+          {resolvedImage ? (
+            <Image 
+              src={resolvedImage} 
+              alt={imageAltTitle} 
+              title={imageAltTitle} 
+              fill 
+              sizes="(max-width: 768px) 100vw, 50vw" 
+              className="object-cover" 
+            />
+          ) : (
+            <div className="w-full h-full bg-zinc-800 flex items-center justify-center text-zinc-500">No Image</div>
+          )}
         </div>
         <div className={`flex flex-col items-start text-start ${isImageLeft ? 'md:order-2' : 'md:order-none'}`}>
           <h2 className="text-2xl md:text-4xl font-extrabold mb-4 text-white">{section.title?.[currentLang]}</h2>
@@ -179,10 +206,10 @@ function renderSingleSection(section: any, currentLang: string, locale: string, 
             [&>ol]:list-decimal [&>ol]:pl-6 [&>ol]:space-y-2
             [&>h2]:text-2xl md:[&>h2]:text-3xl [&>h2]:font-extrabold [&>h2]:text-white [&>h2]:mt-6 [&>h2]:mb-3
             [&>h3]:text-xl md:[&>h3]:text-2xl [&>h3]:font-bold [&>h3]:text-white [&>h3]:mt-5 [&>h3]:mb-2">
-            {section.description?.[currentLang] && <PortableText value={section.description[currentLang]} />}
+            {section.description?.[currentLang] && <PortableText value={section.description[currentLang]} components={portableTextComponents} />}
           </div>
 
-          <Link href={buttonUrl} className="mt-6 px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl transition-all shadow-lg flex items-center gap-3 text-sm">
+          <Link href={buttonUrl} title={buttonText} aria-label={buttonText} className="mt-6 px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl transition-all shadow-lg flex items-center gap-3 text-sm cursor-pointer">
             <span>{buttonText}</span>
           </Link>
         </div>
@@ -194,6 +221,7 @@ function renderSingleSection(section: any, currentLang: string, locale: string, 
     const resolvedHeroImage = section.imageUrl || section.bgImageUrl;
     const heroBtnText = section.ctaText?.[currentLang];
     const heroBtnUrl = formatUrl(section.ctaUrl?.[currentLang], slug ? `/contact?service=${slug}` : '#');
+    const heroAltTitle = section.title?.[currentLang] || pageName;
 
     return (
       <div key={index} className="bg-zinc-900/60 border border-red-600/30 rounded-3xl p-8 md:p-12 text-start shadow-xl flex flex-col items-start">
@@ -205,13 +233,15 @@ function renderSingleSection(section: any, currentLang: string, locale: string, 
           [&>ol]:list-decimal [&>ol]:pl-6 [&>ol]:space-y-2
           [&>h2]:text-2xl md:[&>h2]:text-3xl [&>h2]:font-extrabold [&>h2]:text-white [&>h2]:mt-6 [&>h2]:mb-3
           [&>h3]:text-xl md:[&>h3]:text-2xl [&>h3]:font-bold [&>h3]:text-white [&>h3]:mt-5 [&>h3]:mb-2">
-          {section.subtitle?.[currentLang] && <PortableText value={section.subtitle[currentLang]} />}
+          {section.subtitle?.[currentLang] && <PortableText value={section.subtitle[currentLang]} components={portableTextComponents} />}
         </div>
 
         {heroBtnText && (
           <Link 
             href={heroBtnUrl} 
-            className="mb-8 px-8 py-4 bg-red-600 hover:bg-red-700 text-white font-bold rounded-2xl transition-all shadow-[0_0_25px_rgba(220,38,38,0.4)] flex items-center gap-3"
+            title={heroBtnText}
+            aria-label={heroBtnText}
+            className="mb-8 px-8 py-4 bg-red-600 hover:bg-red-700 text-white font-bold rounded-2xl transition-all shadow-[0_0_25px_rgba(220,38,38,0.4)] flex items-center gap-3 cursor-pointer"
           >
             <span>{heroBtnText}</span>
           </Link>
@@ -219,7 +249,14 @@ function renderSingleSection(section: any, currentLang: string, locale: string, 
 
         {resolvedHeroImage && (
           <div className="relative w-full h-[350px] md:h-[450px] rounded-2xl overflow-hidden mt-2 border border-white/10 shadow-2xl">
-            <Image src={resolvedHeroImage} alt="Hero Section Image" fill sizes="100vw" className="object-cover" />
+            <Image 
+              src={resolvedHeroImage} 
+              alt={heroAltTitle} 
+              title={heroAltTitle} 
+              fill 
+              sizes="100vw" 
+              className="object-cover" 
+            />
           </div>
         )}
       </div>
@@ -236,13 +273,21 @@ function renderSingleSection(section: any, currentLang: string, locale: string, 
           {section.cards?.map((card: any, cIdx: number) => {
             const cardBtnText = card.cardCtaText?.[currentLang];
             const cardBtnUrl = formatUrl(card.cardCtaUrl?.[currentLang], card.serviceSlug || '#');
+            const cardTitleText = card.cardTitle?.[currentLang] || pageName;
 
             return (
               <div key={cIdx} className="bg-zinc-900 border border-white/10 rounded-2xl p-6 flex flex-col justify-between shadow-lg text-start">
                 <div>
                   {card.cardImageUrl && (
                     <div className="relative aspect-video rounded-xl overflow-hidden mb-4">
-                      <Image src={card.cardImageUrl} alt="Card Image" fill sizes="(max-width: 768px) 100vw, 33vw" className="object-cover" />
+                      <Image 
+                        src={card.cardImageUrl} 
+                        alt={cardTitleText} 
+                        title={cardTitleText} 
+                        fill 
+                        sizes="(max-width: 768px) 100vw, 33vw" 
+                        className="object-cover" 
+                      />
                     </div>
                   )}
                   <h3 className="text-xl font-bold mb-3">{card.cardTitle?.[currentLang]}</h3>
@@ -259,14 +304,16 @@ function renderSingleSection(section: any, currentLang: string, locale: string, 
                     [&>ol]:list-decimal [&>ol]:pl-5 [&>ol]:space-y-1.5
                     [&>h2]:text-xl [&>h2]:font-bold [&>h2]:text-white [&>h2]:mt-4 [&>h2]:mb-2
                     [&>h3]:text-lg [&>h3]:font-bold [&>h3]:text-white [&>h3]:mt-3 [&>h3]:mb-1">
-                    {card.cardDesc?.[currentLang] && <PortableText value={card.cardDesc[currentLang]} />}
+                    {card.cardDesc?.[currentLang] && <PortableText value={card.cardDesc[currentLang]} components={portableTextComponents} />}
                   </div>
                 </div>
 
                 {cardBtnText && (
                   <Link 
                     href={cardBtnUrl}
-                    className="mt-4 w-full py-3 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl transition-all text-center block shadow-md text-sm"
+                    title={cardBtnText}
+                    aria-label={cardBtnText}
+                    className="mt-4 w-full py-3 bg-red-600 hover:bg-red-700 text-white font-bold rounded-2xl transition-all text-center block shadow-md text-sm cursor-pointer"
                   >
                     {cardBtnText}
                   </Link>
@@ -299,14 +346,17 @@ function renderSingleSection(section: any, currentLang: string, locale: string, 
               <Link 
                 key={pIdx} 
                 href={pageUrl}
-                className="group bg-zinc-900/80 border border-white/10 hover:border-red-600/50 rounded-2xl overflow-hidden p-5 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 shadow-lg"
+                title={pageTitle}
+                aria-label={pageTitle}
+                className="group bg-zinc-900/80 border border-white/10 hover:border-red-600/50 rounded-2xl overflow-hidden p-5 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 shadow-lg cursor-pointer"
               >
                 <div>
                   {page.imageUrl ? (
                     <div className="relative aspect-video rounded-xl overflow-hidden mb-4 border border-white/10">
                       <Image 
                         src={page.imageUrl} 
-                        alt={pageTitle || 'Service'} 
+                        alt={pageTitle} 
+                        title={pageTitle} 
                         fill 
                         sizes="(max-width: 768px) 100vw, 33vw"
                         className="object-cover transition-transform duration-500 group-hover:scale-105" 

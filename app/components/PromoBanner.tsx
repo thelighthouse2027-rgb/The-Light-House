@@ -44,6 +44,7 @@ export default function PromoBanner({ data, locale }: PromoBannerProps) {
   const description = data.description?.[lang] || data.description?.en;
   const badge = data.discountBadge?.[lang] || data.discountBadge?.en;
   const ctaText = data.ctaText?.[lang] || data.ctaText?.en;
+  const imageAltTitle = title || "Special Offer";
 
   return (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
@@ -52,8 +53,9 @@ export default function PromoBanner({ data, locale }: PromoBannerProps) {
         
         <button
           onClick={() => setIsVisible(false)}
-          className="absolute top-4 right-4 z-10 bg-black/60 hover:bg-black text-white w-8 h-8 rounded-full flex items-center justify-center transition-colors font-bold"
+          title="إغلاق العرض"
           aria-label="إغلاق العرض"
+          className="absolute top-4 right-4 z-10 bg-black/60 hover:bg-black text-white w-8 h-8 rounded-full flex items-center justify-center transition-colors font-bold cursor-pointer"
         >
           ✕
         </button>
@@ -62,7 +64,8 @@ export default function PromoBanner({ data, locale }: PromoBannerProps) {
           <div className="w-full h-56 md:h-72 relative bg-gray-800">
             <img
               src={data.imageUrl}
-              alt={title || "Special Offer"}
+              alt={imageAltTitle}
+              title={imageAltTitle}
               className="w-full h-full object-cover"
             />
             {badge && (
@@ -95,7 +98,9 @@ export default function PromoBanner({ data, locale }: PromoBannerProps) {
           {data.ctaLink && ctaText && (
             <a
               href={data.ctaLink}
-              className="mt-4 inline-block bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 px-8 rounded-full transition-transform hover:-translate-y-1 shadow-[0_0_15px_rgba(79,70,229,0.5)]"
+              title={ctaText}
+              aria-label={ctaText}
+              className="mt-4 inline-block bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 px-8 rounded-full transition-transform hover:-translate-y-1 shadow-[0_0_15px_rgba(79,70,229,0.5)] cursor-pointer"
             >
               {ctaText}
             </a>

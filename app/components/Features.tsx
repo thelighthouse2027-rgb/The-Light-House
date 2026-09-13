@@ -54,6 +54,7 @@ export default function Features() {
       >
         {data.map((item, index) => {
           const isActive = active === index;
+          const imageText = t(`items.${item.key}.title`);
           
           return (
             <div
@@ -86,7 +87,8 @@ export default function Features() {
             >
               <Image
                 src={item.img}
-                alt={t(`items.${item.key}.title`)}
+                alt={imageText}
+                title={imageText}
                 fill
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 30vw, 20vw"
                 className={`object-cover transition-transform duration-[1200ms] ${
@@ -110,7 +112,7 @@ export default function Features() {
                   </div>
                   
                   <h3 className="text-xl md:text-3xl lg:text-4xl font-extrabold text-white mb-2 md:mb-3 drop-shadow-lg leading-tight">
-                    {t(`items.${item.key}.title`)}
+                    {imageText}
                   </h3>
                   
                   <p className="hidden md:block text-zinc-300 text-sm font-light max-w-sm drop-shadow-md leading-relaxed">
@@ -120,6 +122,7 @@ export default function Features() {
                   <div className="mt-3 md:mt-6">
                     <Link 
                       href={`/${locale}/features/${item.slug}`}
+                      title={imageText} // <-- إضافة الـ title لرابط الاستكشاف لتجاوز أخطاء أدوات الفحص
                       onClick={(e) => e.stopPropagation()} 
                     >
                       <button className="px-5 py-2 md:px-8 md:py-3 bg-white/10 hover:bg-blue-600 border border-white/20 hover:border-blue-500 backdrop-blur-md rounded-xl md:rounded-2xl text-white text-xs md:text-sm font-bold transition-all duration-300 cursor-pointer shadow-[0_0_15px_rgba(37,99,235,0.2)]">

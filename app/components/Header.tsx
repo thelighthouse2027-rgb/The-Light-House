@@ -39,10 +39,11 @@ export default function Header({ locale }: { locale: string }) {
       <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-3 rounded-2xl bg-black/90 backdrop-blur-2xl border-2 border-blue-600/40 shadow-[0_10px_30px_rgba(37,99,235,0.2)]">
         
         {/* اللوجو مع الإضاءة الزرقاء القوية الملتصقة بالحواف */}
-        <Link href={`/${locale}`} className="py-1 inline-block" aria-label="The Light House Home">
+        <Link href={`/${locale}`} title="The Light House Home" className="py-1 inline-block" aria-label="The Light House Home">
           <Image 
             src="/logoo.webp" 
             alt="The Light House Logo" 
+            title="The Light House Logo" 
             width={96}
             height={96}
             priority
@@ -52,24 +53,45 @@ export default function Header({ locale }: { locale: string }) {
 
         {/* القائمة الرئيسية - الديسكتوب */}
         <nav className="hidden lg:flex items-center gap-8 text-white font-medium text-sm">
-          <Link href={`/${locale}`} className="hover:text-blue-400 hover:drop-shadow-[0_0_8px_rgba(59,130,246,0.8)] transition-all">{t('home')}</Link>
-          <Link href={`/${locale}/about`} className="text-white/90 hover:text-blue-400 hover:drop-shadow-[0_0_8px_rgba(59,130,246,0.8)] transition-all">{t('about')}</Link>
-          <Link href={`/${locale}/services`} className="text-white/90 hover:text-blue-400 hover:drop-shadow-[0_0_8px_rgba(59,130,246,0.8)] transition-all">{t('services')}</Link>
-          <Link href={`/${locale}/search`} className="text-white/90 hover:text-blue-400 hover:drop-shadow-[0_0_8px_rgba(59,130,246,0.8)] transition-all">{t('exploreAndBook')}</Link>
-          <Link href={`/${locale}/contact`} className="text-white/90 hover:text-blue-400 hover:drop-shadow-[0_0_8px_rgba(59,130,246,0.8)] transition-all">{t('contact')}</Link>
+          <Link href={`/${locale}`} title={t('home')} className="hover:text-blue-400 hover:drop-shadow-[0_0_8px_rgba(59,130,246,0.8)] transition-all">{t('home')}</Link>
+          <Link href={`/${locale}/about`} title={t('about')} className="text-white/90 hover:text-blue-400 hover:drop-shadow-[0_0_8px_rgba(59,130,246,0.8)] transition-all">{t('about')}</Link>
+          <Link href={`/${locale}/services`} title={t('services')} className="text-white/90 hover:text-blue-400 hover:drop-shadow-[0_0_8px_rgba(59,130,246,0.8)] transition-all">{t('services')}</Link>
+          <Link href={`/${locale}/search`} title={t('exploreAndBook')} className="text-white/90 hover:text-blue-400 hover:drop-shadow-[0_0_8px_rgba(59,130,246,0.8)] transition-all">{t('exploreAndBook')}</Link>
+          <Link href={`/${locale}/contact`} title={t('contact')} className="text-white/90 hover:text-blue-400 hover:drop-shadow-[0_0_8px_rgba(59,130,246,0.8)] transition-all">{t('contact')}</Link>
         </nav>
 
         <div className="flex items-center gap-4 md:gap-5">
           
           {/* روابط السوشيال ميديا - ديسكتوب */}
           <div className="hidden md:flex items-center gap-3">
-            <a href="https://wa.me/201273327311" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" className="text-zinc-300 hover:text-blue-400 hover:drop-shadow-[0_0_8px_rgba(59,130,246,0.8)] transition-all">
+            <a 
+              href="https://wa.me/201273327311" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              title="WhatsApp"
+              aria-label="WhatsApp" 
+              className="text-zinc-300 hover:text-blue-400 hover:drop-shadow-[0_0_8px_rgba(59,130,246,0.8)] transition-all"
+            >
               <FaWhatsapp className="text-lg" aria-hidden="true" />
             </a>
-            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="text-zinc-300 hover:text-blue-400 hover:drop-shadow-[0_0_8px_rgba(59,130,246,0.8)] transition-all">
+            <a 
+              href="https://facebook.com" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              title="Facebook"
+              aria-label="Facebook" 
+              className="text-zinc-300 hover:text-blue-400 hover:drop-shadow-[0_0_8px_rgba(59,130,246,0.8)] transition-all"
+            >
               <FaFacebookF className="text-md" aria-hidden="true" />
             </a>
-            <a href="https://www.youtube.com/@TheLightHouse-v8b" target="_blank" rel="noopener noreferrer" aria-label="YouTube" className="text-zinc-300 hover:text-blue-400 hover:drop-shadow-[0_0_8px_rgba(59,130,246,0.8)] transition-all">
+            <a 
+              href="https://www.youtube.com/@TheLightHouse-v8b" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              title="YouTube"
+              aria-label="YouTube" 
+              className="text-zinc-300 hover:text-blue-400 hover:drop-shadow-[0_0_8px_rgba(59,130,246,0.8)] transition-all"
+            >
               <FaYoutube className="text-lg" aria-hidden="true" />
             </a>
           </div>
@@ -94,6 +116,8 @@ export default function Header({ locale }: { locale: string }) {
                   <Link 
                     key={l.code} 
                     href={`/${l.code}`} 
+                    title={l.name}
+                    aria-label={l.name}
                     onClick={() => setLangDropdownOpen(false)}
                     className={`block px-4 py-2 text-xs md:text-sm font-medium transition-colors ${
                       locale === l.code ? 'bg-blue-600 text-white font-bold' : 'text-zinc-300 hover:bg-blue-950/50 hover:text-blue-400'
@@ -109,6 +133,7 @@ export default function Header({ locale }: { locale: string }) {
           <button 
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)} 
             aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+            title={mobileMenuOpen ? "Close menu" : "Open menu"}
             className="lg:hidden text-white p-1 hover:text-blue-400 transition-colors focus:outline-none cursor-pointer drop-shadow-[0_0_8px_rgba(59,130,246,0.8)]"
           >
             <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -124,22 +149,43 @@ export default function Header({ locale }: { locale: string }) {
       {mobileMenuOpen && (
         <div className="lg:hidden mt-3 max-w-7xl mx-auto bg-black/95 backdrop-blur-2xl border border-blue-600 rounded-2xl p-6 shadow-[0_10px_40px_rgba(37,99,235,0.5)]">
           <nav className="flex flex-col gap-5 text-center">
-            <Link href={`/${locale}`} onClick={() => setMobileMenuOpen(false)} className="text-white/90 text-lg hover:text-blue-400 transition-colors drop-shadow-md">{t('home')}</Link>
-            <Link href={`/${locale}/about`} onClick={() => setMobileMenuOpen(false)} className="text-white/90 text-lg hover:text-blue-400 transition-colors drop-shadow-md">{t('about')}</Link>
-            <Link href={`/${locale}/services`} onClick={() => setMobileMenuOpen(false)} className="text-white/90 text-lg hover:text-blue-400 transition-colors drop-shadow-md">{t('services')}</Link>
-            <Link href={`/${locale}/search`} onClick={() => setMobileMenuOpen(false)} className="text-white/90 text-lg hover:text-blue-400 transition-colors drop-shadow-md">{t('exploreAndBook')}</Link>
-            <Link href={`/${locale}/contact`} onClick={() => setMobileMenuOpen(false)} className="text-white/90 text-lg hover:text-blue-400 transition-colors drop-shadow-md">{t('contact')}</Link>
+            <Link href={`/${locale}`} title={t('home')} aria-label={t('home')} onClick={() => setMobileMenuOpen(false)} className="text-white/90 text-lg hover:text-blue-400 transition-colors drop-shadow-md">{t('home')}</Link>
+            <Link href={`/${locale}/about`} title={t('about')} aria-label={t('about')} onClick={() => setMobileMenuOpen(false)} className="text-white/90 text-lg hover:text-blue-400 transition-colors drop-shadow-md">{t('about')}</Link>
+            <Link href={`/${locale}/services`} title={t('services')} aria-label={t('services')} onClick={() => setMobileMenuOpen(false)} className="text-white/90 text-lg hover:text-blue-400 transition-colors drop-shadow-md">{t('services')}</Link>
+            <Link href={`/${locale}/search`} title={t('exploreAndBook')} aria-label={t('exploreAndBook')} onClick={() => setMobileMenuOpen(false)} className="text-white/90 text-lg hover:text-blue-400 transition-colors drop-shadow-md">{t('exploreAndBook')}</Link>
+            <Link href={`/${locale}/contact`} title={t('contact')} aria-label={t('contact')} onClick={() => setMobileMenuOpen(false)} className="text-white/90 text-lg hover:text-blue-400 transition-colors drop-shadow-md">{t('contact')}</Link>
           </nav>
           
           {/* روابط السوشيال ميديا - موبايل */}
           <div className="mt-6 pt-6 border-t border-blue-600/40 flex justify-center gap-6">
-            <a href="https://wa.me/201273327311" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" className="p-3 bg-blue-600/10 border border-blue-500 text-white hover:bg-blue-600 rounded-xl transition-all shadow-[0_0_15px_rgba(37,99,235,0.3)]">
+            <a 
+              href="https://wa.me/201273327311" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              title="WhatsApp"
+              aria-label="WhatsApp" 
+              className="p-3 bg-blue-600/10 border border-blue-500 text-white hover:bg-blue-600 rounded-xl transition-all shadow-[0_0_15px_rgba(37,99,235,0.3)]"
+            >
               <FaWhatsapp className="text-xl" aria-hidden="true" />
             </a>
-            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="p-3 bg-blue-600/10 border border-blue-500 text-white hover:bg-blue-600 rounded-xl transition-all shadow-[0_0_15px_rgba(37,99,235,0.3)]">
+            <a 
+              href="https://facebook.com" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              title="Facebook"
+              aria-label="Facebook" 
+              className="p-3 bg-blue-600/10 border border-blue-500 text-white hover:bg-blue-600 rounded-xl transition-all shadow-[0_0_15px_rgba(37,99,235,0.3)]"
+            >
               <FaFacebookF className="text-lg" aria-hidden="true" />
             </a>
-            <a href="https://www.youtube.com/@TheLightHouse-v8b" target="_blank" rel="noopener noreferrer" aria-label="YouTube" className="p-3 bg-blue-600/10 border border-blue-500 text-white hover:bg-blue-600 rounded-xl transition-all shadow-[0_0_15px_rgba(37,99,235,0.3)]">
+            <a 
+              href="https://www.youtube.com/@TheLightHouse-v8b" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              title="YouTube"
+              aria-label="YouTube" 
+              className="p-3 bg-blue-600/10 border border-blue-500 text-white hover:bg-blue-600 rounded-xl transition-all shadow-[0_0_15px_rgba(37,99,235,0.3)]"
+            >
               <FaYoutube className="text-xl" aria-hidden="true" />
             </a>
           </div>

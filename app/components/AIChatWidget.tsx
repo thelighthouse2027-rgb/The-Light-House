@@ -1,4 +1,5 @@
 'use client';
+
 import { useState, useEffect } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
 import { useRouter } from 'next/navigation';
@@ -92,6 +93,8 @@ export default function AIChatWidget() {
       <button
         id="my-chat-button"
         onClick={handleClick}
+        title="Chat with us"
+        aria-label="Chat with us"
         className="fixed bottom-6 right-6 z-[99999] px-5 py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm rounded-2xl shadow-[0_0_25px_rgba(37,99,235,0.6)] transition-all duration-200 border border-blue-500 cursor-pointer flex items-center gap-2.5 active:scale-95"
       >
         <span className="w-2.5 h-2.5 rounded-full bg-white animate-pulse"></span>

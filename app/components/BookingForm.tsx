@@ -67,7 +67,7 @@ export default function BookingForm({ adultPrice = 150, childPrice = 150, locale
               min="1" 
               value={adults}
               onChange={(e) => setAdults(parseInt(e.target.value) || 0)}
-              className="w-full bg-white text-zinc-900 rounded-xl px-4 py-3 text-sm focus:outline-none font-bold text-zinc-900" 
+              className="w-full bg-white text-zinc-900 rounded-xl px-4 py-3 text-sm focus:outline-none font-bold" 
             />
           </div>
           <div>
@@ -80,7 +80,7 @@ export default function BookingForm({ adultPrice = 150, childPrice = 150, locale
               min="0" 
               value={children}
               onChange={(e) => setChildren(parseInt(e.target.value) || 0)}
-              className="w-full bg-white text-zinc-900 rounded-xl px-4 py-3 text-sm focus:outline-none font-bold text-zinc-900" 
+              className="w-full bg-white text-zinc-900 rounded-xl px-4 py-3 text-sm focus:outline-none font-bold" 
             />
           </div>
         </div>
@@ -92,7 +92,7 @@ export default function BookingForm({ adultPrice = 150, childPrice = 150, locale
             required
             value={fullName}
             onChange={(e) => setFullName(e.target.value)}
-            className="w-full bg-white text-zinc-900 rounded-xl px-4 py-3 text-sm focus:outline-none placeholder:text-zinc-500 text-zinc-900" 
+            className="w-full bg-white text-zinc-900 rounded-xl px-4 py-3 text-sm focus:outline-none placeholder:text-zinc-500" 
           />
         </div>
 
@@ -103,7 +103,7 @@ export default function BookingForm({ adultPrice = 150, childPrice = 150, locale
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full bg-white text-zinc-900 rounded-xl px-4 py-3 text-sm focus:outline-none placeholder:text-zinc-500 text-zinc-900" 
+            className="w-full bg-white text-zinc-900 rounded-xl px-4 py-3 text-sm focus:outline-none placeholder:text-zinc-500" 
           />
         </div>
 
@@ -114,7 +114,7 @@ export default function BookingForm({ adultPrice = 150, childPrice = 150, locale
             required
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
-            className="w-full bg-white text-zinc-900 rounded-xl px-4 py-3 text-sm focus:outline-none placeholder:text-zinc-500 text-zinc-900" 
+            className="w-full bg-white text-zinc-900 rounded-xl px-4 py-3 text-sm focus:outline-none placeholder:text-zinc-500" 
           />
         </div>
 
@@ -125,7 +125,7 @@ export default function BookingForm({ adultPrice = 150, childPrice = 150, locale
             required
             value={country}
             onChange={(e) => setCountry(e.target.value)}
-            className="w-full bg-white text-zinc-900 rounded-xl px-4 py-3 text-sm focus:outline-none placeholder:text-zinc-500 text-zinc-900" 
+            className="w-full bg-white text-zinc-900 rounded-xl px-4 py-3 text-sm focus:outline-none placeholder:text-zinc-500" 
           />
         </div>
 
@@ -135,7 +135,7 @@ export default function BookingForm({ adultPrice = 150, childPrice = 150, locale
             rows={3} 
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
-            className="w-full bg-white text-zinc-900 rounded-xl px-4 py-3 text-sm focus:outline-none placeholder:text-zinc-500 resize-none text-zinc-900" 
+            className="w-full bg-white text-zinc-900 rounded-xl px-4 py-3 text-sm focus:outline-none placeholder:text-zinc-500 resize-none" 
           />
         </div>
 
@@ -146,6 +146,8 @@ export default function BookingForm({ adultPrice = 150, childPrice = 150, locale
 
         <button 
           type="submit"
+          title="Book Now"
+          aria-label="Book Now"
           className="w-full py-4 bg-white hover:bg-zinc-200 text-zinc-900 font-bold rounded-2xl transition-all shadow-lg text-center mt-4 cursor-pointer"
         >
           Book Now

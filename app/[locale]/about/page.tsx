@@ -19,6 +19,7 @@ export default async function AboutPage({
           <Image
             src="/about.webp"
             alt="About The Light House"
+            title="About The Light House"
             fill
             priority
             className="object-cover object-center filter brightness-90"
@@ -85,6 +86,7 @@ export default async function AboutPage({
             <Image
               src="/pp.webp"
               alt="The Light House Experience"
+              title="The Light House Experience"
               fill
               className="object-cover group-hover:scale-105 transition-transform duration-700"
             />
@@ -114,7 +116,13 @@ export default async function AboutPage({
               </p>
             </div>
             <div className="relative h-64 rounded-2xl overflow-hidden border border-white/10">
-              <Image src="/ppp.webp" alt="Red Sea Diving" fill className="object-cover hover:scale-105 transition-transform duration-500" />
+              <Image 
+                src="/ppp.webp" 
+                alt="Red Sea Diving" 
+                title="Red Sea Diving" 
+                fill 
+                className="object-cover hover:scale-105 transition-transform duration-500" 
+              />
             </div>
           </div>
 
@@ -126,7 +134,13 @@ export default async function AboutPage({
               </p>
             </div>
             <div className="relative h-64 rounded-2xl overflow-hidden border border-white/10">
-              <Image src="/pppp.webp" alt="Diving Experience" fill className="object-cover hover:scale-105 transition-transform duration-500" />
+              <Image 
+                src="/pppp.webp" 
+                alt="Diving Experience" 
+                title="Diving Experience" 
+                fill 
+                className="object-cover hover:scale-105 transition-transform duration-500" 
+              />
             </div>
           </div>
 
@@ -144,6 +158,8 @@ export default async function AboutPage({
           <div className="pt-6">
             <Link
               href={`/${locale}/contact`}
+              title={t('ctaBtn')}
+              aria-label={t('ctaBtn')}
               className="inline-flex items-center justify-center px-8 py-4 bg-red-600 hover:bg-red-700 text-white font-bold rounded-2xl transition-all shadow-[0_0_25px_rgba(220,38,38,0.5)] hover:scale-105 cursor-pointer"
             >
               {t('ctaBtn')}

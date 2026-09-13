@@ -119,6 +119,8 @@ export default function CheckoutPage({ params }: { params: Promise<{ locale: str
             <div className="pt-4">
               <button 
                 type="submit"
+                title={`Pay Now (€ ${total})`}
+                aria-label={`Pay Now (€ ${total})`}
                 className="w-full py-4 bg-red-600 hover:bg-red-700 text-white font-bold rounded-2xl transition-all shadow-lg text-center cursor-pointer"
               >
                 Pay Now (€ {total})
@@ -126,7 +128,12 @@ export default function CheckoutPage({ params }: { params: Promise<{ locale: str
             </div>
 
             <div className="text-center mt-4">
-              <Link href={`/${locale}`} className="text-xs text-zinc-400 hover:underline">
+              <Link 
+                href={`/${locale}`} 
+                title="Cancel and return to home"
+                aria-label="Cancel and return to home"
+                className="text-xs text-zinc-400 hover:underline"
+              >
                 Cancel and return to home
               </Link>
             </div>

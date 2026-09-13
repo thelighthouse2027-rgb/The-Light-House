@@ -56,6 +56,8 @@ export default function LocationSection({ locale }: { locale?: string }) {
                     href="https://wa.me/201273327311" 
                     target="_blank" 
                     rel="noopener noreferrer"
+                    title="+20 127 332 7311"
+                    aria-label="Phone and WhatsApp contact"
                     className="text-blue-400 hover:text-blue-300 font-mono text-lg transition-colors block"
                   >
                     +20 127 332 7311
@@ -73,6 +75,7 @@ export default function LocationSection({ locale }: { locale?: string }) {
                   href="https://wa.me/201273327311"
                   target="_blank"
                   rel="noopener noreferrer"
+                  title="WhatsApp"
                   aria-label="WhatsApp"
                   className="w-12 h-12 rounded-2xl bg-zinc-900 border border-white/10 flex items-center justify-center text-zinc-300 hover:text-white hover:bg-green-600 hover:border-green-500 transition-all duration-300 shadow-lg"
                 >
@@ -83,6 +86,7 @@ export default function LocationSection({ locale }: { locale?: string }) {
                   href="https://facebook.com"
                   target="_blank"
                   rel="noopener noreferrer"
+                  title="Facebook"
                   aria-label="Facebook"
                   className="w-12 h-12 rounded-2xl bg-zinc-900 border border-white/10 flex items-center justify-center text-zinc-300 hover:text-white hover:bg-blue-600 hover:border-blue-500 transition-all duration-300 shadow-lg"
                 >
@@ -93,6 +97,7 @@ export default function LocationSection({ locale }: { locale?: string }) {
                   href="https://www.youtube.com/@TheLightHouse-v8b"
                   target="_blank"
                   rel="noopener noreferrer"
+                  title="YouTube"
                   aria-label="YouTube"
                   className="w-12 h-12 rounded-2xl bg-zinc-900 border border-white/10 flex items-center justify-center text-zinc-300 hover:text-white hover:bg-blue-600 hover:border-blue-500 transition-all duration-300 shadow-lg"
                 >
@@ -123,6 +128,8 @@ export default function LocationSection({ locale }: { locale?: string }) {
               href={googleMapsDirectionsUrl}
               target="_blank"
               rel="noopener noreferrer"
+              title={t('directions')}
+              aria-label={t('directions')}
               className="absolute bottom-4 right-4 z-20 bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-2xl font-semibold text-sm flex items-center gap-2 shadow-2xl transition-all duration-300 transform hover:-translate-y-1 active:scale-95 cursor-pointer"
             >
               <FaDirections className="text-lg" />

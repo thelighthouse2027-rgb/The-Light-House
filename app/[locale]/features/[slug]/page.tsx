@@ -89,7 +89,7 @@ export default async function FeaturePage({
               )}
               {!section.bgVideoFileUrl && youtubeEmbedUrl && (
                 <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none z-0">
-                  <iframe src={youtubeEmbedUrl} className="absolute top-1/2 left-1/2 w-[150vw] h-[150vh] -translate-x-1/2 -translate-y-1/2 object-cover opacity-60" allow="autoplay; encrypted-media" tabIndex={-1} />
+                  <iframe src={youtubeEmbedUrl} title="Background video player" className="absolute top-1/2 left-1/2 w-[150vw] h-[150vh] -translate-x-1/2 -translate-y-1/2 object-cover opacity-60" allow="autoplay; encrypted-media" tabIndex={-1} />
                 </div>
               )}
               <div className="absolute inset-0 bg-black/60 backdrop-blur-[1px] z-10" />
@@ -112,7 +112,7 @@ export default async function FeaturePage({
                 )}
                 {ctaText && ctaUrl && (
                   <div className="mt-4">
-                    <Link href={ctaUrl} className="px-8 py-3.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl shadow-lg transition-all duration-300">
+                    <Link href={ctaUrl} title={ctaText} aria-label={ctaText} className="px-8 py-3.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl shadow-lg transition-all duration-300">
                       {ctaText}
                     </Link>
                   </div>
@@ -126,10 +126,10 @@ export default async function FeaturePage({
           const titleText = section.title?.[lang] || section.title?.en;
           const descText = section.description?.[lang] || section.description?.en;
           const ctaText = section.ctaText?.[lang] || section.ctaText?.en;
-          // جلب الرابط حسب اللغة
           const ctaUrl = section.ctaUrl?.[lang] || section.ctaUrl?.en; 
           
           const isImageLeft = section.layoutDirection === 'imageLeft';
+          const imageAltTitle = titleText || "Split media";
 
           return (
             <section key={index} className="py-24 px-6 max-w-7xl mx-auto">
@@ -137,7 +137,7 @@ export default async function FeaturePage({
                 
                 <div className="w-full lg:w-1/2 rounded-3xl overflow-hidden shadow-2xl border border-indigo-500/20 bg-slate-900 h-[380px] md:h-[450px]">
                   {section.mediaType === 'image' && section.imageUrl && (
-                    <img src={section.imageUrl} alt={titleText || "Split media"} className="w-full h-full object-cover" />
+                    <img src={section.imageUrl} alt={imageAltTitle} title={imageAltTitle} className="w-full h-full object-cover" />
                   )}
                   {section.mediaType === 'videoFile' && section.videoFileUrl && (
                     <video autoPlay loop muted playsInline className="w-full h-full object-cover">
@@ -159,7 +159,7 @@ export default async function FeaturePage({
                   )}
                   {ctaText && ctaUrl && (
                     <div className="pt-2">
-                      <Link href={ctaUrl} className="px-7 py-3 bg-white/10 hover:bg-indigo-600 border border-white/20 hover:border-indigo-500 rounded-xl text-white font-bold transition-all duration-300 shadow-md">
+                      <Link href={ctaUrl} title={ctaText} aria-label={ctaText} className="px-7 py-3 bg-white/10 hover:bg-indigo-600 border border-white/20 hover:border-indigo-500 rounded-xl text-white font-bold transition-all duration-300 shadow-md">
                         {ctaText}
                       </Link>
                     </div>
@@ -186,11 +186,12 @@ export default async function FeaturePage({
                   {[...(section.slides || []), ...(section.slides || [])].map((slide: any, sIdx: number) => {
                     const captionText = slide.caption?.[lang] || slide.caption?.en;
                     const slideUrl = slide.slideUrl?.[lang] || slide.slideUrl?.en; 
+                    const imageAltTitle = captionText || "Slide";
                     
                     const slideContent = (
                       <div className="relative rounded-2xl overflow-hidden shadow-2xl w-[350px] md:w-[420px] h-[250px] md:h-[280px] bg-gray-900 border border-indigo-500/30 flex-shrink-0 group/card cursor-pointer">
                         {slide.imageUrl && (
-                          <img src={slide.imageUrl} alt={captionText || "Slide"} className="w-full h-full object-cover group-hover/card:scale-110 transition-transform duration-700" />
+                          <img src={slide.imageUrl} alt={imageAltTitle} title={imageAltTitle} className="w-full h-full object-cover group-hover/card:scale-110 transition-transform duration-700" />
                         )}
                         {captionText && (
                           <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex items-end p-6">
@@ -201,7 +202,7 @@ export default async function FeaturePage({
                     );
 
                     return slideUrl ? (
-                      <Link key={sIdx} href={slideUrl}>
+                      <Link key={sIdx} href={slideUrl} title={captionText || "Slide Link"} aria-label={captionText || "Slide Link"}>
                         {slideContent}
                       </Link>
                     ) : (
@@ -231,13 +232,14 @@ export default async function FeaturePage({
                   const cardDesc = card.cardDesc?.[lang] || card.cardDesc?.en;
                   const cardCtaText = card.cardCtaText?.[lang] || card.cardCtaText?.en;
                   const cardCtaUrl = card.cardCtaUrl?.[lang] || card.cardCtaUrl?.en;
+                  const cardImageAltTitle = cardTitle || "Card";
 
                   return (
                     <div key={cIdx} className="bg-slate-900/80 border border-indigo-500/30 rounded-2xl overflow-hidden shadow-[0_0_20px_rgba(79,70,229,0.15)] flex flex-col justify-between">
                       <div>
                         {card.cardImageUrl && (
                           <div className="h-52 w-full overflow-hidden relative">
-                            <img src={card.cardImageUrl} alt={cardTitle || "Card"} className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+                            <img src={card.cardImageUrl} alt={cardImageAltTitle} title={cardImageAltTitle} className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
                           </div>
                         )}
                         <div className="p-6">
@@ -250,13 +252,13 @@ export default async function FeaturePage({
                         {card.hasMiniSlider && card.miniSliderUrls?.length > 0 && (
                           <div className="pt-2 border-t border-zinc-800 flex gap-2 overflow-x-auto pb-2">
                             {card.miniSliderUrls.map((mUrl: string, mIdx: number) => (
-                              <img key={mIdx} src={mUrl} alt="Mini slide" className="w-20 h-16 object-cover rounded-lg border border-indigo-500/30 flex-shrink-0" />
+                              <img key={mIdx} src={mUrl} alt="Mini slide" title="Mini slide" className="w-20 h-16 object-cover rounded-lg border border-indigo-500/30 flex-shrink-0" />
                             ))}
                           </div>
                         )}
 
                         {cardCtaText && cardCtaUrl && (
-                          <Link href={cardCtaUrl} className="w-full py-2.5 bg-indigo-600/30 hover:bg-indigo-600 border border-indigo-500/50 text-center rounded-xl text-white font-semibold text-sm transition-all duration-300">
+                          <Link href={cardCtaUrl} title={cardCtaText} aria-label={cardCtaText} className="w-full py-2.5 bg-indigo-600/30 hover:bg-indigo-600 border border-indigo-500/50 text-center rounded-xl text-white font-semibold text-sm transition-all duration-300">
                             {cardCtaText}
                           </Link>
                         )}

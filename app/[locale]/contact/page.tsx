@@ -40,6 +40,8 @@ export default function ContactPage() {
     }
   };
 
+  const submitButtonText = t('submitBtn');
+
   return (
     <main className="w-full min-h-[85vh] py-24 px-4 md:px-8 flex flex-col items-center justify-center relative">
       
@@ -155,6 +157,8 @@ export default function ContactPage() {
           <button 
             type="submit" 
             disabled={isSubmitting}
+            title={String(submitButtonText)}
+            aria-label={String(submitButtonText)}
             className="w-full mt-2 px-8 py-4 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl shadow-[0_0_20px_rgba(220,38,38,0.4)] hover:shadow-[0_0_30px_rgba(220,38,38,0.6)] transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer"
           >
             {isSubmitting ? (
@@ -163,7 +167,7 @@ export default function ContactPage() {
                 {t('sending')}
               </>
             ) : (
-              t('submitBtn')
+              submitButtonText
             )}
           </button>
 

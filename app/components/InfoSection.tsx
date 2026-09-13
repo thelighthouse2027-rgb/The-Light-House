@@ -16,6 +16,7 @@ export default function AboutSection({ locale }: { locale: string }) {
             <Image 
               src="/aboutus.webp" 
               alt="About The Light House" 
+              title="About The Light House"
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 400px"
               className="absolute inset-0 object-cover transition-transform duration-1000 group-hover:scale-110"
@@ -66,6 +67,8 @@ export default function AboutSection({ locale }: { locale: string }) {
 
           <Link
             href={`/${locale}/aboutus`}
+            title={t('exploreBtn')}
+            aria-label={t('exploreBtn')}
             className="px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-2xl transition-all duration-300 shadow-[0_0_25px_rgba(37,99,235,0.4)] hover:shadow-[0_0_40px_rgba(37,99,235,0.7)] hover:-translate-y-1 flex items-center gap-3 cursor-pointer"
           >
             <span>{t('exploreBtn')}</span>

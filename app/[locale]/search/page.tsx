@@ -30,6 +30,8 @@ export default function SearchPage({ params }: { params: Promise<{ locale: strin
     }
   };
 
+  const searchButtonText = loading ? 'Searching...' : 'Search Now';
+
   return (
     <main className="w-full min-h-screen bg-black text-white pt-36 pb-24 px-6">
       <div className="max-w-5xl mx-auto">
@@ -52,30 +54,39 @@ export default function SearchPage({ params }: { params: Promise<{ locale: strin
           <button
             type="submit"
             disabled={loading}
+            title={searchButtonText}
+            aria-label={searchButtonText}
             className="px-8 py-4 bg-red-600 hover:bg-red-700 text-white font-bold rounded-2xl transition-all shadow-[0_0_20px_rgba(220,38,38,0.4)] cursor-pointer disabled:opacity-50"
           >
-            {loading ? 'Searching...' : 'Search Now'}
+            {searchButtonText}
           </button>
         </form>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {results.length > 0 ? (
-            results.map((item, index) => (
-              <div key={index} className="bg-zinc-900/40 border border-white/10 rounded-3xl p-6 flex flex-col justify-between hover:border-red-600/50 transition-all duration-300">
-                <div>
-                  <h3 className="text-xl font-bold mb-2 text-white">{item.advertiserName || 'Travel Offer'}</h3>
-                  <p className="text-zinc-400 text-sm mb-6 line-clamp-2">{item.linkName || item.description || 'Explore this exclusive offer.'}</p>
+            results.map((item, index) => {
+              const advertiserTitle = item.advertiserName || 'Travel Offer';
+              const bookNowText = 'Book Now (Affiliate)';
+
+              return (
+                <div key={index} className="bg-zinc-900/40 border border-white/10 rounded-3xl p-6 flex flex-col justify-between hover:border-red-600/50 transition-all duration-300">
+                  <div>
+                    <h3 className="text-xl font-bold mb-2 text-white">{advertiserTitle}</h3>
+                    <p className="text-zinc-400 text-sm mb-6 line-clamp-2">{item.linkName || item.description || 'Explore this exclusive offer.'}</p>
+                  </div>
+                  <a
+                    href={item.clickUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title={bookNowText}
+                    aria-label={bookNowText}
+                    className="inline-flex items-center justify-center w-full py-3 bg-red-600/20 hover:bg-red-600 border border-red-600/40 text-red-400 hover:text-white font-semibold rounded-xl transition-all"
+                  >
+                    {bookNowText}
+                  </a>
                 </div>
-                <a
-                  href={item.clickUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center w-full py-3 bg-red-600/20 hover:bg-red-600 border border-red-600/40 text-red-400 hover:text-white font-semibold rounded-xl transition-all"
-                >
-                  Book Now (Affiliate)
-                </a>
-              </div>
-            ))
+              );
+            })
           ) : (
             <div className="col-span-full text-center py-20 text-zinc-500">
               {loading ? 'Searching for best results...' : 'No results found. Try searching for a destination.'}
