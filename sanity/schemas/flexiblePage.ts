@@ -252,6 +252,16 @@ export default {
           ]
         }
       ]
+    },
+    // إعدادات الـ SEO الخاصة بكل صفحة
+    {
+      name: 'seo',
+      title: 'SEO Settings (إعدادات محركات البحث لكل صفحة)',
+      type: 'object',
+      fields: [
+        createMultiLangField('metaTitle', 'عنوان الصفحة لمحركات البحث (Meta Title)'),
+        createMultiLangField('metaDescription', 'وصف الصفحة لمحركات البحث (Meta Description)'),
+      ]
     }
   ],
   preview: {

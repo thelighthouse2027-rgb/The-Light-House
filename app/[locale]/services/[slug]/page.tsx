@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { PortableText } from '@portabletext/react';
 import BookingForm from '../../../components/BookingForm';
 
+// جلب بيانات الصفحة والـ SEO من سانتي
 async function getFlexiblePage(slug: string, locale: string) {
   const cleanSlug = decodeURIComponent(slug).trim();
   const currentLang = ['en', 'de', 'fr', 'pl'].includes(locale) ? locale : 'en';
@@ -11,6 +12,8 @@ async function getFlexiblePage(slug: string, locale: string) {
   const query = `*[_type == "flexiblePage" && lower(slug.current) == lower($cleanSlug)][0]{
     "name": pageTitle,
     "slug": slug.current,
+    "metaTitle": seo.metaTitle[$currentLang],
+    "metaDescription": seo.metaDescription[$currentLang],
     sections[]{
       _type,
       title,
@@ -50,6 +53,24 @@ async function getFlexiblePage(slug: string, locale: string) {
   return await client.fetch(query, { cleanSlug, currentLang });
 }
 
+// تخصيص العنوان والميتا ديسكربشن ديناميكياً لكل صفحة حسب بيانات سانتي
+export async function generateMetadata({ params }: { params: Promise<{ locale: string; slug: string }> }) {
+  const { locale, slug } = await params;
+  const pageData = await getFlexiblePage(slug, locale);
+
+  const currentLang = ['en', 'de', 'fr', 'pl'].includes(locale) ? locale : 'en';
+  
+  // استخراج العنوان الاحتياطي في حال لم يتم كتابة عنوان SEO خاص
+  const fallbackTitle = typeof pageData?.name === 'object' 
+    ? (pageData.name?.[currentLang] || pageData.name?.en || 'The Light House') 
+    : (pageData?.name || 'The Light House');
+
+  return {
+    title: pageData?.metaTitle || fallbackTitle,
+    description: pageData?.metaDescription || 'Explore and book your adventures with The Light House.',
+  };
+}
+
 export default async function ServiceDetailPage({
   params,
 }: {
@@ -71,7 +92,6 @@ export default async function ServiceDetailPage({
   const currentLang = ['en', 'de', 'fr', 'pl'].includes(locale) ? locale : 'en';
   const backText = locale === 'ar' ? 'العودة للرئيسية' : locale === 'de' ? 'Zurück zur Startseite' : locale === 'fr' ? 'Retour à l\'accueil' : 'Back to Home';
 
-  // استخراج اسم الصفحة باللغة الحالية بدقة لمنع خطأ الـ Objects
   const pageName = typeof pageData.name === 'object' 
     ? (pageData.name?.[currentLang] || pageData.name?.en || 'Service') 
     : pageData.name;
@@ -137,7 +157,7 @@ function renderSections(sections: any[], currentLang: string, locale: string, sl
 }
 
 function renderSingleSection(section: any, currentLang: string, locale: string, formatUrl: Function, slug?: string, index: number = 0) {
-  
+  // ... (باقي دوال عرض الأقسام كما هي تماماً بدون تغيير)
   if (section._type === 'splitSection') {
     const isImageLeft = section.layoutDirection === 'imageLeft';
     const buttonText = section.ctaText?.[currentLang] || 'Book Now';
@@ -147,7 +167,7 @@ function renderSingleSection(section: any, currentLang: string, locale: string, 
     return (
       <div key={index} className={`bg-zinc-900/60 backdrop-blur-2xl border border-red-600/30 rounded-3xl overflow-hidden p-8 md:p-12 grid grid-cols-1 md:grid-cols-2 gap-8 items-center ${isImageLeft ? 'md:grid-flow-dense' : ''}`}>
         <div className={`relative aspect-[4/3] w-full rounded-2xl overflow-hidden border border-red-600/20 shadow-xl ${isImageLeft ? 'md:order-1' : 'md:order-none'}`}>
-          {resolvedImage ? <Image src={resolvedImage} alt="Image" fill className="object-cover" /> : <div className="w-full h-full bg-zinc-800 flex items-center justify-center text-zinc-500">No Image</div>}
+          {resolvedImage ? <Image src={resolvedImage} alt="Image" fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover" /> : <div className="w-full h-full bg-zinc-800 flex items-center justify-center text-zinc-500">No Image</div>}
         </div>
         <div className={`flex flex-col items-start text-start ${isImageLeft ? 'md:order-2' : 'md:order-none'}`}>
           <h2 className="text-2xl md:text-4xl font-extrabold mb-4 text-white">{section.title?.[currentLang]}</h2>
@@ -199,7 +219,7 @@ function renderSingleSection(section: any, currentLang: string, locale: string, 
 
         {resolvedHeroImage && (
           <div className="relative w-full h-[350px] md:h-[450px] rounded-2xl overflow-hidden mt-2 border border-white/10 shadow-2xl">
-            <Image src={resolvedHeroImage} alt="Hero Section Image" fill className="object-cover" />
+            <Image src={resolvedHeroImage} alt="Hero Section Image" fill sizes="100vw" className="object-cover" />
           </div>
         )}
       </div>
@@ -222,7 +242,7 @@ function renderSingleSection(section: any, currentLang: string, locale: string, 
                 <div>
                   {card.cardImageUrl && (
                     <div className="relative aspect-video rounded-xl overflow-hidden mb-4">
-                      <Image src={card.cardImageUrl} alt="Card Image" fill className="object-cover" />
+                      <Image src={card.cardImageUrl} alt="Card Image" fill sizes="(max-width: 768px) 100vw, 33vw" className="object-cover" />
                     </div>
                   )}
                   <h3 className="text-xl font-bold mb-3">{card.cardTitle?.[currentLang]}</h3>
@@ -288,6 +308,7 @@ function renderSingleSection(section: any, currentLang: string, locale: string, 
                         src={page.imageUrl} 
                         alt={pageTitle || 'Service'} 
                         fill 
+                        sizes="(max-width: 768px) 100vw, 33vw"
                         className="object-cover transition-transform duration-500 group-hover:scale-105" 
                       />
                     </div>

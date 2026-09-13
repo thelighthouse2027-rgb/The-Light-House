@@ -11,6 +11,32 @@ import { client } from '@/sanity/lib/client';
 
 export const revalidate = 0;
 
+// ترجمة الـ Meta Description للغات الأربع
+const metaDescriptions: Record<string, string> = {
+  en: "Explore and book your diving, snorkeling, and safari adventures with The Light House.",
+  de: "Entdecken und buchen Sie Ihre Tauch-, Schnorchel- und Safari-Abenteuer mit The Light House.",
+  fr: "Explorez et réservez vos aventures de plongée, de snorkeling et de safari avec The Light House.",
+  pl: "Odkryj i zarezerwuj swoje przygody nurkowe, snorkelingowe i safari z The Light House."
+};
+
+const metaTitles: Record<string, string> = {
+  en: "The Light House - Diving & Safari Adventures",
+  de: "The Light House - Tauch- & Safari-Abenteuer",
+  fr: "The Light House - Plongée & Aventures Safari",
+  pl: "The Light House - Nurkowanie i Przygody Safari"
+};
+
+// توليد العنوان والوصف تلقائياً حسب لغة المستخدم
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  const lang = ['en', 'de', 'fr', 'pl'].includes(locale) ? locale : 'en';
+
+  return {
+    title: metaTitles[lang] || metaTitles.en,
+    description: metaDescriptions[lang] || metaDescriptions.en,
+  };
+}
+
 async function getPromoBanner() {
   const query = `*[_type == "promoBanner"][0]{
     ...,
