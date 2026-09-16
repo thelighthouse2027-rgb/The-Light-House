@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 export default function BookingForm({ adultPrice = 150, childPrice = 150, locale, serviceName, formTitle }: any) {
@@ -12,17 +12,20 @@ export default function BookingForm({ adultPrice = 150, childPrice = 150, locale
   const [phone, setPhone] = useState('');
   const [country, setCountry] = useState('');
   const [notes, setNotes] = useState('');
+  
+  // حماية من مشكلة الـ Hydration عبر توحيد أول رندر
+  const [isMounted, setIsMounted] = useState(false);
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
-  // حساب التكلفة الإجمالية تلقائياً ولحظياً
   const totalCost = (adults * Number(adultPrice)) + (children * Number(childPrice));
 
-  // عنوان الفورم: يعرض العنوان القادم من سانتي أو اسم الخدمة أو عنوان افتراضي
+  // العنوان الذي سيظهر ديناميكياً بعد التحميل
   const displayTitle = formTitle || (serviceName ? `Book: ${serviceName}` : 'Send an Inquiry');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // تجميع كافة البيانات لتنتقل وتتثبت تلقائياً في صفحة الدفع
     const queryParams = new URLSearchParams({
       service: serviceName || 'Diving Tour',
       date: date || 'Not specified',
@@ -36,13 +39,15 @@ export default function BookingForm({ adultPrice = 150, childPrice = 150, locale
       notes: notes || ''
     });
 
-    // الانتقال التلقائي لصفحة الدفع مع تثبيت البيانات
     router.push(`/${locale}/checkout?${queryParams.toString()}`);
   };
 
   return (
     <div className="max-w-md mx-auto bg-[#101033] border border-blue-600/35 rounded-3xl p-6 md:p-8 shadow-2xl text-white">
-      <h3 className="text-2xl font-extrabold mb-6 text-white">{displayTitle}</h3>
+      {/* توحيد النص المبدئي لكي يتطابق السيرفر مع الكلانت لحظة التحميل */}
+      <h3 className="text-2xl font-extrabold mb-6 text-white">
+        {isMounted ? displayTitle : 'Send an Inquiry'}
+      </h3>
       
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>

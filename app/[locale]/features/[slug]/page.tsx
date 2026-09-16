@@ -1,13 +1,20 @@
 import { client } from '@/sanity/lib/client';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
+import { PortableText } from '@portabletext/react';
 
 export const revalidate = 0;
 
-async function getPageBySlug(slug: string) {
-  const query = `*[_type == "flexiblePage" && slug.current == $slug][0]{
-    pageTitle,
-    slug,
+// جلب بيانات الصفحة والـ SEO من سانتي
+async function getPageBySlug(slug: string, locale: string) {
+  const cleanSlug = decodeURIComponent(slug).trim();
+  const currentLang = ['en', 'de', 'fr', 'pl'].includes(locale) ? locale : 'en';
+
+  const query = `*[_type == "flexiblePage" && lower(slug.current) == lower($cleanSlug)][0]{
+    "name": pageTitle,
+    "slug": slug.current,
+    "metaTitle": seo.metaTitle[$currentLang],
+    "metaDescription": seo.metaDescription[$currentLang],
     sections[]{
       ...,
       _type == "heroSection" => {
@@ -30,14 +37,52 @@ async function getPageBySlug(slug: string) {
       _type == "gridCardsSection" => {
         ...,
         cards[]{
-          ...,
+          cardTitle,
+          cardDesc,
           "cardImageUrl": cardImage.asset->url,
+          servicePrice,
+          serviceSlug,
+          cardCtaText,
+          cardCtaUrl,
+          hasMiniSlider,
           "miniSliderUrls": miniSliderImages[].asset->url
         }
       }
     }
   }`;
-  return await client.fetch(query, { slug });
+  return await client.fetch(query, { cleanSlug, currentLang });
+}
+
+// تخصيص الروابط داخل Portable Text
+const portableTextComponents = {
+  marks: {
+    link: ({ value, children }: any) => {
+      const href = value?.href || '#';
+      const linkTitle = typeof children === 'string' ? children : 'External Link';
+      return (
+        <Link href={href} title={linkTitle} aria-label={linkTitle} className="text-indigo-400 hover:underline">
+          {children}
+        </Link>
+      );
+    },
+  },
+};
+
+// توليد الميتا ديسكربشن والعنوان ديناميكياً لكل صفحة Feature حسب بيانات سانتي
+export async function generateMetadata({ params }: { params: Promise<{ locale: string; slug: string }> }) {
+  const { locale, slug } = await params;
+  const data = await getPageBySlug(slug, locale);
+
+  const currentLang = ['en', 'de', 'fr', 'pl'].includes(locale) ? locale : 'en';
+  
+  const fallbackTitle = typeof data?.name === 'object' 
+    ? (data.name?.[currentLang] || data.name?.en || 'The Light House') 
+    : (data?.name || 'The Light House');
+
+  return {
+    title: data?.metaTitle || fallbackTitle,
+    description: data?.metaDescription || 'Explore and book your adventures with The Light House.',
+  };
 }
 
 export default async function FeaturePage({ 
@@ -46,7 +91,7 @@ export default async function FeaturePage({
   params: Promise<{ locale: string; slug: string }> 
 }) {
   const { locale, slug } = await params;
-  const data = await getPageBySlug(slug);
+  const data = await getPageBySlug(slug, locale);
 
   if (!data) {
     notFound();
@@ -106,13 +151,17 @@ export default async function FeaturePage({
                   </h1>
                 )}
                 {subtitleText && (
-                  <p className="text-zinc-200 text-lg md:text-xl max-w-2xl font-light leading-relaxed">
-                    {subtitleText}
-                  </p>
+                  <div className="text-zinc-200 text-lg md:text-xl max-w-2xl font-light leading-relaxed">
+                    {typeof subtitleText === 'object' ? (
+                      <PortableText value={subtitleText} components={portableTextComponents} />
+                    ) : (
+                      subtitleText
+                    )}
+                  </div>
                 )}
                 {ctaText && ctaUrl && (
                   <div className="mt-4">
-                    <Link href={ctaUrl} title={ctaText} aria-label={ctaText} className="px-8 py-3.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl shadow-lg transition-all duration-300">
+                    <Link href={ctaUrl} title={typeof ctaText === 'string' ? ctaText : 'CTA'} aria-label={typeof ctaText === 'string' ? ctaText : 'CTA'} className="px-8 py-3.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl shadow-lg transition-all duration-300">
                       {ctaText}
                     </Link>
                   </div>
@@ -124,7 +173,7 @@ export default async function FeaturePage({
 
         if (section._type === 'splitSection') {
           const titleText = section.title?.[lang] || section.title?.en;
-          const descText = section.description?.[lang] || section.description?.en;
+          const descVal = section.description?.[lang] || section.description?.en;
           const ctaText = section.ctaText?.[lang] || section.ctaText?.en;
           const ctaUrl = section.ctaUrl?.[lang] || section.ctaUrl?.en; 
           
@@ -152,14 +201,18 @@ export default async function FeaturePage({
                       {titleText}
                     </h2>
                   )}
-                  {descText && (
-                    <p className="text-zinc-300 text-lg font-light leading-relaxed">
-                      {descText}
-                    </p>
+                  {descVal && (
+                    <div className="text-zinc-300 text-lg font-light leading-relaxed prose prose-invert">
+                      {typeof descVal === 'object' ? (
+                        <PortableText value={descVal} components={portableTextComponents} />
+                      ) : (
+                        descVal
+                      )}
+                    </div>
                   )}
                   {ctaText && ctaUrl && (
                     <div className="pt-2">
-                      <Link href={ctaUrl} title={ctaText} aria-label={ctaText} className="px-7 py-3 bg-white/10 hover:bg-indigo-600 border border-white/20 hover:border-indigo-500 rounded-xl text-white font-bold transition-all duration-300 shadow-md">
+                      <Link href={ctaUrl} title={typeof ctaText === 'string' ? ctaText : 'CTA'} aria-label={typeof ctaText === 'string' ? ctaText : 'CTA'} className="px-7 py-3 bg-white/10 hover:bg-indigo-600 border border-white/20 hover:border-indigo-500 rounded-xl text-white font-bold transition-all duration-300 shadow-md">
                         {ctaText}
                       </Link>
                     </div>
@@ -186,7 +239,7 @@ export default async function FeaturePage({
                   {[...(section.slides || []), ...(section.slides || [])].map((slide: any, sIdx: number) => {
                     const captionText = slide.caption?.[lang] || slide.caption?.en;
                     const slideUrl = slide.slideUrl?.[lang] || slide.slideUrl?.en; 
-                    const imageAltTitle = captionText || "Slide";
+                    const imageAltTitle = typeof captionText === 'string' ? captionText : "Slide";
                     
                     const slideContent = (
                       <div className="relative rounded-2xl overflow-hidden shadow-2xl w-[350px] md:w-[420px] h-[250px] md:h-[280px] bg-gray-900 border border-indigo-500/30 flex-shrink-0 group/card cursor-pointer">
@@ -195,14 +248,16 @@ export default async function FeaturePage({
                         )}
                         {captionText && (
                           <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex items-end p-6">
-                            <p className="text-white font-bold text-lg drop-shadow-md">{captionText}</p>
+                            <p className="text-white font-bold text-lg drop-shadow-md">
+                              {typeof captionText === 'object' ? <PortableText value={captionText} components={portableTextComponents} /> : captionText}
+                            </p>
                           </div>
                         )}
                       </div>
                     );
 
                     return slideUrl ? (
-                      <Link key={sIdx} href={slideUrl} title={captionText || "Slide Link"} aria-label={captionText || "Slide Link"}>
+                      <Link key={sIdx} href={slideUrl} title="Slide Link" aria-label="Slide Link">
                         {slideContent}
                       </Link>
                     ) : (
@@ -232,7 +287,7 @@ export default async function FeaturePage({
                   const cardDesc = card.cardDesc?.[lang] || card.cardDesc?.en;
                   const cardCtaText = card.cardCtaText?.[lang] || card.cardCtaText?.en;
                   const cardCtaUrl = card.cardCtaUrl?.[lang] || card.cardCtaUrl?.en;
-                  const cardImageAltTitle = cardTitle || "Card";
+                  const cardImageAltTitle = typeof cardTitle === 'string' ? cardTitle : "Card";
 
                   return (
                     <div key={cIdx} className="bg-slate-900/80 border border-indigo-500/30 rounded-2xl overflow-hidden shadow-[0_0_20px_rgba(79,70,229,0.15)] flex flex-col justify-between">
@@ -244,7 +299,15 @@ export default async function FeaturePage({
                         )}
                         <div className="p-6">
                           {cardTitle && <h3 className="text-2xl font-bold mb-2 text-white">{cardTitle}</h3>}
-                          {cardDesc && <p className="text-zinc-300 text-sm leading-relaxed">{cardDesc}</p>}
+                          {cardDesc && (
+                            <div className="text-zinc-300 text-sm leading-relaxed prose prose-invert">
+                              {typeof cardDesc === 'object' ? (
+                                <PortableText value={cardDesc} components={portableTextComponents} />
+                              ) : (
+                                cardDesc
+                              )}
+                            </div>
+                          )}
                         </div>
                       </div>
 
@@ -258,7 +321,7 @@ export default async function FeaturePage({
                         )}
 
                         {cardCtaText && cardCtaUrl && (
-                          <Link href={cardCtaUrl} title={cardCtaText} aria-label={cardCtaText} className="w-full py-2.5 bg-indigo-600/30 hover:bg-indigo-600 border border-indigo-500/50 text-center rounded-xl text-white font-semibold text-sm transition-all duration-300">
+                          <Link href={cardCtaUrl} title={typeof cardCtaText === 'string' ? cardCtaText : 'CTA'} aria-label={typeof cardCtaText === 'string' ? cardCtaText : 'CTA'} className="w-full py-2.5 bg-indigo-600/30 hover:bg-indigo-600 border border-indigo-500/50 text-center rounded-xl text-white font-semibold text-sm transition-all duration-300">
                             {cardCtaText}
                           </Link>
                         )}

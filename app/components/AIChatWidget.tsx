@@ -1,13 +1,13 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useTranslations, useLocale } from 'next-intl';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
-import Image from 'next/image'; 
 
 export default function AIChatWidget() {
-    useEffect(() => {
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+
     if (document.getElementById('mojeeb-chat-widget')) return;
 
     const script = document.createElement('script');
@@ -64,40 +64,19 @@ export default function AIChatWidget() {
     }
   };
 
+  // إذا لم يتم التحميل على المتصفح بعد، لا نrendered شيئاً لتجنب أي تضارب
+  if (!isMounted) return null;
+
   return (
     <>
-      <style jsx global>{`
-        iframe[src*="mojeeb"], 
-        .mojeeb-widget-window,
-        div[id*="mojeeb"] {
-          max-width: 380px !important;
-          max-height: 520px !important;
-          border-radius: 1.5rem !important;
-          box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7) !important;
-          opacity: 1 !important;
-          visibility: visible !important;
-          transition: none !important;
-        }
-        @media (max-width: 768px) {
-          iframe[src*="mojeeb"], 
-          .mojeeb-widget-window,
-          div[id*="mojeeb"] {
-            width: calc(100vw - 32px) !important;
-            height: 450px !important;
-            bottom: 80px !important;
-            right: 16px !important;
-          }
-        }
-      `}</style>
-
       <button
         id="my-chat-button"
         onClick={handleClick}
         title="Chat with us"
         aria-label="Chat with us"
-        className="fixed bottom-6 right-6 z-[99999] px-5 py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm rounded-2xl shadow-[0_0_25px_rgba(37,99,235,0.6)] transition-all duration-200 border border-blue-500 cursor-pointer flex items-center gap-2.5 active:scale-95"
+        className="fixed bottom-5 right-5 z-[99999] px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-2xl shadow-[0_0_20px_rgba(37,99,235,0.5)] transition-all duration-200 border border-blue-500 cursor-pointer flex items-center gap-2 active:scale-95 md:bottom-6 md:right-6 md:px-5 md:py-3.5 md:text-sm"
       >
-        <span className="w-2.5 h-2.5 rounded-full bg-white animate-pulse"></span>
+        <span className="w-2 h-2 rounded-full bg-white animate-pulse"></span>
         <span>Chat with us</span>
       </button>
     </>
