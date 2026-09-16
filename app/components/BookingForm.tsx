@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-export default function BookingForm({ adultPrice = 150, childPrice = 150, locale, serviceName }: any) {
+export default function BookingForm({ adultPrice = 150, childPrice = 150, locale, serviceName, formTitle }: any) {
   const router = useRouter();
   const [date, setDate] = useState('');
   const [adults, setAdults] = useState<number>(1);
@@ -15,6 +15,9 @@ export default function BookingForm({ adultPrice = 150, childPrice = 150, locale
 
   // حساب التكلفة الإجمالية تلقائياً ولحظياً
   const totalCost = (adults * Number(adultPrice)) + (children * Number(childPrice));
+
+  // عنوان الفورم: يعرض العنوان القادم من سانتي أو اسم الخدمة أو عنوان افتراضي
+  const displayTitle = formTitle || (serviceName ? `Book: ${serviceName}` : 'Send an Inquiry');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,8 +41,8 @@ export default function BookingForm({ adultPrice = 150, childPrice = 150, locale
   };
 
   return (
-    <div className="max-w-md mx-auto bg-[#101033] border border-blue-600/30 rounded-3xl p-6 md:p-8 shadow-2xl text-white">
-      <h3 className="text-2xl font-extrabold mb-6">Send an Inquiry</h3>
+    <div className="max-w-md mx-auto bg-[#101033] border border-blue-600/35 rounded-3xl p-6 md:p-8 shadow-2xl text-white">
+      <h3 className="text-2xl font-extrabold mb-6 text-white">{displayTitle}</h3>
       
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
