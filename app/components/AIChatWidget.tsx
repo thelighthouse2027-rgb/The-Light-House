@@ -5,10 +5,10 @@ import { useTranslations, useLocale } from 'next-intl';
 
 export default function AIChatWidget() {
   const [isMounted, setIsMounted] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const locale = useLocale();
   const t = useTranslations('AIChat');
 
-  // الترجمات الخاصة بالنصوص الداخلية للبوت
   const chatTranslations: Record<string, { headerTitle: string; online: string; placeholder: string }> = {
     de: { headerTitle: 'Chatten Sie mit uns', online: 'Online', placeholder: 'Nachricht eingeben...' },
     fr: { headerTitle: 'Discutez avec nous', online: 'En ligne', placeholder: 'Tapez un message...' },
@@ -46,14 +46,12 @@ export default function AIChatWidget() {
     const timer = setTimeout(attachWidget, 100);
     const interval = setInterval(attachWidget, 500);
 
-    // مراقبة وتحديث النصوص داخل الـ iframe الخاص بالبوت عند فتحه
-    const observer = new MutationObserver(() => {
+    const translateWidgetContent = () => {
       const iframes = document.querySelectorAll('iframe');
       iframes.forEach((iframe) => {
         try {
           const doc = iframe.contentDocument || iframe.contentWindow?.document;
           if (doc) {
-            // ترجمة العناصر الداخلية لو وجدت
             doc.querySelectorAll('*').forEach((el) => {
               if (el.childNodes.length === 1 && el.childNodes[0].nodeType === 3) {
                 const text = el.textContent?.trim();
@@ -64,22 +62,25 @@ export default function AIChatWidget() {
                   el.textContent = currentLangTexts.online;
                 }
               }
-              if ((el as HTMLInputElement).placeholder === 'Type a message...') {
-                (el as HTMLInputElement).placeholder = currentLangTexts.placeholder;
+              const inputEl = el as HTMLInputElement;
+              if (inputEl.placeholder === 'Type a message...' || inputEl.placeholder === 'Nachricht eingeben...') {
+                inputEl.placeholder = currentLangTexts.placeholder;
               }
             });
           }
-        } catch (err) {
-          // تجاوز أخطاء الأمان الخاصة بالـ cross-origin للـ iframes لو وجدت
-        }
+        } catch (err) {}
       });
-    });
+    };
 
+    const observer = new MutationObserver(translateWidgetContent);
     observer.observe(document.body, { childList: true, subtree: true });
+
+    const translationInterval = setInterval(translateWidgetContent, 1000);
 
     return () => {
       clearTimeout(timer);
       clearInterval(interval);
+      clearInterval(translationInterval);
       observer.disconnect();
     };
   }, [locale]);
@@ -92,10 +93,17 @@ export default function AIChatWidget() {
       try {
         if (typeof widget.toggle === 'function') {
           widget.toggle();
+          setIsOpen((prev) => !prev);
           return;
         }
-        if (typeof widget.open === 'function') {
-          widget.open();
+        if (typeof widget.open === 'function' && typeof widget.close === 'function') {
+          if (isOpen) {
+            widget.close();
+            setIsOpen(false);
+          } else {
+            widget.open();
+            setIsOpen(true);
+          }
           return;
         }
       } catch (err) {
@@ -103,6 +111,7 @@ export default function AIChatWidget() {
       }
     }
     
+    setIsOpen((prev) => !prev);
     const btn = document.getElementById('my-chat-button');
     if (btn) {
       btn.click();
@@ -119,11 +128,11 @@ export default function AIChatWidget() {
         iframe[src*="mojeeb"], 
         .mojeeb-widget-window,
         div[id*="mojeeb"] {
-          max-width: 360px !important;
-          width: 360px !important;
-          max-height: 480px !important;
-          border-radius: 1.5rem !important;
-          box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8) !important;
+          max-width: 340px !important;
+          width: 340px !important;
+          max-height: 420px !important;
+          border-radius: 1.2rem !important;
+          box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.7) !important;
           opacity: 1 !important;
           visibility: visible !important;
           overflow: hidden !important;
@@ -134,13 +143,13 @@ export default function AIChatWidget() {
           div[id*="mojeeb"] {
             position: fixed !important;
             top: auto !important;
-            bottom: 75px !important;
-            right: 12px !important;
-            left: 12px !important;
-            width: calc(100vw - 24px) !important;
-            max-width: 360px !important;
-            height: 410px !important;
-            max-height: 410px !important;
+            bottom: 65px !important;
+            right: 10px !important;
+            left: 10px !important;
+            width: calc(100vw - 20px) !important;
+            max-width: 330px !important;
+            height: 380px !important;
+            max-height: 380px !important;
           }
         }
       ` }} />
@@ -150,10 +159,22 @@ export default function AIChatWidget() {
         onClick={handleClick}
         title={buttonText}
         aria-label={buttonText}
-        className="fixed bottom-5 right-5 z-[99999] px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-2xl shadow-[0_0_20px_rgba(37,99,235,0.5)] transition-all duration-200 border border-blue-500 cursor-pointer flex items-center gap-2 active:scale-95 md:bottom-6 md:right-6 md:px-5 md:py-3.5 md:text-sm"
+        className={`fixed z-[99999] bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-lg transition-all duration-300 border border-blue-500 cursor-pointer flex items-center justify-center active:scale-95 ${
+          isOpen 
+            ? 'bottom-4 right-4 w-12 h-12 rounded-full p-0' 
+            : 'bottom-4 right-4 px-3.5 py-2.5 text-xs rounded-xl gap-2 w-max'
+        }`}
       >
-        <span className="w-2 h-2 rounded-full bg-white animate-pulse"></span>
-        <span>{buttonText}</span>
+        {isOpen ? (
+          <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round6" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        ) : (
+          <>
+            <span className="w-2 h-2 rounded-full bg-white animate-pulse"></span>
+            <span>{buttonText}</span>
+          </>
+        )}
       </button>
     </>
   );
