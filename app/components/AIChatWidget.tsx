@@ -1,9 +1,11 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useTranslations } from 'next-intl';
 
 export default function AIChatWidget() {
   const [isMounted, setIsMounted] = useState(false);
+  const t = useTranslations('AIChat');
 
   useEffect(() => {
     setIsMounted(true);
@@ -64,20 +66,49 @@ export default function AIChatWidget() {
     }
   };
 
-  // إذا لم يتم التحميل على المتصفح بعد، لا نrendered شيئاً لتجنب أي تضارب
   if (!isMounted) return null;
+
+  const buttonText = t('buttonText');
 
   return (
     <>
+      <style dangerouslySetInnerHTML={{ __html: `
+        iframe[src*="mojeeb"], 
+        .mojeeb-widget-window,
+        div[id*="mojeeb"] {
+          max-width: 380px !important;
+          max-height: 480px !important;
+          border-radius: 1.5rem !important;
+          box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7) !important;
+          opacity: 1 !important;
+          visibility: visible !important;
+        }
+        @media (max-width: 768px) {
+          iframe[src*="mojeeb"], 
+          .mojeeb-widget-window,
+          div[id*="mojeeb"] {
+            position: fixed !important;
+            top: auto !important;
+            bottom: 75px !important;
+            right: 12px !important;
+            left: 12px !important;
+            width: auto !important;
+            max-width: none !important;
+            height: 420px !important;
+            max-height: 420px !important;
+          }
+        }
+      ` }} />
+
       <button
         id="my-chat-button"
         onClick={handleClick}
-        title="Chat with us"
-        aria-label="Chat with us"
+        title={buttonText}
+        aria-label={buttonText}
         className="fixed bottom-5 right-5 z-[99999] px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-2xl shadow-[0_0_20px_rgba(37,99,235,0.5)] transition-all duration-200 border border-blue-500 cursor-pointer flex items-center gap-2 active:scale-95 md:bottom-6 md:right-6 md:px-5 md:py-3.5 md:text-sm"
       >
         <span className="w-2 h-2 rounded-full bg-white animate-pulse"></span>
-        <span>Chat with us</span>
+        <span>{buttonText}</span>
       </button>
     </>
   );

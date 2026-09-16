@@ -161,5 +161,8 @@
     "services": "Dienstleistungen",
     "exploreAndBook": "Erkunden & Buchen",
     "contact": "Kontakt"
+  },
+  "AIChat": {
+    "buttonText": "Chatten Sie mit uns"
   }
 }
