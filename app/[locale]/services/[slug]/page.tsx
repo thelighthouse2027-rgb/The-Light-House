@@ -108,6 +108,11 @@ export default async function ServiceDetailPage({
   const internalLinksSection = pageData.sections?.find((s: any) => s._type === 'internalLinksSection');
   const bookingSection = pageData.sections?.find((s: any) => s._type === 'bookingFormSection');
 
+  // استخراج عنوان الفورم المترجم بناءً على اللغة الحالية
+  const formTitleText = bookingSection?.formTitle 
+    ? (bookingSection.formTitle[currentLang] || bookingSection.formTitle.en) 
+    : null;
+
   return (
     <main className="min-h-screen pt-32 pb-20 px-6 max-w-7xl mx-auto text-white">
       {/* زر العودة */}
@@ -135,6 +140,7 @@ export default async function ServiceDetailPage({
                 childPrice={bookingSection.defaultChildPrice || 150}
                 locale={locale}
                 serviceName={pageName}
+                formTitle={formTitleText}
               />
             </div>
           </div>
