@@ -1,11 +1,22 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 
 export default function AIChatWidget() {
   const [isMounted, setIsMounted] = useState(false);
+  const locale = useLocale();
   const t = useTranslations('AIChat');
+
+  // الترجمات الخاصة بالنصوص الداخلية للبوت
+  const chatTranslations: Record<string, { headerTitle: string; online: string; placeholder: string }> = {
+    de: { headerTitle: 'Chatten Sie mit uns', online: 'Online', placeholder: 'Nachricht eingeben...' },
+    fr: { headerTitle: 'Discutez avec nous', online: 'En ligne', placeholder: 'Tapez un message...' },
+    pl: { headerTitle: 'Napisz do nas', online: 'Dostępny', placeholder: 'Wpisz wiadomość...' },
+    en: { headerTitle: 'Chat with us', online: 'Online', placeholder: 'Type a message...' },
+  };
+
+  const currentLangTexts = chatTranslations[locale] || chatTranslations.en;
 
   useEffect(() => {
     setIsMounted(true);
@@ -35,11 +46,43 @@ export default function AIChatWidget() {
     const timer = setTimeout(attachWidget, 100);
     const interval = setInterval(attachWidget, 500);
 
+    // مراقبة وتحديث النصوص داخل الـ iframe الخاص بالبوت عند فتحه
+    const observer = new MutationObserver(() => {
+      const iframes = document.querySelectorAll('iframe');
+      iframes.forEach((iframe) => {
+        try {
+          const doc = iframe.contentDocument || iframe.contentWindow?.document;
+          if (doc) {
+            // ترجمة العناصر الداخلية لو وجدت
+            doc.querySelectorAll('*').forEach((el) => {
+              if (el.childNodes.length === 1 && el.childNodes[0].nodeType === 3) {
+                const text = el.textContent?.trim();
+                if (text === 'Chat with us' || text === 'Support team') {
+                  el.textContent = currentLangTexts.headerTitle;
+                }
+                if (text === 'Online' || text === 'We are online') {
+                  el.textContent = currentLangTexts.online;
+                }
+              }
+              if ((el as HTMLInputElement).placeholder === 'Type a message...') {
+                (el as HTMLInputElement).placeholder = currentLangTexts.placeholder;
+              }
+            });
+          }
+        } catch (err) {
+          // تجاوز أخطاء الأمان الخاصة بالـ cross-origin للـ iframes لو وجدت
+        }
+      });
+    });
+
+    observer.observe(document.body, { childList: true, subtree: true });
+
     return () => {
       clearTimeout(timer);
       clearInterval(interval);
+      observer.disconnect();
     };
-  }, []);
+  }, [locale]);
 
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -76,12 +119,14 @@ export default function AIChatWidget() {
         iframe[src*="mojeeb"], 
         .mojeeb-widget-window,
         div[id*="mojeeb"] {
-          max-width: 380px !important;
+          max-width: 360px !important;
+          width: 360px !important;
           max-height: 480px !important;
           border-radius: 1.5rem !important;
-          box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7) !important;
+          box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8) !important;
           opacity: 1 !important;
           visibility: visible !important;
+          overflow: hidden !important;
         }
         @media (max-width: 768px) {
           iframe[src*="mojeeb"], 
@@ -92,10 +137,10 @@ export default function AIChatWidget() {
             bottom: 75px !important;
             right: 12px !important;
             left: 12px !important;
-            width: auto !important;
-            max-width: none !important;
-            height: 420px !important;
-            max-height: 420px !important;
+            width: calc(100vw - 24px) !important;
+            max-width: 360px !important;
+            height: 410px !important;
+            max-height: 410px !important;
           }
         }
       ` }} />

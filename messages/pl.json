@@ -1,111 +1,111 @@
 {
   "HomePage": {
-    "title": "Witamy w The Light House",
+    "title": "Witaj w The Light House",
     "subtitle": "Odkryj piękno świata",
     "badge": "Doświadczenie The Light House",
-    "exploreBtn": "Przeglądaj wycieczki",
+    "exploreBtn": "Odkryj wycieczki",
     "contactBtn": "Skontaktuj się z nami"
   },
   "Features": {
     "heading": "Zanurz się w",
-    "headingHighlight": "Hurghadzie",
-    "subtitle": "Przeżyj niezwykłą przygodę pod wodą dzięki naszym profesjonalnym usługom nurkowym i rejsom.",
-    "featured": "Wyróżnione",
+    "headingHighlight": "Hurghada",
+    "subtitle": "Przeżyj niesamowitą przygodę podwodną dzięki naszym najwyższej klasy usługom nurkowym i rejsowym.",
+    "featured": "Polecane",
     "exploreMore": "Dowiedz się więcej",
     "items": {
       "diving": {
-        "title": "Profesjonalne nurkowanie",
-        "desc": "Certyfikowani eksperci PADI/SSI poprowadzą Twoją podwodną wyprawę."
+        "title": "Profesjonalne Nurkowanie",
+        "desc": "Certyfikowani eksperci PADI/SSI poprowadzą Twoją podwodną podróż."
       },
       "coral": {
-        "title": "Eksploracja raf koralowych",
-        "desc": "Odkryj ukryte podwodne światy i tętniące życiem morskie ekosystemy."
+        "title": "Eksploracja Raf Koralowych",
+        "desc": "Odkryj ukryte podwodne światy i tętniące życiem środowisko morskie."
       },
       "boat": {
-        "title": "Luksusowe rejsy łodzią",
-        "desc": "Komfort i styl na Morzu Czerwonym dzięki naszej flocie klasy premium."
+        "title": "Luksusowe Rejsy Łodzią",
+        "desc": "Komfort i styl na Morzu Czerwonym z naszą flotą najwyższej klasy."
       },
       "night": {
-        "title": "Nocne przygody nurkowe",
+        "title": "Nocne Nurkowanie",
         "desc": "Poczuj magię oceanu w blasku księżyca."
       },
       "snorkeling": {
-        "title": "Wyprawy snorkelingowe",
-        "desc": "Idealne dla rodzin pragnących odkrywać płytkie, krystalicznie czyste wody."
+        "title": "Wyprawy Snorkellingowe",
+        "desc": "Idealne dla rodzin do odkrywania płytkich, krystalicznie czystych wód."
       },
       "wreck": {
-        "title": "Nurkowanie w wrakach",
-        "desc": "Odkryj historyczne wraki spoczywające na dnie oceanu."
+        "title": "Nurkowanie Wrakowe",
+        "desc": "Odkryj historyczne wraki statków spoczywające na dnie oceanu."
       },
       "photo": {
-        "title": "Fotografia podwodna",
-        "desc": "Uwiecznij swoje niezapomniane chwile pod wodą z profesjonalistami."
+        "title": "Fotografia Podwodna",
+        "desc": "Uwiecznij niezapomniane chwile w wodzie z profesjonalistami."
       }
     }
   },
   "ServicesSection": {
-    "title": "Nasze usługi premium",
+    "title": "Nasze Usługi Premium",
     "subtitle": "Wybierz swoją kolejną przygodę na Morzu Czerwonym",
-    "learnMore": "Dowiedz się więcej",
+    "learnMore": "Odkryj więcej",
     "items": {
       "diving-courses": {
-        "title": "Kursy nurkowania",
-        "desc": "Zdobywaj certyfikaty z profesjonalnymi instruktorami PADI i SSI."
+        "title": "Kursy Nurkowania",
+        "desc": "Zdobądź certyfikat pod okiem profesjonalnych instruktorów PADI i SSI."
       },
       "boat-trips": {
-        "title": "Rejsy łodzią",
+        "title": "Rejsy Łodzią",
         "desc": "Ciesz się luksusowymi codziennymi rejsami po krystalicznie czystych wodach."
       },
       "diving-trips": {
-        "title": "Wycieczki nurkowe",
-        "desc": "Odkryj zapierające dech w piersiach rafy koralowe i tętniące życiem morze."
+        "title": "Wycieczki Nurkowe",
+        "desc": "Odkryj zapierające dech w piersiach rafy koralowe i bogate życie morskie."
       },
       "safari": {
-        "title": "Safari pustynne i morskie",
-        "desc": "Połącz ekscytujące przygody na pustyni z magią Morza Czerwonego."
+        "title": "Safari Pustynne i Morskie",
+        "desc": "Połącz ekscytującą przygodę na pustyni z magią Morza Czerwonego."
       }
     }
   },
   "SafariSection": {
-    "badge": "Przygoda na pustyni i morzu",
-    "title": "Pustynne safari nad Morzem Czerwonym",
-    "subtitle": "Wyrusz w pełną adrenaliny podróż przez majestatyczne wydmy i krystalicznie czyste wody Hurghady.",
-    "exploreBtn": "Poznaj szczegóły safari"
+    "badge": "Przygoda na Pustyni i Morzu",
+    "title": "Pustynne Safari nad Morzem Czerwonym",
+    "subtitle": "Wyrusz w pełną adrenaliny podróż przez majestatyczne wydmy Hurghady i kryształowe wody.",
+    "exploreBtn": "Sprawdź Szczegóły Safari"
   },
   "AboutSection": {
     "badge": "Nasza Historia",
     "title": "O The Light House",
     "subtitle": "Twoja brama do cudów Morza Czerwonego",
-    "description": "Jesteśmy wiodącym centrum nurkowym i safari z siedzibą w Hurghadzie, dedykowanym zapewnianiu niezapomnianych przygód. Dzięki wieloletniemu doświadczeniu, certyfikowanym instruktorom i pasji do oceanu, gwarantujemy bezpieczeństwo, luksus i zapierające dech w piersiach wspomnienia.",
+    "description": "Jesteśmy wiodącym centrum nurkowym i safari z siedzibą w Hurghadzie, dedykowanym dostarczaniu niezapomnianych przygód. Dzięki wieloletniemu doświadczeniu, certyfikowanym instruktorom i pasji do oceanu gwarantujemy bezpieczeństwo, luksus i niezapomniane wspomnienia.",
     "stats": {
-      "experience": "10+ Lat doświadczenia",
-      "team": "Profesjonalny certyfikowany zespół",
-      "equipment": "Sprzęt bezpieczeństwa premium"
+      "experience": "10+ Lat Doświadczenia",
+      "team": "Profesjonalny Certyfikowany Zespół",
+      "equipment": "Najwyższej Jakości Sprzęt"
     },
-    "exploreBtn": "Przeczytaj naszą pełną historię"
+    "exploreBtn": "Przeczytaj Całą Historię"
   },
   "Contact": {
-    "title": "Rozpocznijmy rozmowę",
+    "title": "Skontaktuj się z nami",
     "subtitle": "Wypełnij poniższe dane, a nasz zespół skontaktuje się z Tobą tak szybko, jak to możliwe.",
-    "name": "Imię i nazwisko *",
+    "name": "Imię i Nazwisko *",
     "namePlaceholder": "Wpisz swoje imię",
-    "email": "Adres e-mail *",
+    "email": "Adres E-mail *",
     "emailPlaceholder": "przyklad@email.com",
-    "phone": "Numer telefonu *",
-    "phonePlaceholder": "+48 600 000 000",
+    "phone": "Numer Telefonu *",
+    "phonePlaceholder": "+48 000 000 000",
     "country": "Kraj *",
     "countryPlaceholder": "Twój kraj",
-    "service": "Wymagana usługa / Wycieczka *",
+    "service": "Wymagana Usługa / Wycieczka *",
     "selectService": "Wybierz usługę lub wycieczkę",
-    "safari": "Safari pustynne",
-    "boat": "Rejs łodzią",
-    "city": "Wycieczka po mieście",
-    "other": "Inna usługa",
-    "message": "Twoja wiadomość / Notatki",
-    "messagePlaceholder": "Wszelkie dodatkowe szczegóły lub specjalne życzenia...",
-    "submitBtn": "Wyślij wiadomość",
+    "safari": "Safari Pustynne",
+    "boat": "Rejs Łodzią",
+    "city": "Wycieczka Miejska",
+    "other": "Inna Usługa",
+    "message": "Twoja Wiadomość / Uwagi",
+    "messagePlaceholder": "Dodatkowe szczegóły lub specjalne życzenia...",
+    "submitBtn": "Wyślij Wiadomość",
     "sending": "Wysyłanie...",
-    "successMessage": "Sukces! Twoja wiadomość została wysłana pomyślnie.",
+    "successMessage": "Sukces! Twoja wiadomość została pomyślnie wysłana.",
     "errorMessage": "Coś poszło nie tak. Spróbuj ponownie."
   },
   "AboutPage": {
@@ -114,55 +114,58 @@
     "titleHighlight": "The Light House",
     "subtitle": "W The Light House wierzymy, że nurkowanie to coś więcej niż tylko aktywność w wodzie. To niezwykłe doświadczenie, które otwiera drzwi do zupełnie innego świata pod powierzchnią.",
     "heading1": "Profesjonalizm, Bezpieczeństwo i Przyjemność",
-    "p1": "Dlatego z zaangażowaniem oferujemy wyprawy nurkowe łączące profesjonalizm, bezpieczeństwo i przyjemność, zwracając uwagę na każdy detal.",
-    "p2": "Nasz zespół składa się z wysoko wykwalifikowanych nurków i instruktorów z ogromną wiedzą na temat Morza Czerwonego i jego podwodnych ekosystemów.",
-    "card1Title": "Prawdziwe doświadczenie pod powierzchnią",
-    "card1Desc": "Zespół The Light House wnosi lata praktycznego doświadczenia zdobytego podczas niezliczonych nurkowan i eksploracji miejsc na Morzu Czerwonym.",
-    "card2Title": "Profesjonalny zespół",
-    "card2Desc": "Niezależnie od tego, czy nurkujesz po raz pierwszy, chcesz rozwijać swoje umiejętności, czy jesteś ekspertem szukającym przygód, nasz zespół jest gotowy.",
+    "p1": "Dlatego zobowiązujemy się dostarczać niezapomniane wrażenia nurkowe, które łączą w sobie profesjonalizm, bezpieczeństwo i świetną zabawę.",
+    "p2": "Nasz zespół składa się z wysoko wykwalifikowanych nurków i instruktorów z ogromną wiedzą na temat Morza Czerwonego i jego podwodnego ekosystemu.",
+    "card1Title": "Prawdziwe Doświadczenie Pod Powierzchnią",
+    "card1Desc": "Zespół The Light House wnosi lata praktycznego doświadczenia zdobytego podczas niezliczonych nurkowań.",
+    "card2Title": "Profesjonalny Zespół",
+    "card2Desc": "Niezależnie od tego, czy nurkujesz po raz pierwszy, czy szukasz nowych wyzwań, nasz zespół jest gotowy pomóc.",
     "safetyTitle": "Bezpieczeństwo przede wszystkim",
-    "safetyDesc": "W The Light House bezpieczeństwo jest naszym najwyższym priorytetem. Dbamy o warunki na morzu i przestrzegamy procedur bezpieczeństwa.",
+    "safetyDesc": "W The Light House bezpieczeństwo jest naszym najwyższym priorytetem. Zawsze śledzimy warunki panujące na morzu.",
     "discoverTitle": "Odkryj Morze Czerwone",
-    "discoverDesc": "Morze Czerwone to niezwykły podwodny świat pełen kolorowych raf koralowych i unikalnych miejsc nurkowych.",
-    "levelTitle": "Nurkowanie dla każdego poziomu",
-    "levelDesc": "Od początkujących po zaawansowanych – dopasowujemy się do Twoich umiejętności i zainteresowań.",
-    "passionTitle": "Pasja do nurkowania wykraczająca poza pracę",
-    "passionDesc": "To, co wyróżnia nasz zespół, to nie tylko doświadczenie, ale prawdziwa pasja do oceanu i dzielenia się pięknem Morza Czerwonego.",
-    "ctaBtn": "Rozpocznij swoją przygodę z nami"
+    "discoverDesc": "Morze Czerwone skrywa niesamowity podwodny świat pełen kolorowych raf koralowych.",
+    "levelTitle": "Nurkowanie dla Każdego Poziomu",
+    "levelDesc": "Dopasowujemy się do Twoich umiejętności, niezależnie od tego czy jesteś początkującym, czy ekspertem.",
+    "passionTitle": "Pasja do Nurkowania",
+    "passionDesc": "To, co wyróżnia nasz zespół, to prawdziwa miłość do oceanu i chęć dzielenia się nią z innymi.",
+    "ctaBtn": "Rozpocznij Swoją Przygodę"
   },
   "Location": {
     "titlePart1": "Nasza",
     "titlePart2": "Lokalizacja i Mapa",
-    "subtitle": "Znajdź nas na mapie, uzyskaj wskazówki dojazdu do naszego profesjonalnego centrum nurkowego w Hurghadzie lub skontaktuj się z nami natychmiast.",
+    "subtitle": "Znajdź nas na mapie, uzyskaj wskazówki dojazdu do naszego centrum nurkowego w Hurghadzie.",
     "centerName": "Centrum The Light House",
-    "officialAddress": "Oficjalny adres",
-    "addressText": "The Light House, Hurghada, Prowincja Morze Czerwone, Egipt",
+    "officialAddress": "Oficjalny Adres",
+    "addressText": "The Light House, Hurghada, Prowincja Morza Czerwonego, Egipt",
     "phoneTitle": "Telefon i WhatsApp",
     "connect": "Połącz się z nami",
     "directions": "Wyznacz trasę"
   },
   "Footer": {
-    "description": "Najlepsze centrum nurkowe oferujące profesjonalne kursy nurkowania, wycieczki statkiem i ekscytujące safari.",
+    "description": "Wiodące centrum nurkowe oferujące profesjonalne kursy nurkowania, rejsy łodzią oraz emocjonujące safari.",
     "quickLinksTitle": "Szybkie Linki",
     "servicesTitle": "Nasze Usługi",
-    "about": "O Nas",
+    "about": "O nas",
     "services": "Usługi",
-    "exploreAndBook": "Odkrywaj i Rezerwuj",
+    "exploreAndBook": "Odkryj i Zarezerwuj",
     "contact": "Kontakt",
-    "safari": "Pustynne Safari",
+    "safari": "Safari Pustynne",
     "divingTrips": "Wycieczki Nurkowe",
-    "boatTrips": "Rejsy Statkiem",
+    "boatTrips": "Rejsy Łodzią",
     "divingCourses": "Kursy Nurkowania",
     "rights": "Wszelkie prawa zastrzeżone."
   },
   "Header": {
-    "home": "Strona główna",
+    "home": "Strona Główna",
     "about": "O nas",
     "services": "Usługi",
-    "exploreAndBook": "Odkrywaj i Rezerwuj",
+    "exploreAndBook": "Odkryj i Zarezerwuj",
     "contact": "Kontakt"
   },
   "AIChat": {
-    "buttonText": "Napisz do nas"
+    "buttonText": "Napisz do nas",
+    "headerTitle": "Napisz do nas",
+    "online": "Dostępny",
+    "placeholder": "Wpisz wiadomość..."
   }
 }

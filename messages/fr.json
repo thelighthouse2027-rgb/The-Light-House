@@ -163,6 +163,9 @@
     "contact": "Contact"
   },
   "AIChat": {
-    "buttonText": "Discutez avec nous"
+    "buttonText": "Discutez avec nous",
+    "headerTitle": "Discutez avec nous",
+    "online": "En ligne",
+    "placeholder": "Tapez un message..."
   }
 }
