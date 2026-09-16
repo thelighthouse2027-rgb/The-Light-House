@@ -46,7 +46,23 @@ export default function AIChatWidget() {
     const timer = setTimeout(attachWidget, 100);
     const interval = setInterval(attachWidget, 500);
 
-    const translateWidgetContent = () => {
+    // مراقبة حالة ظهور نافذة الشات في الصفحة لتحديث شكل الأيقونة بدقة
+    const checkWidgetState = () => {
+      const chatWindow = document.querySelector('.mojeeb-widget-window') || document.querySelector('iframe[style*="visibility: visible"]');
+      if (chatWindow) {
+        const style = window.getComputedStyle(chatWindow);
+        if (style.display !== 'none' && style.visibility !== 'hidden') {
+          setIsOpen(true);
+        }
+      } else {
+        // التحقق من الحاويات الخاصة بالبوكس لو وُجدت
+        const activeDiv = document.querySelector('div[id*="mojeeb"] iframe');
+        if (!activeDiv) {
+          setIsOpen(false);
+        }
+      }
+
+      // ترجمة المحتوى الداخلي للـ iframe
       const iframes = document.querySelectorAll('iframe');
       iframes.forEach((iframe) => {
         try {
@@ -72,15 +88,15 @@ export default function AIChatWidget() {
       });
     };
 
-    const observer = new MutationObserver(translateWidgetContent);
-    observer.observe(document.body, { childList: true, subtree: true });
+    const observer = new MutationObserver(checkWidgetState);
+    observer.observe(document.body, { childList: true, subtree: true, attributes: true });
 
-    const translationInterval = setInterval(translateWidgetContent, 1000);
+    const stateInterval = setInterval(checkWidgetState, 500);
 
     return () => {
       clearTimeout(timer);
       clearInterval(interval);
-      clearInterval(translationInterval);
+      clearInterval(stateInterval);
       observer.disconnect();
     };
   }, [locale]);
@@ -94,16 +110,6 @@ export default function AIChatWidget() {
         if (typeof widget.toggle === 'function') {
           widget.toggle();
           setIsOpen((prev) => !prev);
-          return;
-        }
-        if (typeof widget.open === 'function' && typeof widget.close === 'function') {
-          if (isOpen) {
-            widget.close();
-            setIsOpen(false);
-          } else {
-            widget.open();
-            setIsOpen(true);
-          }
           return;
         }
       } catch (err) {
@@ -161,7 +167,7 @@ export default function AIChatWidget() {
         aria-label={buttonText}
         className={`fixed z-[99999] bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-lg transition-all duration-300 border border-blue-500 cursor-pointer flex items-center justify-center active:scale-95 ${
           isOpen 
-            ? 'bottom-4 right-4 w-12 h-12 rounded-full p-0' 
+            ? 'bottom-4 right-4 w-11 h-11 rounded-full p-0' 
             : 'bottom-4 right-4 px-3.5 py-2.5 text-xs rounded-xl gap-2 w-max'
         }`}
       >
