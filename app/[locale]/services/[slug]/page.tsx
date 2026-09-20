@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { PortableText } from '@portabletext/react';
 import BookingForm from '../../../components/BookingForm';
 
-// جلب بيانات الصفحة والـ SEO من سانتي
+// جلب بيانات الصفحة مع تغطية كافة الاحتمالات الممكنة لاسم حقل الفيديو في سانتي
 async function getFlexiblePage(slug: string, locale: string) {
   const cleanSlug = decodeURIComponent(slug).trim();
   const currentLang = ['en', 'de', 'fr', 'pl'].includes(locale) ? locale : 'en';
@@ -21,6 +21,7 @@ async function getFlexiblePage(slug: string, locale: string) {
       description,
       "imageUrl": image.asset->url,
       "bgImageUrl": bgImage.asset->url,
+      "bgVideoUrl": coalesce(bgVideoUrl, video.asset->url, bgVideo.asset->url, file.asset->url, videoUrl, bgVideoFile.asset->url),
       layoutDirection,
       mediaType,
       ctaText,
@@ -159,7 +160,6 @@ function renderSections(sections: any[], currentLang: string, locale: string, sl
   return sections.map((section: any, index: number) => renderSingleSection(section, currentLang, locale, formatUrl, slug, index, pageName));
 }
 
-// تخصيص Portable Text لدعم القوائم المتداخلة (Lists) والعناوين بدقة
 const portableTextComponents = {
   list: {
     bullet: ({ children }: any) => <ul className="list-disc pl-5 space-y-2 my-3">{children}</ul>,
@@ -220,6 +220,7 @@ function renderSingleSection(section: any, currentLang: string, locale: string, 
 
   if (section._type === 'heroSection') {
     const resolvedHeroImage = section.imageUrl || section.bgImageUrl;
+    const videoUrl = section.bgVideoUrl;
     const heroBtnText = section.ctaText?.[currentLang];
     const heroBtnUrl = formatUrl(section.ctaUrl?.[currentLang], slug ? `/contact?service=${slug}` : '#');
     const heroAltTitle = section.title?.[currentLang] || pageName;
@@ -227,19 +228,34 @@ function renderSingleSection(section: any, currentLang: string, locale: string, 
     return (
       <div key={index} className="bg-zinc-900/60 border border-red-600/30 rounded-3xl p-8 md:p-12 text-start shadow-xl flex flex-col items-start">
         <h2 className="text-3xl md:text-5xl font-bold mb-4">{section.title?.[currentLang]}</h2>
+        
         <div className="text-zinc-300 max-w-none mb-8 text-start leading-relaxed w-full">
           {section.subtitle?.[currentLang] && <PortableText value={section.subtitle[currentLang]} components={portableTextComponents} />}
         </div>
+
         {heroBtnText && (
           <Link href={heroBtnUrl} title={heroBtnText} aria-label={heroBtnText} className="mb-8 px-8 py-4 bg-red-600 hover:bg-red-700 text-white font-bold rounded-2xl transition-all shadow-[0_0_25px_rgba(220,38,38,0.4)] flex items-center gap-3 cursor-pointer">
             <span>{heroBtnText}</span>
           </Link>
         )}
-        {resolvedHeroImage && (
+
+        {/* عرض الفيديو المباشر بشكل صحيح */}
+        {videoUrl ? (
+          <div className="relative w-full h-[350px] md:h-[450px] rounded-2xl overflow-hidden mt-2 border border-white/10 shadow-2xl bg-black">
+            <video
+              src={videoUrl}
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="w-full h-full object-cover"
+            />
+          </div>
+        ) : resolvedHeroImage ? (
           <div className="relative w-full h-[350px] md:h-[450px] rounded-2xl overflow-hidden mt-2 border border-white/10 shadow-2xl">
             <Image src={resolvedHeroImage} alt={heroAltTitle} title={heroAltTitle} fill sizes="100vw" className="object-cover" />
           </div>
-        )}
+        ) : null}
       </div>
     );
   }
@@ -288,7 +304,6 @@ function renderSingleSection(section: any, currentLang: string, locale: string, 
 
                   <h3 className="text-xl font-bold mb-3">{card.cardTitle?.[currentLang]}</h3>
                   
-                  {/* تفعيل القوائم والنقاط والعناوين الفرعية لتظهر بنفس التنسيق تماماً */}
                   <div className="text-zinc-400 text-sm mb-6 leading-relaxed w-full">
                     {card.cardDesc?.[currentLang] && <PortableText value={card.cardDesc[currentLang]} components={portableTextComponents} />}
                   </div>
