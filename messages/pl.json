@@ -163,9 +163,12 @@
     "contact": "Kontakt"
   },
   "AIChat": {
-    "buttonText": "Napisz do nas",
-    "headerTitle": "Napisz do nas",
+    "buttonText": "Zapytaj przewodnika",
+    "headerTitle": "Zapytaj przewodnika",
     "online": "Dostępny",
-    "placeholder": "Wpisz wiadomość..."
+    "placeholder": "Wpisz wiadomość...",
+    "selectApp": "Wybierz aplikację",
+    "settingsText": "Ustawienia",
+    "cancelText": "Anuluj"
   }
 }

@@ -177,9 +177,16 @@ export default {
                       type: 'image',
                       options: { hotspot: true }
                     },
+                    // الحقول الجديدة للإضافات المطلوبة (السعر والشارة المميزة)
+                    {
+                      name: 'priceText',
+                      title: 'نص السعر على الكارت (مثل: From €45)',
+                      type: 'string'
+                    },
+                    createMultiLangField('badgeText', 'نص الشارة المميزة على الكارت (مثل: Popular)'),
                     {
                       name: 'servicePrice',
-                      title: 'سعر الخدمة (€)',
+                      title: 'سعر الخدمة (€) - رقمي',
                       type: 'number'
                     },
                     {

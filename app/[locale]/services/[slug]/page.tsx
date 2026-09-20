@@ -30,6 +30,7 @@ async function getFlexiblePage(slug: string, locale: string) {
         cardTitle,
         cardDesc,
         "cardImageUrl": cardImage.asset->url,
+        "badgeText": badgeText[$currentLang],
         servicePrice,
         serviceSlug,
         cardCtaText,
@@ -53,7 +54,6 @@ async function getFlexiblePage(slug: string, locale: string) {
   return await client.fetch(query, { cleanSlug, currentLang });
 }
 
-// تخصيص العنوان والميتا ديسكربشن ديناميكياً لكل صفحة حسب بيانات سانتي
 export async function generateMetadata({ params }: { params: Promise<{ locale: string; slug: string }> }) {
   const { locale, slug } = await params;
   const pageData = await getFlexiblePage(slug, locale);
@@ -108,14 +108,12 @@ export default async function ServiceDetailPage({
   const internalLinksSection = pageData.sections?.find((s: any) => s._type === 'internalLinksSection');
   const bookingSection = pageData.sections?.find((s: any) => s._type === 'bookingFormSection');
 
-  // استخراج عنوان الفورم المترجم بناءً على اللغة الحالية
   const formTitleText = bookingSection?.formTitle 
     ? (bookingSection.formTitle[currentLang] || bookingSection.formTitle.en) 
     : null;
 
   return (
     <main className="min-h-screen pt-32 pb-20 px-6 max-w-7xl mx-auto text-white">
-      {/* زر العودة */}
       <Link href={`/${locale}`} title={backText} aria-label={backText} className="inline-flex items-center gap-2 text-zinc-400 hover:text-white mb-8 transition-colors">
         <svg className="w-5 h-5 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
@@ -161,8 +159,21 @@ function renderSections(sections: any[], currentLang: string, locale: string, sl
   return sections.map((section: any, index: number) => renderSingleSection(section, currentLang, locale, formatUrl, slug, index, pageName));
 }
 
-// تخصيص Portable Text بحيث تأخذ الروابط داخل المقالات الـ title تلقائياً من النص
+// تخصيص Portable Text لدعم القوائم المتداخلة (Lists) والعناوين بدقة
 const portableTextComponents = {
+  list: {
+    bullet: ({ children }: any) => <ul className="list-disc pl-5 space-y-2 my-3">{children}</ul>,
+    number: ({ children }: any) => <ol className="list-decimal pl-5 space-y-2 my-3">{children}</ol>,
+  },
+  listItem: {
+    bullet: ({ children }: any) => <li className="leading-relaxed">{children}</li>,
+    number: ({ children }: any) => <li className="leading-relaxed">{children}</li>,
+  },
+  block: {
+    h2: ({ children }: any) => <h2 className="text-xl md:text-2xl font-bold text-white mt-6 mb-3">{children}</h2>,
+    h3: ({ children }: any) => <h3 className="text-lg md:text-xl font-bold text-white mt-5 mb-2">{children}</h3>,
+    normal: ({ children }: any) => <p className="mb-3 leading-relaxed">{children}</p>,
+  },
   marks: {
     link: ({ value, children }: any) => {
       const href = value?.href || '#';
@@ -183,38 +194,22 @@ function renderSingleSection(section: any, currentLang: string, locale: string, 
     const buttonText = section.ctaText?.[currentLang] || 'Book Now';
     const buttonUrl = formatUrl(section.ctaUrl?.[currentLang], `/contact?service=${slug}`);
     const resolvedImage = section.imageUrl || section.bgImageUrl;
-    
     const imageAltTitle = section.title?.[currentLang] || pageName;
 
     return (
       <div key={index} className={`bg-zinc-900/60 backdrop-blur-2xl border border-red-600/30 rounded-3xl overflow-hidden p-8 md:p-12 grid grid-cols-1 md:grid-cols-2 gap-8 items-center ${isImageLeft ? 'md:grid-flow-dense' : ''}`}>
         <div className={`relative aspect-[4/3] w-full rounded-2xl overflow-hidden border border-red-600/20 shadow-xl ${isImageLeft ? 'md:order-1' : 'md:order-none'}`}>
           {resolvedImage ? (
-            <Image 
-              src={resolvedImage} 
-              alt={imageAltTitle} 
-              title={imageAltTitle} 
-              fill 
-              sizes="(max-width: 768px) 100vw, 50vw" 
-              className="object-cover" 
-            />
+            <Image src={resolvedImage} alt={imageAltTitle} title={imageAltTitle} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover" />
           ) : (
             <div className="w-full h-full bg-zinc-800 flex items-center justify-center text-zinc-500">No Image</div>
           )}
         </div>
         <div className={`flex flex-col items-start text-start ${isImageLeft ? 'md:order-2' : 'md:order-none'}`}>
           <h2 className="text-2xl md:text-4xl font-extrabold mb-4 text-white">{section.title?.[currentLang]}</h2>
-          
-          <div className="prose prose-invert max-w-none text-zinc-300 text-base leading-relaxed text-start space-y-4 
-            [&>p]:mb-4 
-            [&>strong]:text-amber-400 
-            [&>ul]:list-disc [&>ul]:pl-6 [&>ul]:space-y-2
-            [&>ol]:list-decimal [&>ol]:pl-6 [&>ol]:space-y-2
-            [&>h2]:text-2xl md:[&>h2]:text-3xl [&>h2]:font-extrabold [&>h2]:text-white [&>h2]:mt-6 [&>h2]:mb-3
-            [&>h3]:text-xl md:[&>h3]:text-2xl [&>h3]:font-bold [&>h3]:text-white [&>h3]:mt-5 [&>h3]:mb-2">
+          <div className="max-w-none text-zinc-300 text-base leading-relaxed text-start w-full">
             {section.description?.[currentLang] && <PortableText value={section.description[currentLang]} components={portableTextComponents} />}
           </div>
-
           <Link href={buttonUrl} title={buttonText} aria-label={buttonText} className="mt-6 px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl transition-all shadow-lg flex items-center gap-3 text-sm cursor-pointer">
             <span>{buttonText}</span>
           </Link>
@@ -232,37 +227,17 @@ function renderSingleSection(section: any, currentLang: string, locale: string, 
     return (
       <div key={index} className="bg-zinc-900/60 border border-red-600/30 rounded-3xl p-8 md:p-12 text-start shadow-xl flex flex-col items-start">
         <h2 className="text-3xl md:text-5xl font-bold mb-4">{section.title?.[currentLang]}</h2>
-        
-        <div className="text-zinc-300 max-w-none mb-8 text-start leading-relaxed prose prose-invert 
-          [&>strong]:text-amber-400
-          [&>ul]:list-disc [&>ul]:pl-6 [&>ul]:space-y-2
-          [&>ol]:list-decimal [&>ol]:pl-6 [&>ol]:space-y-2
-          [&>h2]:text-2xl md:[&>h2]:text-3xl [&>h2]:font-extrabold [&>h2]:text-white [&>h2]:mt-6 [&>h2]:mb-3
-          [&>h3]:text-xl md:[&>h3]:text-2xl [&>h3]:font-bold [&>h3]:text-white [&>h3]:mt-5 [&>h3]:mb-2">
+        <div className="text-zinc-300 max-w-none mb-8 text-start leading-relaxed w-full">
           {section.subtitle?.[currentLang] && <PortableText value={section.subtitle[currentLang]} components={portableTextComponents} />}
         </div>
-
         {heroBtnText && (
-          <Link 
-            href={heroBtnUrl} 
-            title={heroBtnText}
-            aria-label={heroBtnText}
-            className="mb-8 px-8 py-4 bg-red-600 hover:bg-red-700 text-white font-bold rounded-2xl transition-all shadow-[0_0_25px_rgba(220,38,38,0.4)] flex items-center gap-3 cursor-pointer"
-          >
+          <Link href={heroBtnUrl} title={heroBtnText} aria-label={heroBtnText} className="mb-8 px-8 py-4 bg-red-600 hover:bg-red-700 text-white font-bold rounded-2xl transition-all shadow-[0_0_25px_rgba(220,38,38,0.4)] flex items-center gap-3 cursor-pointer">
             <span>{heroBtnText}</span>
           </Link>
         )}
-
         {resolvedHeroImage && (
           <div className="relative w-full h-[350px] md:h-[450px] rounded-2xl overflow-hidden mt-2 border border-white/10 shadow-2xl">
-            <Image 
-              src={resolvedHeroImage} 
-              alt={heroAltTitle} 
-              title={heroAltTitle} 
-              fill 
-              sizes="100vw" 
-              className="object-cover" 
-            />
+            <Image src={resolvedHeroImage} alt={heroAltTitle} title={heroAltTitle} fill sizes="100vw" className="object-cover" />
           </div>
         )}
       </div>
@@ -280,6 +255,8 @@ function renderSingleSection(section: any, currentLang: string, locale: string, 
             const cardBtnText = card.cardCtaText?.[currentLang];
             const cardBtnUrl = formatUrl(card.cardCtaUrl?.[currentLang], card.serviceSlug || '#');
             const cardTitleText = card.cardTitle?.[currentLang] || pageName;
+            
+            const displayPrice = card.servicePrice ? `From €${card.servicePrice}` : null;
 
             return (
               <div key={cIdx} className="bg-zinc-900 border border-white/10 rounded-2xl p-6 flex flex-col justify-between shadow-lg text-start">
@@ -294,22 +271,25 @@ function renderSingleSection(section: any, currentLang: string, locale: string, 
                         sizes="(max-width: 768px) 100vw, 33vw" 
                         className="object-cover" 
                       />
-                    </div>
-                  )}
-                  <h3 className="text-xl font-bold mb-3">{card.cardTitle?.[currentLang]}</h3>
-                  
-                  {card.servicePrice && (
-                    <div className="text-red-500 font-black text-xl mb-3 tracking-wide">
-                      {card.servicePrice} €
+                      
+                      {card.badgeText && (
+                        <div className="absolute top-3 left-3 z-10 bg-amber-500 text-neutral-950 font-bold px-3 py-1 rounded-full text-xs shadow-md">
+                          {card.badgeText}
+                        </div>
+                      )}
+
+                      {displayPrice && (
+                        <div className="absolute top-3 right-3 z-10 bg-black/70 backdrop-blur-md text-teal-300 border border-teal-500/30 px-3.5 py-1 rounded-full text-xs font-semibold shadow-md">
+                          {displayPrice}
+                        </div>
+                      )}
                     </div>
                   )}
 
-                  <div className="text-zinc-400 text-sm mb-6 leading-relaxed prose prose-invert 
-                    [&>strong]:text-amber-400
-                    [&>ul]:list-disc [&>ul]:pl-5 [&>ul]:space-y-1.5
-                    [&>ol]:list-decimal [&>ol]:pl-5 [&>ol]:space-y-1.5
-                    [&>h2]:text-xl [&>h2]:font-bold [&>h2]:text-white [&>h2]:mt-4 [&>h2]:mb-2
-                    [&>h3]:text-lg [&>h3]:font-bold [&>h3]:text-white [&>h3]:mt-3 [&>h3]:mb-1">
+                  <h3 className="text-xl font-bold mb-3">{card.cardTitle?.[currentLang]}</h3>
+                  
+                  {/* تفعيل القوائم والنقاط والعناوين الفرعية لتظهر بنفس التنسيق تماماً */}
+                  <div className="text-zinc-400 text-sm mb-6 leading-relaxed w-full">
                     {card.cardDesc?.[currentLang] && <PortableText value={card.cardDesc[currentLang]} components={portableTextComponents} />}
                   </div>
                 </div>
@@ -359,23 +339,12 @@ function renderSingleSection(section: any, currentLang: string, locale: string, 
                 <div>
                   {page.imageUrl ? (
                     <div className="relative aspect-video rounded-xl overflow-hidden mb-4 border border-white/10">
-                      <Image 
-                        src={page.imageUrl} 
-                        alt={pageTitle} 
-                        title={pageTitle} 
-                        fill 
-                        sizes="(max-width: 768px) 100vw, 33vw"
-                        className="object-cover transition-transform duration-500 group-hover:scale-105" 
-                      />
+                      <Image src={page.imageUrl} alt={pageTitle} title={pageTitle} fill sizes="(max-width: 768px) 100vw, 33vw" className="object-cover transition-transform duration-500 group-hover:scale-105" />
                     </div>
                   ) : (
-                    <div className="w-full h-32 bg-zinc-800 rounded-xl mb-4 flex items-center justify-center text-zinc-500 text-xs">
-                      No Image Available
-                    </div>
+                    <div className="w-full h-32 bg-zinc-800 rounded-xl mb-4 flex items-center justify-center text-zinc-500 text-xs">No Image Available</div>
                   )}
-                  <h3 className="text-xl font-bold text-white mb-2 group-hover:text-red-500 transition-colors">
-                    {pageTitle}
-                  </h3>
+                  <h3 className="text-xl font-bold text-white mb-2 group-hover:text-red-500 transition-colors">{pageTitle}</h3>
                 </div>
 
                 <div className="mt-4 flex items-center gap-2 text-red-400 font-semibold text-sm group-hover:translate-x-1 transition-transform">

@@ -163,9 +163,12 @@
     "contact": "Contact"
   },
   "AIChat": {
-    "buttonText": "Chat with us",
-    "headerTitle": "Chat with us",
+    "buttonText": "Ask Guide",
+    "headerTitle": "Ask Guide",
     "online": "Online",
-    "placeholder": "Type a message..."
+    "placeholder": "Type a message...",
+    "selectApp": "Select an app to open",
+    "settingsText": "Settings",
+    "cancelText": "Cancel"
   }
 }
