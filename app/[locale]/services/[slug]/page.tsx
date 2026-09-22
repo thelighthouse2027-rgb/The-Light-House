@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { PortableText } from '@portabletext/react';
 import BookingForm from '../../../components/BookingForm';
 
-// جلب بيانات الصفحة مع تغطية كافة الاحتمالات الممكنة لاسم حقل الفيديو في سانتي
+// جلب بيانات الصفحة
 async function getFlexiblePage(slug: string, locale: string) {
   const cleanSlug = decodeURIComponent(slug).trim();
   const currentLang = ['en', 'de', 'fr', 'pl'].includes(locale) ? locale : 'en';
@@ -31,11 +31,19 @@ async function getFlexiblePage(slug: string, locale: string) {
         cardTitle,
         cardDesc,
         "cardImageUrl": cardImage.asset->url,
-        "badgeText": badgeText[$currentLang],
+        "badgeText": badgeData.badgeText[$currentLang],
+        "badgeEmoji": badgeData.emoji,
         servicePrice,
         serviceSlug,
+        features[]{
+          "featureText": featureText[$currentLang],
+          emoji
+        },
         cardCtaText,
-        cardCtaUrl
+        cardCtaUrl,
+        showAiGuide,
+        showWhatsApp,
+        whatsappNumber
       },
       formTitle,
       defaultAdultPrice,
@@ -91,6 +99,8 @@ export default async function ServiceDetailPage({
 
   const currentLang = ['en', 'de', 'fr', 'pl'].includes(locale) ? locale : 'en';
   const backText = locale === 'ar' ? 'العودة للرئيسية' : locale === 'de' ? 'Zurück zur Startseite' : locale === 'fr' ? 'Retour à l\'accueil' : 'Back to Home';
+  const aiGuideText = 'Ask AI Guide';
+  const whatsappText = locale === 'de' ? 'Über WhatsApp buchen' : locale === 'fr' ? 'Réserver via WhatsApp' : locale === 'pl' ? 'Zarezerwuj przez WhatsApp' : 'Book Instantly via WhatsApp';
 
   const pageName = typeof pageData.name === 'object' 
     ? (pageData.name?.[currentLang] || pageData.name?.en || 'Service') 
@@ -114,7 +124,7 @@ export default async function ServiceDetailPage({
     : null;
 
   return (
-    <main className="min-h-screen pt-32 pb-20 px-6 max-w-7xl mx-auto text-white">
+    <main className="min-h-screen pt-32 pb-20 px-6 max-w-7xl mx-auto text-white relative">
       <Link href={`/${locale}`} title={backText} aria-label={backText} className="inline-flex items-center gap-2 text-zinc-400 hover:text-white mb-8 transition-colors">
         <svg className="w-5 h-5 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
@@ -130,7 +140,7 @@ export default async function ServiceDetailPage({
         <div className="space-y-16">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start relative">
             <div className="lg:col-span-2 space-y-16">
-              {renderSections(mainSections, currentLang, locale, slug, formatUrl, pageName)}
+              {renderSections(mainSections, currentLang, locale, slug, formatUrl, pageName, aiGuideText, whatsappText)}
             </div>
             
             <div className="lg:col-span-1 lg:sticky lg:top-28">
@@ -144,20 +154,44 @@ export default async function ServiceDetailPage({
             </div>
           </div>
 
-          {internalLinksSection && renderSingleSection(internalLinksSection, currentLang, locale, formatUrl, slug, 0, pageName)}
+          {internalLinksSection && renderSingleSection(internalLinksSection, currentLang, locale, formatUrl, slug, 0, pageName, aiGuideText, whatsappText)}
         </div>
       ) : (
         <div className="max-w-6xl mx-auto space-y-16">
-          {renderSections(mainSections, currentLang, locale, slug, formatUrl, pageName)}
-          {internalLinksSection && renderSingleSection(internalLinksSection, currentLang, locale, formatUrl, slug, 0, pageName)}
+          {renderSections(mainSections, currentLang, locale, slug, formatUrl, pageName, aiGuideText, whatsappText)}
+          {internalLinksSection && renderSingleSection(internalLinksSection, currentLang, locale, formatUrl, slug, 0, pageName, aiGuideText, whatsappText)}
         </div>
       )}
+
+      {/* سكريبت لتوصيل أزرار الكروت بالويدجت الخاص بك الموجود في التطبيق */}
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `
+            document.addEventListener('click', function(e) {
+              // 1. تفعيل البوت
+              const triggerAi = e.target.closest('[data-ai-trigger]');
+              if (triggerAi) {
+                const chatBtn = document.getElementById('my-chat-button');
+                if (chatBtn) chatBtn.click();
+              }
+
+              // 2. تفعيل الواتساب الخاص بالويدجت
+              const triggerWa = e.target.closest('[data-wa-trigger]');
+              if (triggerWa) {
+                // البحث عن زر الواتساب الموجود في الـ AIChatWidget والضغط عليه
+                const waBtn = document.querySelector('button[title="WhatsApp"]') || document.querySelector('button[aria-label="WhatsApp"]');
+                if (waBtn) waBtn.click();
+              }
+            });
+          `,
+        }}
+      />
     </main>
   );
 }
 
-function renderSections(sections: any[], currentLang: string, locale: string, slug: string, formatUrl: Function, pageName: string) {
-  return sections.map((section: any, index: number) => renderSingleSection(section, currentLang, locale, formatUrl, slug, index, pageName));
+function renderSections(sections: any[], currentLang: string, locale: string, slug: string, formatUrl: Function, pageName: string, aiGuideText: string, whatsappText: string) {
+  return sections.map((section: any, index: number) => renderSingleSection(section, currentLang, locale, formatUrl, slug, index, pageName, aiGuideText, whatsappText));
 }
 
 const portableTextComponents = {
@@ -187,7 +221,7 @@ const portableTextComponents = {
   },
 };
 
-function renderSingleSection(section: any, currentLang: string, locale: string, formatUrl: Function, slug?: string, index: number = 0, pageName: string = 'Service') {
+function renderSingleSection(section: any, currentLang: string, locale: string, formatUrl: Function, slug: string = '', index: number = 0, pageName: string = 'Service', aiGuideText: string, whatsappText: string) {
   
   if (section._type === 'splitSection') {
     const isImageLeft = section.layoutDirection === 'imageLeft';
@@ -239,7 +273,6 @@ function renderSingleSection(section: any, currentLang: string, locale: string, 
           </Link>
         )}
 
-        {/* عرض الفيديو المباشر بشكل صحيح */}
         {videoUrl ? (
           <div className="relative w-full h-[350px] md:h-[450px] rounded-2xl overflow-hidden mt-2 border border-white/10 shadow-2xl bg-black">
             <video
@@ -268,11 +301,12 @@ function renderSingleSection(section: any, currentLang: string, locale: string, 
         )}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {section.cards?.map((card: any, cIdx: number) => {
-            const cardBtnText = card.cardCtaText?.[currentLang];
+            const cardBtnText = card.cardCtaText?.[currentLang] || 'View Packages';
             const cardBtnUrl = formatUrl(card.cardCtaUrl?.[currentLang], card.serviceSlug || '#');
             const cardTitleText = card.cardTitle?.[currentLang] || pageName;
-            
             const displayPrice = card.servicePrice ? `From €${card.servicePrice}` : null;
+            const showAi = card.showAiGuide !== false;
+            const showWa = card.showWhatsApp !== false;
 
             return (
               <div key={cIdx} className="bg-zinc-900 border border-white/10 rounded-2xl p-6 flex flex-col justify-between shadow-lg text-start">
@@ -289,8 +323,9 @@ function renderSingleSection(section: any, currentLang: string, locale: string, 
                       />
                       
                       {card.badgeText && (
-                        <div className="absolute top-3 left-3 z-10 bg-amber-500 text-neutral-950 font-bold px-3 py-1 rounded-full text-xs shadow-md">
-                          {card.badgeText}
+                        <div className="absolute top-3 left-3 z-10 bg-amber-500 text-neutral-950 font-bold px-3 py-1.5 rounded-full text-xs shadow-md flex items-center gap-1.5">
+                          {card.badgeEmoji && <span className="text-sm leading-none">{card.badgeEmoji}</span>}
+                          <span>{card.badgeText}</span>
                         </div>
                       )}
 
@@ -304,21 +339,67 @@ function renderSingleSection(section: any, currentLang: string, locale: string, 
 
                   <h3 className="text-xl font-bold mb-3">{card.cardTitle?.[currentLang]}</h3>
                   
-                  <div className="text-zinc-400 text-sm mb-6 leading-relaxed w-full">
+                  <div className="text-zinc-400 text-sm mb-4 leading-relaxed w-full">
                     {card.cardDesc?.[currentLang] && <PortableText value={card.cardDesc[currentLang]} components={portableTextComponents} />}
                   </div>
+
+                  {card.features && card.features.length > 0 && (
+                    <div className="flex flex-wrap gap-2 mb-5">
+                      {card.features.map((feat: any, fIdx: number) => {
+                        if (!feat?.featureText) return null;
+                        return (
+                          <div 
+                            key={fIdx} 
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#171e2e]/90 hover:bg-[#1d273b] border border-blue-900/40 rounded-xl text-xs font-medium text-zinc-200 transition-colors shadow-sm"
+                          >
+                            {feat.emoji && <span className="text-sm">{feat.emoji}</span>}
+                            <span>{feat.featureText}</span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
                 </div>
 
-                {cardBtnText && (
-                  <Link 
-                    href={cardBtnUrl}
-                    title={cardBtnText}
-                    aria-label={cardBtnText}
-                    className="mt-4 w-full py-3 bg-red-600 hover:bg-red-700 text-white font-bold rounded-2xl transition-all text-center block shadow-md text-sm cursor-pointer"
-                  >
-                    {cardBtnText}
-                  </Link>
-                )}
+                <div className="mt-4 space-y-3">
+                  <div className="grid grid-cols-2 gap-2">
+                    <Link 
+                      href={cardBtnUrl}
+                      title={cardBtnText}
+                      aria-label={cardBtnText}
+                      className="py-3 px-2 bg-zinc-800 hover:bg-zinc-700 text-white font-semibold rounded-xl transition-all text-center block shadow-md text-xs sm:text-sm cursor-pointer flex items-center justify-center gap-1.5"
+                    >
+                      <span>📖</span>
+                      <span className="truncate">{cardBtnText}</span>
+                    </Link>
+
+                    {showAi && (
+                      <button 
+                        type="button"
+                        data-ai-trigger="true"
+                        title={aiGuideText}
+                        aria-label={aiGuideText}
+                        className="py-3 px-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold rounded-xl transition-all text-center block shadow-md text-xs sm:text-sm cursor-pointer flex items-center justify-center gap-1.5 w-full"
+                      >
+                        <span>✨</span>
+                        <span className="truncate">{aiGuideText}</span>
+                      </button>
+                    )}
+                  </div>
+
+                  {showWa && (
+                    <button 
+                      type="button"
+                      data-wa-trigger="true"
+                      title={whatsappText}
+                      aria-label={whatsappText}
+                      className="w-full py-3 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl transition-all text-center block shadow-lg text-sm cursor-pointer flex items-center justify-center gap-2"
+                    >
+                      <span>💬</span>
+                      <span>{whatsappText}</span>
+                    </button>
+                  )}
+                </div>
               </div>
             );
           })}

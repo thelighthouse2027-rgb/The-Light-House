@@ -177,13 +177,40 @@ export default {
                       type: 'image',
                       options: { hotspot: true }
                     },
-                    // الحقول الجديدة للإضافات المطلوبة (السعر والشارة المميزة)
                     {
                       name: 'priceText',
                       title: 'نص السعر على الكارت (مثل: From €45)',
                       type: 'string'
                     },
-                    createMultiLangField('badgeText', 'نص الشارة المميزة على الكارت (مثل: Popular)'),
+                    // الشارة المميزة أصبحت تدعم النص باللغات الأربع والأيقونة في نفس الوقت
+                    {
+                      name: 'badgeData',
+                      title: 'الشارة المميزة على الكارت (Badge)',
+                      type: 'object',
+                      fields: [
+                        createMultiLangField('badgeText', 'نص الشارة (مثل: Most Popular)'),
+                        {
+                          name: 'emoji',
+                          title: 'اختر أيقونة للشارة',
+                          type: 'string',
+                          options: {
+                            list: [
+                              { title: '🔥 الأكثر طلباً / ساخن (Fire)', value: '🔥' },
+                              { title: '👨‍👩‍👧‍👦 مناسب للعائلات (Family)', value: '👨‍👩‍👧‍👦' },
+                              { title: '👶 مناسب للمبتدئين (Beginner)', value: '👶' },
+                              { title: '🏆 مستوى محترف / متقدم (Pro)', value: '🏆' },
+                              { title: '🤿 معدات غوص شاملة (Diving Gear)', value: '🤿' },
+                              { title: '🚤 رحلة بحرية سريعة (Speedboat)', value: '🚤' },
+                              { title: '🐬 مشاهدة دلافين وحياة بحرية (Dolphins)', value: '🐬' },
+                              { title: '⭐ خدمة في آي بي مميزة (VIP)', value: '⭐' },
+                              { title: '🍽️ بوفيه مفتوح ومشروبات (Open Buffet)', value: '🍽️' },
+                              { title: '🚐 انتقالات مجانية (Free Transfer)', value: '🚐' }
+                            ],
+                            layout: 'dropdown'
+                          }
+                        }
+                      ]
+                    },
                     {
                       name: 'servicePrice',
                       title: 'سعر الخدمة (€) - رقمي',
@@ -194,8 +221,80 @@ export default {
                       title: 'معرف الخدمة في الرابط',
                       type: 'string'
                     },
+                    // مميزات الكارت مع قائمة الأيقونات المنسدلة الجاهزة
+                    {
+                      name: 'features',
+                      title: 'مميزات الكارت (Tags باللغات الأربع)',
+                      type: 'array',
+                      of: [
+                        {
+                          type: 'object',
+                          fields: [
+                            createMultiLangField('featureText', 'نص الميزة باللغات الأربع'),
+                            {
+                              name: 'emoji',
+                              title: 'اختر أيقونة أو إيموجي مميز',
+                              type: 'string',
+                              options: {
+                                list: [
+                                  { title: '🔥 الأكثر طلباً / ساخن (Fire)', value: '🔥' },
+                                  { title: '👨‍👩‍👧‍👦 مناسب للعائلات (Family)', value: '👨‍👩‍👧‍👦' },
+                                  { title: '👶 مناسب للمبتدئين (Beginner)', value: '👶' },
+                                  { title: '🏆 مستوى محترف / متقدم (Pro)', value: '🏆' },
+                                  { title: '🤿 معدات غوص شاملة (Diving Gear)', value: '🤿' },
+                                  { title: '🚤 رحلة بحرية سريعة (Speedboat)', value: '🚤' },
+                                  { title: '🐬 مشاهدة دلافين وحياة بحرية (Dolphins)', value: '🐬' },
+                                  { title: '⭐ خدمة في آي بي مميزة (VIP)', value: '⭐' },
+                                  { title: '🍽️ بوفيه مفتوح ومشروبات (Open Buffet)', value: '🍽️' },
+                                  { title: '🚐 انتقالات مجانية (Free Transfer)', value: '🚐' }
+                                ],
+                                layout: 'dropdown'
+                              }
+                            }
+                          ],
+                          preview: {
+                            select: {
+                              title: 'featureText.en',
+                              subtitle: 'emoji'
+                            },
+                            prepare(selection: { title?: string; subtitle?: string }) {
+                              return {
+                                title: selection.title || 'Feature',
+                                subtitle: selection.subtitle || ''
+                              };
+                            }
+                          }
+                        }
+                      ]
+                    },
                     createMultiLangField('cardCtaText', 'نص زر الكارت'),
                     createMultiLangField('cardCtaUrl', 'رابط زر الكارت المتعدد اللغات'),
+                    {
+                      name: 'showAiGuide',
+                      title: 'تفعيل زر Ask AI Guide في هذا الكارت؟',
+                      type: 'boolean',
+                      initialValue: true
+                    },
+                    {
+                      name: 'showWhatsApp',
+                      title: 'تفعيل زر حجز الواتساب في هذا الكارت؟',
+                      type: 'boolean',
+                      initialValue: true
+                    },
+                    {
+                      name: 'whatsappNumber',
+                      title: 'اختر رقم الواتساب للتواصل',
+                      type: 'string',
+                      options: {
+                        list: [
+                          { title: 'الرقم الأول (01273327311)', value: '201273327311' },
+                          { title: 'الرقم الثاني (01550503959)', value: '201550503959' }
+                        ],
+                        layout: 'radio'
+                      },
+                      initialValue: '201273327311',
+                      hidden: ({ parent }: { parent?: any }) => !parent?.showWhatsApp
+                    },
                     {
                       name: 'hasMiniSlider',
                       title: 'سلايدر مصغر داخل الكارت؟',
