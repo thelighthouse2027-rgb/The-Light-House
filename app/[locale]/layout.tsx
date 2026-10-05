@@ -9,6 +9,9 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'The Light House | Diving & Safari Center',
   description: 'Explore and book your diving, snorkeling, and safari adventures with The Light House.',
+  verification: {
+    google: 'google418dafbaec0426f7',
+  },
 };
 
 export default async function LocaleLayout({
