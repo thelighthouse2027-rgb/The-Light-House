@@ -182,35 +182,37 @@ export default {
                       title: 'نص السعر على الكارت (مثل: From €45)',
                       type: 'string'
                     },
-                    // الشارة المميزة أصبحت تدعم النص باللغات الأربع والأيقونة في نفس الوقت
+                    // --- تمت إضافة حقول الموقع بشكل آمن هنا ---
+                    createMultiLangField('locationText', 'نص الموقع على الخريطة (مثل: Hurghada, Red Sea)'),
                     {
-                      name: 'badgeData',
-                      title: 'الشارة المميزة على الكارت (Badge)',
-                      type: 'object',
-                      fields: [
-                        createMultiLangField('badgeText', 'نص الشارة (مثل: Most Popular)'),
-                        {
-                          name: 'emoji',
-                          title: 'اختر أيقونة للشارة',
-                          type: 'string',
-                          options: {
-                            list: [
-                              { title: '🔥 الأكثر طلباً / ساخن (Fire)', value: '🔥' },
-                              { title: '👨‍👩‍👧‍👦 مناسب للعائلات (Family)', value: '👨‍👩‍👧‍👦' },
-                              { title: '👶 مناسب للمبتدئين (Beginner)', value: '👶' },
-                              { title: '🏆 مستوى محترف / متقدم (Pro)', value: '🏆' },
-                              { title: '🤿 معدات غوص شاملة (Diving Gear)', value: '🤿' },
-                              { title: '🚤 رحلة بحرية سريعة (Speedboat)', value: '🚤' },
-                              { title: '🐬 مشاهدة دلافين وحياة بحرية (Dolphins)', value: '🐬' },
-                              { title: '⭐ خدمة في آي بي مميزة (VIP)', value: '⭐' },
-                              { title: '🍽️ بوفيه مفتوح ومشروبات (Open Buffet)', value: '🍽️' },
-                              { title: '🚐 انتقالات مجانية (Free Transfer)', value: '🚐' }
-                            ],
-                            layout: 'dropdown'
-                          }
-                        }
-                      ]
+                      name: 'locationMapUrl',
+                      title: 'رابط خريطة الموقع (Google Maps URL)',
+                      type: 'url'
                     },
+                    // ------------------------------------------
+                    createMultiLangField('badgeText', 'نص الشارة المميزة على الكارت (مثل: Most Popular)'),
+                    // --- تمت إضافة حقل أيقونة الشارة بشكل منفصل وآمن ---
+                    {
+                      name: 'badgeEmoji',
+                      title: 'اختر أيقونة للشارة',
+                      type: 'string',
+                      options: {
+                        list: [
+                          { title: '🔥 الأكثر طلباً / ساخن (Fire)', value: '🔥' },
+                          { title: '👨‍👩‍👧‍👦 مناسب للعائلات (Family)', value: '👨‍👩‍👧‍👦' },
+                          { title: '👶 مناسب للمبتدئين (Beginner)', value: '👶' },
+                          { title: '🏆 مستوى محترف / متقدم (Pro)', value: '🏆' },
+                          { title: '🤿 معدات غوص شاملة (Diving Gear)', value: '🤿' },
+                          { title: '🚤 رحلة بحرية سريعة (Speedboat)', value: '🚤' },
+                          { title: '🐬 مشاهدة دلافين وحياة بحرية (Dolphins)', value: '🐬' },
+                          { title: '⭐ خدمة في آي بي مميزة (VIP)', value: '⭐' },
+                          { title: '🍽️ بوفيه مفتوح ومشروبات (Open Buffet)', value: '🍽️' },
+                          { title: '🚐 انتقالات مجانية (Free Transfer)', value: '🚐' }
+                        ],
+                        layout: 'dropdown'
+                      }
+                    },
+                    // ---------------------------------------------------
                     {
                       name: 'servicePrice',
                       title: 'سعر الخدمة (€) - رقمي',
@@ -221,7 +223,6 @@ export default {
                       title: 'معرف الخدمة في الرابط',
                       type: 'string'
                     },
-                    // مميزات الكارت مع قائمة الأيقونات المنسدلة الجاهزة
                     {
                       name: 'features',
                       title: 'مميزات الكارت (Tags باللغات الأربع)',
