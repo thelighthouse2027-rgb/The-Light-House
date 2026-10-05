@@ -170,5 +170,18 @@
     "selectApp": "Sélectionnez une application",
     "settingsText": "Paramètres",
     "cancelText": "Annuler"
-  }
+  },
+  "GoogleReviews": {
+  "badge": "Avis des clients sur Google Maps",
+  "titlePrefix": "Avis des visiteurs pour",
+  "basedOn": "Basé sur",
+  "reviewsSuffix": "avis vérifiés",
+  "monthAgo": "Il y a 1 mois",
+  "threeWeeksAgo": "Il y a 3 semaines",
+  "twoMonthsAgo": "Il y a 2 mois",
+  "recently": "Récemment",
+  "noComment": "Excellente évaluation sans commentaire écrit.",
+  "guestUser": "Visiteur Google",
+  "viewOriginal": "Voir l'avis original sur Google"
+}
 }

@@ -170,5 +170,20 @@
     "selectApp": "Wählen Sie eine App zum Öffnen",
     "settingsText": "Einstellungen",
     "cancelText": "Abbrechen"
-  }
+  },
+  "GoogleReviews": {
+  "badge": "Gästebewertungen auf Google Maps",
+  "titlePrefix": "Besucherbewertungen für",
+  "basedOn": "Basierend auf",
+  "reviewsSuffix": "verifizierten Bewertungen",
+  "monthAgo": "Vor 1 Monat",
+  "threeWeeksAgo": "Vor 3 Wochen",
+  "twoMonthsAgo": "Vor 2 Monaten",
+  "recently": "Kürzlich",
+  "noComment": "Hervorragende Bewertung ohne geschriebenen Kommentar.",
+  "guestUser": "Google-Besucher",
+  "viewOriginal": "Originalbewertung auf Google anzeigen"
+}
+
+
 }

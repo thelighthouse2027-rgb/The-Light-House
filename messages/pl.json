@@ -170,5 +170,18 @@
     "selectApp": "Wybierz aplikację",
     "settingsText": "Ustawienia",
     "cancelText": "Anuluj"
-  }
+  },
+  "GoogleReviews": {
+  "badge": "Opinie gości na Google Maps",
+  "titlePrefix": "Opinie odwiedzających dla",
+  "basedOn": "Na podstawie",
+  "reviewsSuffix": "zweryfikowanych opinii",
+  "monthAgo": "Miesiąc temu",
+  "threeWeeksAgo": "3 tygodnie temu",
+  "twoMonthsAgo": "2 miesiące temu",
+  "recently": "Niedawno",
+  "noComment": "Doskonała ocena bez komentarza pisanego.",
+  "guestUser": "Gość Google",
+  "viewOriginal": "Zobacz oryginalną opinię w Google"
+}
 }

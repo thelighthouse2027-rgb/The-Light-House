@@ -7,6 +7,7 @@ import LocationSection from '../components/LocationSection';
 import VideoGallery from '../components/VideoGallery';
 import PromoBanner from '../components/PromoBanner';
 import PromoPopup from '../components/PromoPopup';
+import GoogleReviews from '../components/GoogleReviews';
 import { client } from '@/sanity/lib/client';
 
 export const revalidate = 0;
@@ -91,6 +92,11 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 
       <div className="w-full pb-20 px-2 md:px-6">
         <InfoSection locale={locale} />
+      </div>
+
+      {/* قسم تقييمات Google */}
+      <div className="w-full pb-20 px-2 md:px-6">
+        <GoogleReviews />
       </div>
 
       <div className="w-full pb-20 px-2 md:px-6 relative z-10">

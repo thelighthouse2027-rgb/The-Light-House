@@ -170,5 +170,19 @@
     "selectApp": "Select an app to open",
     "settingsText": "Settings",
     "cancelText": "Cancel"
-  }
+  },
+
+  "GoogleReviews": {
+  "badge": "Guest Reviews on Google Maps",
+  "titlePrefix": "Visitor Reviews for",
+  "basedOn": "Based on",
+  "reviewsSuffix": "verified reviews",
+  "monthAgo": "1 month ago",
+  "threeWeeksAgo": "3 weeks ago",
+  "twoMonthsAgo": "2 months ago",
+  "recently": "Recently",
+  "noComment": "Excellent review without written comment.",
+  "guestUser": "Google Visitor",
+  "viewOriginal": "View original review on Google"
+}
 }
