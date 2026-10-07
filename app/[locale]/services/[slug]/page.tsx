@@ -1,6 +1,7 @@
 import { client } from '@/sanity/lib/client';
 import Link from 'next/link';
 import Image from 'next/image';
+import Script from 'next/script';
 import { PortableText } from '@portabletext/react';
 import BookingForm from '../../../components/BookingForm';
 
@@ -164,44 +165,20 @@ export default async function ServiceDetailPage({
         </div>
       )}
 
-      {/* سكريبت تفعيل نوافذ الواتساب وأزرار الـ AI */}
-      <script
-        dangerouslySetInnerHTML={{
-          __html: `
+      {/* استخدام Script المدمج في Next.js لتجنب أخطاء Hydration */}
+      <Script id="ai-trigger-script" strategy="afterInteractive">
+        {`
+          if (typeof window !== 'undefined') {
             document.addEventListener('click', function(e) {
-              // 1. تفعيل بوت AI
               const triggerAi = e.target.closest('[data-ai-trigger]');
               if (triggerAi) {
                 const chatBtn = document.getElementById('my-chat-button');
                 if (chatBtn) chatBtn.click();
               }
-
-              // 2. فتح نافذة الواتساب الخاصة بالكارت
-              const triggerWa = e.target.closest('[data-wa-trigger]');
-              if (triggerWa) {
-                e.preventDefault();
-                const modalId = triggerWa.getAttribute('data-wa-trigger');
-                const modal = document.getElementById(modalId);
-                if (modal) modal.classList.remove('hidden');
-              }
-
-              // 3. إغلاق نافذة الواتساب
-              const closeWa = e.target.closest('[data-wa-close]');
-              if (closeWa) {
-                e.preventDefault();
-                const modalId = closeWa.getAttribute('data-wa-close');
-                const modal = document.getElementById(modalId);
-                if (modal) modal.classList.add('hidden');
-              }
-              
-              // 4. إغلاق النافذة عند الضغط خارجها (على الخلفية السوداء)
-              if (e.target.classList.contains('wa-modal-overlay')) {
-                e.target.classList.add('hidden');
-              }
             });
-          `,
-        }}
-      />
+          }
+        `}
+      </Script>
     </main>
   );
 }
@@ -300,7 +277,6 @@ function renderSingleSection(section: any, currentLang: string, locale: string, 
   }
 
   if (section._type === 'gridCardsSection') {
-    // الأرقام التي ستظهر في النافذة المنبثقة للواتساب
     const whatsappNumbers = [
       { label: 'WhatsApp', number: '201273327311', isCloned: false },
       { label: 'ENG SAQR', number: '201550503959', isCloned: true }
@@ -316,17 +292,20 @@ function renderSingleSection(section: any, currentLang: string, locale: string, 
             const cardBtnText = card.cardCtaText?.[currentLang] || 'View Packages';
             const cardBtnUrl = formatUrl(card.cardCtaUrl?.[currentLang], card.serviceSlug || '#');
             const cardTitleText = card.cardTitle?.[currentLang] || pageName;
-            
             const displayPrice = card.servicePrice ? `€${card.servicePrice}` : null;
             
             const showAi = card.showAiGuide !== false;
             const showWa = card.showWhatsApp !== false;
             
-            // ID فريد لكل نافذة واتساب خاصة بكل كارت
+            // ID فريد لربط زر الواتساب بالنافذة الخاصة به عن طريق الـ Checkbox
             const modalId = `wa-modal-${index}-${cIdx}`;
 
             return (
               <div key={cIdx} className="bg-[#0b1120] border border-[#1e293b] rounded-[24px] p-5 flex flex-col justify-between shadow-xl text-start relative">
+                
+                {/* --- الـ Checkbox المخفي للتحكم في نافذة الواتساب بدون JS --- */}
+                <input type="checkbox" id={modalId} className="peer hidden" />
+
                 <div>
                   {card.cardImageUrl && (
                     <div className="relative aspect-[4/3] rounded-2xl overflow-hidden mb-5">
@@ -339,7 +318,6 @@ function renderSingleSection(section: any, currentLang: string, locale: string, 
                         className="object-cover" 
                       />
                       
-                      {/* الشارة الصفراء العلوية (نار + نص) */}
                       {card.badgeText && (
                         <div className="absolute top-3 left-3 z-10 bg-[#f59e0b] text-neutral-950 font-bold px-3.5 py-1.5 rounded-full text-sm shadow-md flex items-center gap-1.5">
                           {card.badgeEmoji && <span className="text-base leading-none">{card.badgeEmoji}</span>}
@@ -347,7 +325,6 @@ function renderSingleSection(section: any, currentLang: string, locale: string, 
                         </div>
                       )}
 
-                      {/* شارة الموقع الجغرافي أسفل اليسار */}
                       {card.locationText && (
                         <Link 
                           href={card.locationMapUrl || '#'} 
@@ -363,7 +340,6 @@ function renderSingleSection(section: any, currentLang: string, locale: string, 
                         </Link>
                       )}
 
-                      {/* شارة السعر داكنة */}
                       {displayPrice && (
                         <div className="absolute top-3 right-3 z-10 bg-[#0f172a] text-[#38bdf8] border border-white/5 px-4 py-1.5 rounded-full text-sm font-bold shadow-md tracking-wide">
                           {displayPrice}
@@ -372,10 +348,8 @@ function renderSingleSection(section: any, currentLang: string, locale: string, 
                     </div>
                   )}
 
-                  {/* عنوان الكارت */}
                   <h3 className="text-[22px] font-bold text-white mb-2">{card.cardTitle?.[currentLang]}</h3>
                   
-                  {/* شارة الشركة تحت العنوان مباشرة */}
                   <div className="flex items-center gap-1.5 text-[#06b6d4] text-sm font-medium mb-4 w-max">
                     <svg stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4"><path d="M12 15a5 5 0 1 0 0-10 5 5 0 0 0 0 10Z"></path><path d="M8.21 13.89L7 23l5-3 5 3-1.21-9.12"></path></svg>
                     <span>The Light House Diving Center</span>
@@ -385,7 +359,6 @@ function renderSingleSection(section: any, currentLang: string, locale: string, 
                     {card.cardDesc?.[currentLang] && <PortableText value={card.cardDesc[currentLang]} components={portableTextComponents} />}
                   </div>
 
-                  {/* مميزات الكارت */}
                   {card.features && card.features.length > 0 && (
                     <div className="flex flex-wrap gap-2.5 mb-6 border-b border-white/5 pb-6">
                       {card.features.map((feat: any, fIdx: number) => {
@@ -404,8 +377,9 @@ function renderSingleSection(section: any, currentLang: string, locale: string, 
                   )}
                 </div>
 
-                {/* --- توزيع الأزرار بشكل ذكي (تحديث الحجم والشكل الدائري) --- */}
+                {/* --- توزيع الأزرار --- */}
                 <div className="mt-auto">
+                  
                   {/* حالة 1: تفعيل الواتساب وزر الانتقال (بدون AI) */}
                   {!showAi && showWa && (
                     <div className="flex items-center gap-3">
@@ -417,16 +391,16 @@ function renderSingleSection(section: any, currentLang: string, locale: string, 
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
                         <span className="truncate">{cardBtnText}</span>
                       </Link>
-                      {/* زر الواتساب الدائري الصغير */}
-                      <button 
-                        type="button"
-                        data-wa-trigger={modalId}
+                      
+                      {/* زر الواتساب الدائري: مربوط بالـ Label والـ Checkbox عشان يفتح المودال */}
+                      <label 
+                        htmlFor={modalId}
                         title={whatsappText}
                         aria-label={whatsappText}
-                        className="w-12 h-12 flex-shrink-0 bg-[#22c55e] hover:bg-[#16a34a] text-white rounded-full transition-all flex items-center justify-center shadow-lg"
+                        className="w-12 h-12 flex-shrink-0 bg-[#22c55e] hover:bg-[#16a34a] text-white rounded-full transition-all flex items-center justify-center shadow-lg cursor-pointer"
                       >
                         <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
-                      </button>
+                      </label>
                     </div>
                   )}
 
@@ -442,16 +416,15 @@ function renderSingleSection(section: any, currentLang: string, locale: string, 
                           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
                           <span className="truncate">{cardBtnText}</span>
                         </Link>
-                        {/* زر الواتساب الدائري الصغير */}
-                        <button 
-                          type="button"
-                          data-wa-trigger={modalId}
+                        
+                        <label 
+                          htmlFor={modalId}
                           title={whatsappText}
                           aria-label={whatsappText}
-                          className="w-12 h-12 flex-shrink-0 bg-[#22c55e] hover:bg-[#16a34a] text-white rounded-full transition-all flex items-center justify-center shadow-lg"
+                          className="w-12 h-12 flex-shrink-0 bg-[#22c55e] hover:bg-[#16a34a] text-white rounded-full transition-all flex items-center justify-center shadow-lg cursor-pointer"
                         >
                           <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
-                        </button>
+                        </label>
                       </div>
 
                       <button 
@@ -502,10 +475,14 @@ function renderSingleSection(section: any, currentLang: string, locale: string, 
                 </div>
                 {/* ---------------------------------------------------------------------- */}
 
-                {/* --- نافذة اختيار تطبيق الواتساب الخاصة بالكارت (Modal) --- */}
+                {/* --- نافذة الواتساب الخاصة بالكارت (تُفتح وتقفل بالـ CSS فقط عن طريق الـ peer-checked) --- */}
                 {showWa && (
-                  <div id={modalId} className="wa-modal-overlay hidden fixed inset-0 z-[99999] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-                    <div className="bg-[#1e1e1e] border border-zinc-800 rounded-3xl shadow-2xl p-6 w-80 text-white flex flex-col items-center text-center animate-in fade-in zoom-in duration-200">
+                  <div className="hidden peer-checked:flex fixed inset-0 z-[99999] items-center justify-center p-4">
+                    {/* خلفية سوداء شفافة تغلق النافذة عند الضغط عليها */}
+                    <label htmlFor={modalId} className="absolute inset-0 bg-black/80 backdrop-blur-sm cursor-pointer"></label>
+                    
+                    {/* محتوى النافذة */}
+                    <div className="relative z-10 bg-[#1e1e1e] border border-zinc-800 rounded-3xl shadow-2xl p-6 w-80 text-white flex flex-col items-center text-center animate-in fade-in zoom-in duration-200">
                       <h3 className="text-base font-medium text-zinc-100 mb-2">Select an app to open</h3>
                       <p className="text-[11px] text-zinc-400 mb-6 leading-relaxed">
                         To set a default app to open, go to "Settings - Apps - App Cloner". <span className="text-[#3b82f6] cursor-pointer hover:underline">Settings</span>
@@ -520,7 +497,6 @@ function renderSingleSection(section: any, currentLang: string, locale: string, 
                               href={`https://wa.me/${item.number}?text=${encodeURIComponent(defaultMessage)}`}
                               target="_blank"
                               rel="noopener noreferrer"
-                              data-wa-close={modalId}
                               className="flex flex-col items-center gap-2 group cursor-pointer"
                             >
                               <div className="relative w-14 h-14 bg-[#18181b] rounded-2xl flex items-center justify-center border border-zinc-800 group-hover:border-[#10b981] shadow-md transition-all">
@@ -539,17 +515,18 @@ function renderSingleSection(section: any, currentLang: string, locale: string, 
                         })}
                       </div>
 
-                      <button 
-                        type="button" 
-                        data-wa-close={modalId}
-                        className="text-[#3b82f6] hover:text-[#60a5fa] text-sm font-semibold cursor-pointer"
+                      {/* زر الإلغاء لغلق النافذة */}
+                      <label 
+                        htmlFor={modalId}
+                        className="text-[#3b82f6] hover:text-[#60a5fa] text-sm font-semibold cursor-pointer mt-2"
                       >
                         Cancel
-                      </button>
+                      </label>
                     </div>
                   </div>
                 )}
-                {/* ------------------------------------------------------------- */}
+                {/* ---------------------------------------------------------------------- */}
+
               </div>
             );
           })}
