@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useTranslations, useLocale } from 'next-intl';
-import { FaWhatsapp, FaFacebookF, FaYoutube, FaPhoneAlt, FaEnvelope } from 'react-icons/fa';
+import { FaWhatsapp, FaFacebookF, FaYoutube, FaPhoneAlt, FaEnvelope, FaInstagram, FaTiktok } from 'react-icons/fa';
 
 export default function Footer() {
   const t = useTranslations('Footer');
@@ -68,6 +68,7 @@ export default function Footer() {
               <span className="text-zinc-100 text-sm font-medium">thelighthouse2027@gmail.com</span>
             </a>
             
+            {/* التليفون */}
             <a 
               href="https://wa.me/201273327311" 
               target="_blank" 
@@ -80,7 +81,8 @@ export default function Footer() {
               <span className="text-zinc-100 text-sm font-mono">+20 127 332 7311</span>
             </a>
 
-            <div className="flex items-center gap-3 ml-2">
+            {/* روابط السوشيال ميديا */}
+            <div className="flex flex-wrap items-center justify-center gap-3 ml-2">
               <a 
                 href="https://wa.me/201273327311" 
                 target="_blank" 
@@ -92,7 +94,7 @@ export default function Footer() {
                 <FaWhatsapp className="text-xl" aria-hidden="true" />
               </a>
               <a 
-                href="https://facebook.com" 
+                href="https://www.facebook.com/profile.php?id=61594850792813" 
                 target="_blank" 
                 rel="noopener noreferrer" 
                 title="Facebook"
@@ -100,6 +102,26 @@ export default function Footer() {
                 className="p-3 bg-zinc-900/80 border border-blue-600/30 text-blue-400 hover:bg-blue-600 hover:text-white rounded-xl transition-all shadow-[0_0_15px_rgba(37,99,235,0.15)] hover:shadow-[0_0_25px_rgba(37,99,235,0.4)]"
               >
                 <FaFacebookF className="text-xl" aria-hidden="true" />
+              </a>
+              <a 
+                href="https://www.instagram.com/thelighthouse2027/" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                title="Instagram"
+                aria-label="Instagram" 
+                className="p-3 bg-zinc-900/80 border border-blue-600/30 text-blue-400 hover:bg-blue-600 hover:text-white rounded-xl transition-all shadow-[0_0_15px_rgba(37,99,235,0.15)] hover:shadow-[0_0_25px_rgba(37,99,235,0.4)]"
+              >
+                <FaInstagram className="text-xl" aria-hidden="true" />
+              </a>
+              <a 
+                href="https://www.tiktok.com/@user5211356814778" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                title="TikTok"
+                aria-label="TikTok" 
+                className="p-3 bg-zinc-900/80 border border-blue-600/30 text-blue-400 hover:bg-blue-600 hover:text-white rounded-xl transition-all shadow-[0_0_15px_rgba(37,99,235,0.15)] hover:shadow-[0_0_25px_rgba(37,99,235,0.4)]"
+              >
+                <FaTiktok className="text-xl" aria-hidden="true" />
               </a>
               <a 
                 href="https://www.youtube.com/@TheLightHouse-v8b" 

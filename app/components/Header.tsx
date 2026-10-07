@@ -2,7 +2,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { FaWhatsapp, FaFacebookF, FaYoutube } from 'react-icons/fa';
+import { FaWhatsapp, FaFacebookF, FaYoutube, FaInstagram, FaTiktok } from 'react-icons/fa';
 import { useTranslations } from 'next-intl';
 
 const languages = [
@@ -75,7 +75,7 @@ export default function Header({ locale }: { locale: string }) {
               <FaWhatsapp className="text-lg" aria-hidden="true" />
             </a>
             <a 
-              href="https://facebook.com" 
+              href="https://www.facebook.com/profile.php?id=61594850792813" 
               target="_blank" 
               rel="noopener noreferrer" 
               title="Facebook"
@@ -83,6 +83,26 @@ export default function Header({ locale }: { locale: string }) {
               className="text-zinc-300 hover:text-blue-400 hover:drop-shadow-[0_0_8px_rgba(59,130,246,0.8)] transition-all"
             >
               <FaFacebookF className="text-md" aria-hidden="true" />
+            </a>
+            <a 
+              href="https://www.instagram.com/thelighthouse2027/" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              title="Instagram"
+              aria-label="Instagram" 
+              className="text-zinc-300 hover:text-blue-400 hover:drop-shadow-[0_0_8px_rgba(59,130,246,0.8)] transition-all"
+            >
+              <FaInstagram className="text-lg" aria-hidden="true" />
+            </a>
+            <a 
+              href="https://www.tiktok.com/@user5211356814778" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              title="TikTok"
+              aria-label="TikTok" 
+              className="text-zinc-300 hover:text-blue-400 hover:drop-shadow-[0_0_8px_rgba(59,130,246,0.8)] transition-all"
+            >
+              <FaTiktok className="text-lg" aria-hidden="true" />
             </a>
             <a 
               href="https://www.youtube.com/@TheLightHouse-v8b" 
@@ -157,7 +177,7 @@ export default function Header({ locale }: { locale: string }) {
           </nav>
           
           {/* روابط السوشيال ميديا - موبايل */}
-          <div className="mt-6 pt-6 border-t border-blue-600/40 flex justify-center gap-6">
+          <div className="mt-6 pt-6 border-t border-blue-600/40 flex justify-center gap-3 sm:gap-4 flex-wrap">
             <a 
               href="https://wa.me/201273327311" 
               target="_blank" 
@@ -169,7 +189,7 @@ export default function Header({ locale }: { locale: string }) {
               <FaWhatsapp className="text-xl" aria-hidden="true" />
             </a>
             <a 
-              href="https://facebook.com" 
+              href="https://www.facebook.com/profile.php?id=61594850792813" 
               target="_blank" 
               rel="noopener noreferrer" 
               title="Facebook"
@@ -177,6 +197,26 @@ export default function Header({ locale }: { locale: string }) {
               className="p-3 bg-blue-600/10 border border-blue-500 text-white hover:bg-blue-600 rounded-xl transition-all shadow-[0_0_15px_rgba(37,99,235,0.3)]"
             >
               <FaFacebookF className="text-lg" aria-hidden="true" />
+            </a>
+            <a 
+              href="https://www.instagram.com/thelighthouse2027/" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              title="Instagram"
+              aria-label="Instagram" 
+              className="p-3 bg-blue-600/10 border border-blue-500 text-white hover:bg-blue-600 rounded-xl transition-all shadow-[0_0_15px_rgba(37,99,235,0.3)]"
+            >
+              <FaInstagram className="text-xl" aria-hidden="true" />
+            </a>
+            <a 
+              href="https://www.tiktok.com/@user5211356814778" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              title="TikTok"
+              aria-label="TikTok" 
+              className="p-3 bg-blue-600/10 border border-blue-500 text-white hover:bg-blue-600 rounded-xl transition-all shadow-[0_0_15px_rgba(37,99,235,0.3)]"
+            >
+              <FaTiktok className="text-xl" aria-hidden="true" />
             </a>
             <a 
               href="https://www.youtube.com/@TheLightHouse-v8b" 
