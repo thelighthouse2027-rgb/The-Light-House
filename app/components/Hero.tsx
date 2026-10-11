@@ -40,13 +40,16 @@ export default function Hero() {
         </p>
 
         <div className="flex flex-col sm:flex-row items-center gap-4 mt-6">
-          <button 
+          
+          {/* تحويل زر Explore Tours إلى Link ينقل لصفحة الخدمات مع دعم اللغة الحالية */}
+          <Link 
+            href={`/${locale}/services`}
             title="Explore Tours"
             aria-label="Explore Tours"
-            className="w-full sm:w-auto px-10 py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-2xl transition-all duration-300 shadow-[0_0_25px_rgba(37,99,235,0.5)] hover:shadow-[0_0_40px_rgba(37,99,235,0.8)] hover:-translate-y-1 active:translate-y-0 border border-blue-500 cursor-pointer"
+            className="w-full sm:w-auto px-10 py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-2xl transition-all duration-300 shadow-[0_0_25px_rgba(37,99,235,0.5)] hover:shadow-[0_0_40px_rgba(37,99,235,0.8)] hover:-translate-y-1 active:translate-y-0 border border-blue-500 cursor-pointer inline-flex items-center justify-center"
           >
             Explore Tours
-          </button>
+          </Link>
           
           <Link 
             href={`/${locale}/contact`}
