@@ -183,5 +183,17 @@
   "noComment": "Doskonała ocena bez komentarza pisanego.",
   "guestUser": "Gość Google",
   "viewOriginal": "Zobacz oryginalną opinię w Google"
-}
+},
+  "Courses": {
+    "nitrox": "Kurs nurkowania PADI Enriched Air (Nitrox) w Hurghadzie",
+    "drysuit": "Specjalistyczny kurs nurkowania w suchym skafandrze PADI w Hurghadzie",
+    "deep": "Specjalistyczny kurs nurkowania głębokiego PADI w Hurghadzie",
+    "navigator": "Specjalistyczny kurs nawigacji podwodnej PADI w Hurghadzie",
+    "wreck": "Specjalistyczny kurs nurkowania wrakowego PADI w Hurghadzie",
+    "sidemount": "Kurs nurkowania PADI Sidemount w Hurghadzie",
+    "night": "Specjalistyczny kurs nurkowania nocnego PADI w Hurghadzie",
+    "buoyancy": "Specjalistyczny kurs doskonałej pływalności PADI w Hurghadzie",
+    "badge": "Specjalności Morza Czerwonego",
+    "sectionSubtitle": "Rozwijaj swoją karierę nurkową dzięki naszym profesjonalnym kursom specjalistycznym w Hurghadzie."
+  }
 }

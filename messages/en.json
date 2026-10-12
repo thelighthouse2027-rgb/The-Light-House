@@ -184,5 +184,18 @@
   "noComment": "Excellent review without written comment.",
   "guestUser": "Google Visitor",
   "viewOriginal": "View original review on Google"
-}
+},
+  "Courses": {
+    "nitrox": "PADI Enriched Air (Nitrox) Diver Course in Hurghada",
+    "drysuit": "PADI Dry Suit Diver Specialty Course in Hurghada",
+    "deep": "PADI Deep Diver Specialty Course in Hurghada",
+    "navigator": "PADI Underwater Navigator Specialty Course in Hurghada",
+    "wreck": "PADI Wreck Diver Specialty Course in Hurghada",
+    "sidemount": "PADI Sidemount Diver Course in Hurghada",
+    "night": "PADI Night Diver Specialty Course in Hurghada",
+    "buoyancy": "PADI Peak Performance Buoyancy Specialty Course in Hurghada",
+    "sectionTitle": "Featured PADI Diving Courses",
+    "sectionSubtitle": "Advance your diving career with our professional specialty courses in Hurghada.",
+    "badge": "Red Sea Specialties"
+  }
 }

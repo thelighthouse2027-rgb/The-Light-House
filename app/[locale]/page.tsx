@@ -1,4 +1,5 @@
 import Hero from '../components/Hero';
+import DivingCoursesSection from '../components/DivingCoursesSection';
 import Services from '../components/Services';
 import Features from '../components/Features';
 import SafariSection from '../components/SafariSection';
@@ -72,6 +73,11 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       
       <div className="pb-10 px-2 md:px-6">
         <Hero />
+      </div>
+
+      {/* قسم كورسات الغوص الجديد */}
+      <div className="w-full pb-10 px-2 md:px-6">
+        <DivingCoursesSection />
       </div>
       
       <div className="w-full pb-10">
