@@ -5,8 +5,11 @@ import { useRouter } from 'next/navigation';
 export default function BookingForm({ adultPrice = 150, childPrice = 150, locale, serviceName, formTitle }: any) {
   const router = useRouter();
   const [date, setDate] = useState('');
-  const [adults, setAdults] = useState<number>(1);
-  const [children, setChildren] = useState<number>(0);
+  
+  // تم تغيير القيم الافتراضية لتكون فارغة تماماً بدلاً من 1 و 0
+  const [adults, setAdults] = useState<number | string>('');
+  const [children, setChildren] = useState<number | string>('');
+  
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
@@ -19,7 +22,8 @@ export default function BookingForm({ adultPrice = 150, childPrice = 150, locale
     setIsMounted(true);
   }, []);
 
-  const totalCost = (adults * Number(adultPrice)) + (children * Number(childPrice));
+  // حساب الإجمالي مع التعامل بشكل صحيح مع الحقول الفارغة
+  const totalCost = ((Number(adults) || 0) * Number(adultPrice)) + ((Number(children) || 0) * Number(childPrice));
 
   // العنوان الذي سيظهر ديناميكياً بعد التحميل
   const displayTitle = formTitle || (serviceName ? `Book: ${serviceName}` : 'Send an Inquiry');
@@ -29,8 +33,8 @@ export default function BookingForm({ adultPrice = 150, childPrice = 150, locale
     const queryParams = new URLSearchParams({
       service: serviceName || 'Diving Tour',
       date: date || 'Not specified',
-      adults: adults.toString(),
-      children: children.toString(),
+      adults: (adults || 0).toString(),
+      children: (children || 0).toString(),
       total: totalCost.toString(),
       name: fullName,
       email: email,
@@ -44,7 +48,6 @@ export default function BookingForm({ adultPrice = 150, childPrice = 150, locale
 
   return (
     <div className="max-w-md mx-auto bg-[#101033] border border-blue-600/35 rounded-3xl p-6 md:p-8 shadow-2xl text-white">
-      {/* توحيد النص المبدئي لكي يتطابق السيرفر مع الكلانت لحظة التحميل */}
       <h3 className="text-2xl font-extrabold mb-6 text-white">
         {isMounted ? displayTitle : 'Send an Inquiry'}
       </h3>
@@ -73,8 +76,10 @@ export default function BookingForm({ adultPrice = 150, childPrice = 150, locale
             <input 
               type="number" 
               min="1" 
+              placeholder="0"
+              required
               value={adults}
-              onChange={(e) => setAdults(parseInt(e.target.value) || 0)}
+              onChange={(e) => setAdults(e.target.value === '' ? '' : parseInt(e.target.value, 10))}
               className="w-full bg-white text-zinc-900 rounded-xl px-4 py-3 text-sm focus:outline-none font-bold" 
             />
           </div>
@@ -86,8 +91,9 @@ export default function BookingForm({ adultPrice = 150, childPrice = 150, locale
             <input 
               type="number" 
               min="0" 
+              placeholder="0"
               value={children}
-              onChange={(e) => setChildren(parseInt(e.target.value) || 0)}
+              onChange={(e) => setChildren(e.target.value === '' ? '' : parseInt(e.target.value, 10))}
               className="w-full bg-white text-zinc-900 rounded-xl px-4 py-3 text-sm focus:outline-none font-bold" 
             />
           </div>

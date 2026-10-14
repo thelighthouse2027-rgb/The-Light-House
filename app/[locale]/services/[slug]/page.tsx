@@ -289,21 +289,22 @@ function renderSingleSection(section: any, currentLang: string, locale: string, 
         )}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {section.cards?.map((card: any, cIdx: number) => {
-            const cardBtnText = card.cardCtaText?.[currentLang] || 'View Packages';
+            // تم إزالة النص الافتراضي، لو الحقل فاضي المتغير هيكون undefined
+            const cardBtnText = card.cardCtaText?.[currentLang]; 
             const cardBtnUrl = formatUrl(card.cardCtaUrl?.[currentLang], card.serviceSlug || '#');
             const cardTitleText = card.cardTitle?.[currentLang] || pageName;
             const displayPrice = card.servicePrice ? `€${card.servicePrice}` : null;
             
+            const hasCta = !!cardBtnText;
             const showAi = card.showAiGuide !== false;
             const showWa = card.showWhatsApp !== false;
+            const hasAnyButton = hasCta || showAi || showWa;
             
-            // ID فريد لربط زر الواتساب بالنافذة الخاصة به عن طريق الـ Checkbox
             const modalId = `wa-modal-${index}-${cIdx}`;
 
             return (
               <div key={cIdx} className="bg-[#0b1120] border border-[#1e293b] rounded-[24px] p-5 flex flex-col justify-between shadow-xl text-start relative">
                 
-                {/* --- الـ Checkbox المخفي للتحكم في نافذة الواتساب بدون JS --- */}
                 <input type="checkbox" id={modalId} className="peer hidden" />
 
                 <div>
@@ -377,111 +378,145 @@ function renderSingleSection(section: any, currentLang: string, locale: string, 
                   )}
                 </div>
 
-                {/* --- توزيع الأزرار --- */}
-                <div className="mt-auto">
-                  
-                  {/* حالة 1: تفعيل الواتساب وزر الانتقال (بدون AI) */}
-                  {!showAi && showWa && (
-                    <div className="flex items-center gap-3">
-                      <Link 
-                        href={cardBtnUrl}
-                        title={cardBtnText}
-                        className="flex-1 py-3 px-4 bg-gradient-to-r from-[#06b6d4] to-[#3b82f6] hover:from-[#0891b2] hover:to-[#2563eb] text-white font-bold rounded-2xl transition-all text-center shadow-lg text-sm flex items-center justify-center gap-2"
-                      >
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
-                        <span className="truncate">{cardBtnText}</span>
-                      </Link>
-                      
-                      {/* زر الواتساب الدائري: مربوط بالـ Label والـ Checkbox عشان يفتح المودال */}
-                      <label 
-                        htmlFor={modalId}
-                        title={whatsappText}
-                        aria-label={whatsappText}
-                        className="w-12 h-12 flex-shrink-0 bg-[#22c55e] hover:bg-[#16a34a] text-white rounded-full transition-all flex items-center justify-center shadow-lg cursor-pointer"
-                      >
-                        <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
-                      </label>
-                    </div>
-                  )}
-
-                  {/* حالة 2: تفعيل كل الأزرار (AI + WA + Link) */}
-                  {showAi && showWa && (
-                    <div className="space-y-3">
-                      <div className="flex items-center gap-3">
-                        <Link 
-                          href={cardBtnUrl}
-                          title={cardBtnText}
-                          className="flex-1 py-3 px-4 bg-gradient-to-r from-[#06b6d4] to-[#3b82f6] hover:from-[#0891b2] hover:to-[#2563eb] text-white font-bold rounded-2xl transition-all text-center shadow-lg text-sm flex items-center justify-center gap-2"
-                        >
-                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
-                          <span className="truncate">{cardBtnText}</span>
-                        </Link>
-                        
+                {/* --- توزيع الأزرار بشكل ذكي فقط إذا كان هناك أزرار سيتم عرضها --- */}
+                {hasAnyButton && (
+                  <div className="mt-auto">
+                    
+                    {/* حالة 1: تفعيل الواتساب (بدون AI) */}
+                    {!showAi && showWa && (
+                      hasCta ? (
+                        <div className="flex items-center gap-3">
+                          <Link 
+                            href={cardBtnUrl}
+                            title={cardBtnText}
+                            className="flex-1 py-3 px-4 bg-gradient-to-r from-[#06b6d4] to-[#3b82f6] hover:from-[#0891b2] hover:to-[#2563eb] text-white font-bold rounded-2xl transition-all text-center shadow-lg text-sm flex items-center justify-center gap-2"
+                          >
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
+                            <span className="truncate">{cardBtnText}</span>
+                          </Link>
+                          
+                          <label 
+                            htmlFor={modalId}
+                            title={whatsappText}
+                            aria-label={whatsappText}
+                            className="w-12 h-12 flex-shrink-0 bg-[#22c55e] hover:bg-[#16a34a] text-white rounded-full transition-all flex items-center justify-center shadow-lg cursor-pointer"
+                          >
+                            <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+                          </label>
+                        </div>
+                      ) : (
                         <label 
                           htmlFor={modalId}
                           title={whatsappText}
                           aria-label={whatsappText}
-                          className="w-12 h-12 flex-shrink-0 bg-[#22c55e] hover:bg-[#16a34a] text-white rounded-full transition-all flex items-center justify-center shadow-lg cursor-pointer"
+                          className="w-full py-3 px-4 bg-[#22c55e] hover:bg-[#16a34a] text-zinc-900 font-bold rounded-2xl transition-all text-center shadow-lg text-sm flex items-center justify-center gap-2 cursor-pointer"
                         >
-                          <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+                          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+                          <span className="truncate">{whatsappText}</span>
                         </label>
+                      )
+                    )}
+
+                    {/* حالة 2: تفعيل كل الأزرار (AI + WA) */}
+                    {showAi && showWa && (
+                      <div className="space-y-3">
+                        {hasCta ? (
+                          <div className="flex items-center gap-3">
+                            <Link 
+                              href={cardBtnUrl}
+                              title={cardBtnText}
+                              className="flex-1 py-3 px-4 bg-gradient-to-r from-[#06b6d4] to-[#3b82f6] hover:from-[#0891b2] hover:to-[#2563eb] text-white font-bold rounded-2xl transition-all text-center shadow-lg text-sm flex items-center justify-center gap-2"
+                            >
+                              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
+                              <span className="truncate">{cardBtnText}</span>
+                            </Link>
+                            
+                            <label 
+                              htmlFor={modalId}
+                              title={whatsappText}
+                              aria-label={whatsappText}
+                              className="w-12 h-12 flex-shrink-0 bg-[#22c55e] hover:bg-[#16a34a] text-white rounded-full transition-all flex items-center justify-center shadow-lg cursor-pointer"
+                            >
+                              <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+                            </label>
+                          </div>
+                        ) : (
+                          <label 
+                            htmlFor={modalId}
+                            title={whatsappText}
+                            aria-label={whatsappText}
+                            className="w-full py-3 px-4 bg-[#22c55e] hover:bg-[#16a34a] text-zinc-900 font-bold rounded-2xl transition-all text-center shadow-lg text-sm flex items-center justify-center gap-2 cursor-pointer"
+                          >
+                            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+                            <span className="truncate">{whatsappText}</span>
+                          </label>
+                        )}
+
+                        <button 
+                          type="button"
+                          data-ai-trigger="true"
+                          title={aiGuideText}
+                          className="w-full py-3 px-4 bg-[#1e293b] hover:bg-[#334155] text-white font-bold rounded-2xl transition-all text-center shadow-lg text-sm flex items-center justify-center gap-1.5 border border-white/5"
+                        >
+                          <span>✨</span>
+                          <span className="truncate">{aiGuideText}</span>
+                        </button>
                       </div>
+                    )}
 
-                      <button 
-                        type="button"
-                        data-ai-trigger="true"
-                        title={aiGuideText}
-                        className="w-full py-3 px-4 bg-[#1e293b] hover:bg-[#334155] text-white font-bold rounded-2xl transition-all text-center shadow-lg text-sm flex items-center justify-center gap-1.5 border border-white/5"
-                      >
-                        <span>✨</span>
-                        <span className="truncate">{aiGuideText}</span>
-                      </button>
-                    </div>
-                  )}
+                    {/* حالة 3: تفعيل زر AI فقط (بدون واتساب) */}
+                    {showAi && !showWa && (
+                      hasCta ? (
+                        <div className="grid grid-cols-2 gap-3">
+                          <Link 
+                            href={cardBtnUrl}
+                            title={cardBtnText}
+                            className="py-3 px-2 bg-gradient-to-r from-[#06b6d4] to-[#3b82f6] hover:from-[#0891b2] hover:to-[#2563eb] text-white font-bold rounded-2xl transition-all text-center shadow-lg text-sm flex items-center justify-center gap-1.5"
+                          >
+                            <span className="truncate">{cardBtnText}</span>
+                          </Link>
 
-                  {/* حالة 3: تفعيل زر AI وزر الانتقال فقط (بدون واتساب) */}
-                  {showAi && !showWa && (
-                    <div className="grid grid-cols-2 gap-3">
+                          <button 
+                            type="button"
+                            data-ai-trigger="true"
+                            title={aiGuideText}
+                            className="py-3 px-2 bg-[#1e293b] hover:bg-[#334155] text-white font-bold rounded-2xl transition-all text-center shadow-lg text-sm flex items-center justify-center gap-1.5 border border-white/5"
+                          >
+                            <span>✨</span>
+                            <span className="truncate">{aiGuideText}</span>
+                          </button>
+                        </div>
+                      ) : (
+                        <button 
+                          type="button"
+                          data-ai-trigger="true"
+                          title={aiGuideText}
+                          className="w-full py-3 px-4 bg-[#1e293b] hover:bg-[#334155] text-white font-bold rounded-2xl transition-all text-center shadow-lg text-sm flex items-center justify-center gap-1.5 border border-white/5"
+                        >
+                          <span>✨</span>
+                          <span className="truncate">{aiGuideText}</span>
+                        </button>
+                      )
+                    )}
+
+                    {/* حالة 4: لا يوجد AI ولا WA (زر الانتقال فقط) */}
+                    {!showAi && !showWa && hasCta && (
                       <Link 
                         href={cardBtnUrl}
                         title={cardBtnText}
-                        className="py-3 px-2 bg-gradient-to-r from-[#06b6d4] to-[#3b82f6] hover:from-[#0891b2] hover:to-[#2563eb] text-white font-bold rounded-2xl transition-all text-center shadow-lg text-sm flex items-center justify-center gap-1.5"
+                        className="w-full py-3 px-4 bg-gradient-to-r from-[#06b6d4] to-[#3b82f6] hover:from-[#0891b2] hover:to-[#2563eb] text-white font-bold rounded-2xl transition-all text-center shadow-lg text-sm flex items-center justify-center gap-2"
                       >
-                        <span className="truncate">{cardBtnText}</span>
+                        <span>{cardBtnText}</span>
                       </Link>
-
-                      <button 
-                        type="button"
-                        data-ai-trigger="true"
-                        title={aiGuideText}
-                        className="py-3 px-2 bg-[#1e293b] hover:bg-[#334155] text-white font-bold rounded-2xl transition-all text-center shadow-lg text-sm flex items-center justify-center gap-1.5 border border-white/5"
-                      >
-                        <span>✨</span>
-                        <span className="truncate">{aiGuideText}</span>
-                      </button>
-                    </div>
-                  )}
-
-                  {/* حالة 4: زر الانتقال فقط */}
-                  {!showAi && !showWa && (
-                    <Link 
-                      href={cardBtnUrl}
-                      title={cardBtnText}
-                      className="w-full py-3 px-4 bg-gradient-to-r from-[#06b6d4] to-[#3b82f6] hover:from-[#0891b2] hover:to-[#2563eb] text-white font-bold rounded-2xl transition-all text-center shadow-lg text-sm flex items-center justify-center gap-2"
-                    >
-                      <span>{cardBtnText}</span>
-                    </Link>
-                  )}
-                </div>
-                {/* ---------------------------------------------------------------------- */}
+                    )}
+                  </div>
+                )}
 
                 {/* --- نافذة الواتساب الخاصة بالكارت (تُفتح وتقفل بالـ CSS فقط عن طريق الـ peer-checked) --- */}
                 {showWa && (
                   <div className="hidden peer-checked:flex fixed inset-0 z-[99999] items-center justify-center p-4">
-                    {/* خلفية سوداء شفافة تغلق النافذة عند الضغط عليها */}
                     <label htmlFor={modalId} className="absolute inset-0 bg-black/80 backdrop-blur-sm cursor-pointer"></label>
                     
-                    {/* محتوى النافذة */}
                     <div className="relative z-10 bg-[#1e1e1e] border border-zinc-800 rounded-3xl shadow-2xl p-6 w-80 text-white flex flex-col items-center text-center animate-in fade-in zoom-in duration-200">
                       <h3 className="text-base font-medium text-zinc-100 mb-2">Select an app to open</h3>
                       <p className="text-[11px] text-zinc-400 mb-6 leading-relaxed">
@@ -515,7 +550,6 @@ function renderSingleSection(section: any, currentLang: string, locale: string, 
                         })}
                       </div>
 
-                      {/* زر الإلغاء لغلق النافذة */}
                       <label 
                         htmlFor={modalId}
                         className="text-[#3b82f6] hover:text-[#60a5fa] text-sm font-semibold cursor-pointer mt-2"
@@ -525,7 +559,6 @@ function renderSingleSection(section: any, currentLang: string, locale: string, 
                     </div>
                   </div>
                 )}
-                {/* ---------------------------------------------------------------------- */}
 
               </div>
             );
