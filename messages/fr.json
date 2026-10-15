@@ -195,5 +195,11 @@
     "buoyancy": "Cours de spécialité PADI Peak Performance Buoyancy à Hurghada",
     "badge": "Spécialités de la Mer Rouge",
     "sectionSubtitle": "Faites progresser votre carrière de plongeur avec nos cours de spécialité professionnels à Hurghada."
+  },
+  "GoogleReviews": {
+    "tag": "Avis des clients sur Google Maps",
+    "title": "Avis des visiteurs pour The Light House",
+    "reviewsCount": "Basé sur des avis vérifiés",
+    "googleBtn": "Voir l'avis original sur Google"
   }
 }

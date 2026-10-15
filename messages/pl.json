@@ -195,5 +195,11 @@
     "buoyancy": "Specjalistyczny kurs doskonałej pływalności PADI w Hurghadzie",
     "badge": "Specjalności Morza Czerwonego",
     "sectionSubtitle": "Rozwijaj swoją karierę nurkową dzięki naszym profesjonalnym kursom specjalistycznym w Hurghadzie."
+  },
+  "GoogleReviews": {
+    "tag": "Opinie gości w Mapach Google",
+    "title": "Opinie odwiedzających The Light House",
+    "reviewsCount": "Na podstawie zweryfikowanych opinii",
+    "googleBtn": "Zobacz oryginalną opinię w Google"
   }
 }

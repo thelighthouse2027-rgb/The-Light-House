@@ -35,7 +35,6 @@ export default function Features() {
   return (
     <section className="py-24 px-6 max-w-7xl mx-auto">
       
-      {/* عنوان السيكشن */}
       <div className="text-center mb-16">
         <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-4 tracking-tight">
           {t('heading')} <span className="text-blue-500">{t('headingHighlight')}</span>
@@ -90,9 +89,8 @@ export default function Features() {
                 alt={imageText}
                 title={imageText}
                 fill
-                // تم تعديل الـ sizes بدقة لكي تتناسب مع مساحة عرض الكارد النشط وغير النشط وتجنب تحميل أحجام ضخمة بلا داعٍ
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) ${isActive ? '60vw' : '15vw'}, 400px"
-                quality={80} // ضبط الجودة بدقة لتحسين الأداء وسرعة التحميل
+                quality={80} 
                 className={`object-cover transition-transform duration-[1200ms] ${
                   isActive ? 'scale-105' : 'scale-100 grayscale-[40%]'
                 }`}

@@ -1,221 +1,164 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { Star, ExternalLink, Quote } from 'lucide-react';
-import { useTranslations } from 'next-intl';
+import { useState, useEffect } from 'react';
+import { useTranslations, useLocale } from 'next-intl';
+import { client } from '@/sanity/lib/client';
+import { defineQuery } from 'next-sanity';
 
-interface Review {
-  name?: string;
-  relativePublishTimeDescription?: string;
-  rating?: number;
-  text?: { text?: string } | string;
-  originalText?: { text?: string } | string;
-  authorAttribution?: {
-    displayName?: string;
-    photoUri?: string;
-    uri?: string;
-  };
-}
-
-interface PlaceData {
-  name: string;
-  rating: number;
-  userRatingCount: number;
-  reviews: Review[];
-}
+const REVIEWS_QUERY = defineQuery(`
+  *[_type == "review"] | order(_createdAt desc){
+    authorName,
+    reviewText,
+    timeAgo,
+    rating,
+    googleLink,
+    "avatarUrl": avatar.asset->url
+  }
+`);
 
 export default function GoogleReviews() {
   const t = useTranslations('GoogleReviews');
+  const locale = useLocale();
+  const lang = locale === 'ar' ? 'ar' : 'en';
 
-  const fallbackReviews: Review[] = [
-    {
-      relativePublishTimeDescription: t('monthAgo'),
-      rating: 5,
-      text: { text: 'حجزنا عدة رحلات بحرية للغطس والغوص هنا 🩴. خدمة موثوقة وودودة ومتعاونة!' },
-      authorAttribution: {
-        displayName: 'Julia Kindgen',
-        photoUri: 'https://lh3.googleusercontent.com/a-/ALV-UjX8',
-        uri: 'https://maps.google.com',
-      },
-    },
-    {
-      relativePublishTimeDescription: t('threeWeeksAgo'),
-      rating: 5,
-      text: { text: 'Awesome diving experience with The Light House team! Very professional instructors and great diving spots.' },
-      authorAttribution: {
-        displayName: 'Markus Weber',
-        uri: 'https://maps.google.com',
-      },
-    },
-    {
-      relativePublishTimeDescription: t('twoMonthsAgo'),
-      rating: 5,
-      text: { text: 'من أفضل مراكز الغوص في الغردقة، تنظيم ممتاز وطاقم رحلات محترف جداً.' },
-      authorAttribution: {
-        displayName: 'احمد علي',
-        uri: 'https://maps.google.com',
-      },
-    },
-  ];
-
-  const [data, setData] = useState<PlaceData | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [reviews, setReviews] = useState<any[]>([]);
 
   useEffect(() => {
-    async function fetchReviews() {
-      try {
-        const res = await fetch('/api/google-reviews');
-        if (!res.ok) throw new Error('Failed to fetch');
-        const result = await res.json();
+    client.fetch(REVIEWS_QUERY)
+      .then((data) => setReviews(data || []))
+      .catch((err) => console.error('Error fetching reviews from Sanity:', err));
+  }, []);
 
-        if (!result.reviews || result.reviews.length === 0) {
-          result.reviews = fallbackReviews;
-        }
-        setData(result);
-      } catch (err) {
-        console.error(err);
-        setData({
-          name: 'The Light House Diving Center',
-          rating: 4.9,
-          userRatingCount: 77,
-          reviews: fallbackReviews,
-        });
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchReviews();
-  }, [t]);
-
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center py-16">
-        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-indigo-500"></div>
-      </div>
-    );
-  }
-
-  if (!data) return null;
+  // تكرار المصفوفة لضمان استمرار الشريط المتحرك بسلاسة دون فراغات
+  const duplicatedReviews = reviews.length > 0 
+    ? [...reviews, ...reviews, ...reviews, ...reviews, ...reviews] 
+    : [];
 
   return (
-    <section className="py-16 px-4 max-w-7xl mx-auto my-12">
-      {/* الهيدر والعنوان بلون أزرق بنفسجي مطابق للصورة */}
-      <div className="text-center mb-12 relative">
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-950/60 border border-indigo-800/50 text-indigo-300 text-xs font-medium mb-4 backdrop-blur-md">
-          <Star className="w-3.5 h-3.5 fill-indigo-400 text-indigo-400" />
-          <span>{t('badge')}</span>
-        </div>
-
-        <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight mb-4">
-          {t('titlePrefix')} <span className="text-indigo-500">The Light House</span>
+    <section className="py-20 w-full overflow-hidden bg-black" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
+      
+      {/* عنوان السكشن والتقييم العام مترجم عبر ملفات الـ JSON */}
+      <div className="text-center mb-16 px-6 max-w-7xl mx-auto">
+        <span className="inline-block px-4 py-1.5 mb-4 rounded-full bg-blue-600/20 border border-blue-500/40 text-blue-400 text-xs font-bold tracking-wider">
+          {t('tag')}
+        </span>
+        <h2 className="text-3xl md:text-5xl font-extrabold text-white mb-6 tracking-tight">
+          {t('title')}
         </h2>
-
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-4">
-          <div className="flex items-center gap-2 bg-slate-900/80 px-5 py-2.5 rounded-2xl border border-indigo-900/50 backdrop-blur-md">
-            <span className="text-3xl font-extrabold text-amber-400">
-              {data.rating ? data.rating.toFixed(1) : '4.9'}
-            </span>
-            <div className="flex gap-1 text-amber-400">
-              {[...Array(5)].map((_, i) => (
-                <Star
-                  key={i}
-                  className={`w-5 h-5 ${
-                    i < Math.round(data.rating || 5)
-                      ? 'fill-amber-400 text-amber-400'
-                      : 'text-slate-700'
-                  }`}
-                />
-              ))}
-            </div>
-          </div>
-          <span className="text-sm text-slate-400">
-            {t('basedOn')} <strong className="text-slate-200">{data.userRatingCount || 77}</strong> {t('reviewsSuffix')}
+        
+        <div className="inline-flex items-center gap-3 px-6 py-3 rounded-2xl bg-neutral-900 border border-neutral-800 shadow-xl">
+          <span className="text-2xl font-black text-white">4.9</span>
+          <div className="text-yellow-500 tracking-wider">★★★★★</div>
+          <span className="text-gray-400 text-sm">
+            {t('reviewsCount')}
           </span>
         </div>
       </div>
 
-      {/* كروت التقييمات بخلفيات وألوان زرقاء داكنة مثل كروت الفيديو بالصورة */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {data.reviews.map((review, idx) => {
-          const getText = (val: any) => {
-            if (typeof val === 'string') return val;
-            if (val && typeof val === 'object' && val.text) return val.text;
-            return '';
-          };
+      {/* شريط المراجعات المتحرك */}
+      <div className="relative w-full overflow-hidden flex whitespace-nowrap py-4">
+        {duplicatedReviews.length > 0 ? (
+          <div 
+            className={`flex gap-8 items-center shrink-0 review-ticker-${lang}`}
+            style={{
+              display: 'flex',
+              width: 'max-content',
+              animation: lang === 'ar' ? 'tickerAr 40s linear infinite' : 'tickerEn 40s linear infinite'
+            }}
+          >
+            {duplicatedReviews.map((review: any, idx: number) => {
+              // المراجعات من سانتي تدعم اللغات أو النص المباشر
+              const authorName = review?.authorName 
+                ? (typeof review.authorName === 'object' 
+                    ? (review.authorName[lang] || review.authorName.ar || review.authorName.en || 'مستخدم') 
+                    : review.authorName)
+                : 'مستخدم';
 
-          const reviewText =
-            getText(review.text) ||
-            getText(review.originalText) ||
-            t('noComment');
+              const reviewText = review?.reviewText 
+                ? (typeof review.reviewText === 'object' 
+                    ? (review.reviewText[lang] || review.reviewText.ar || review.reviewText.en || '') 
+                    : review.reviewText)
+                : '';
 
-          const authorName = review.authorAttribution?.displayName || t('guestUser');
-          const authorPhoto = review.authorAttribution?.photoUri;
+              const timeAgo = review?.timeAgo 
+                ? (typeof review.timeAgo === 'object' 
+                    ? (review.timeAgo[lang] || review.timeAgo.ar || review.timeAgo.en || '') 
+                    : review.timeAgo)
+                : '';
 
-          return (
-            <div
-              key={idx}
-              className="group relative bg-[#0f1523]/80 hover:bg-[#141c2e] border border-indigo-900/40 hover:border-indigo-600/60 transition-all duration-300 p-6 rounded-2xl backdrop-blur-md flex flex-col justify-between shadow-lg"
-            >
-              <Quote className="absolute top-5 ltr:right-5 rtl:left-5 w-7 h-7 text-indigo-950/80 group-hover:text-indigo-800/40 transition-colors pointer-events-none" />
+              return (
+                <div 
+                  key={idx} 
+                  className="bg-[#0b0f19]/90 border border-neutral-800/80 p-8 rounded-[2rem] shadow-2xl flex flex-col justify-between relative group hover:border-blue-500/50 transition duration-300 w-[380px] md:w-[420px] whitespace-normal shrink-0"
+                >
+                  {/* أيقونة الاقتباس */}
+                  <div className="absolute top-6 end-6 text-indigo-950/80 group-hover:text-blue-900/40 transition duration-300 pointer-events-none">
+                    <svg width="36" height="36" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M6 17h3l2-4V7H5v6h3zm8 0h3l2-4V7h-6v6h3z" />
+                    </svg>
+                  </div>
 
-              <div>
-                {/* اسم وصورة المراجع */}
-                <div className="flex items-center gap-3 mb-4">
-                  {authorPhoto ? (
-                    <img
-                      src={authorPhoto}
-                      alt={authorName}
-                      className="w-11 h-11 rounded-full object-cover border border-indigo-800/50"
-                    />
-                  ) : (
-                    <div className="w-11 h-11 rounded-full bg-indigo-900/80 text-indigo-200 flex items-center justify-center font-bold text-base border border-indigo-700/50">
-                      {authorName[0]}
-                    </div>
-                  )}
                   <div>
-                    <h3 className="font-semibold text-slate-100 text-sm group-hover:text-indigo-300 transition-colors">
-                      {authorName}
-                    </h3>
-                    <p className="text-xs text-slate-400">
-                      {review.relativePublishTimeDescription || t('recently')}
+                    <div className="flex items-center gap-4 mb-6 relative z-10">
+                      {review?.avatarUrl ? (
+                        <img src={review.avatarUrl} alt={authorName} className="w-12 h-12 rounded-full object-cover border border-neutral-700" />
+                      ) : (
+                        <div className="w-12 h-12 rounded-full bg-indigo-950 border border-indigo-800 flex items-center justify-center text-indigo-300 font-bold text-lg">
+                          {authorName.charAt(0)}
+                        </div>
+                      )}
+                      <div>
+                        <h4 className="font-bold text-white text-base text-start">{authorName}</h4>
+                        <span className="text-xs text-gray-400 text-start block">{timeAgo}</span>
+                      </div>
+                    </div>
+
+                    <div className="text-yellow-500 mb-4 text-sm tracking-widest text-start">★★★★★</div>
+
+                    <p className="text-gray-300 text-sm leading-relaxed mb-6 font-light text-start line-clamp-4">
+                      "{reviewText}"
                     </p>
                   </div>
+
+                  {review?.googleLink && (
+                    <div className="pt-4 border-t border-neutral-800/80 text-start">
+                      <a 
+                        href={review.googleLink} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-xs text-blue-400 hover:text-blue-300 transition inline-flex items-center gap-1 font-medium"
+                      >
+                        <span>{t('googleBtn')}</span>
+                        <span>↗</span>
+                      </a>
+                    </div>
+                  )}
                 </div>
+              )
+            })}
+          </div>
+        ) : (
+          <div className="w-full text-center text-gray-500 py-10">
+            {lang === 'ar' ? 'لا توجد مراجعات مضافة حالياً في لوحة التحكم.' : 'No reviews added in the studio yet.'}
+          </div>
+        )}
 
-                {/* تقييم النجوم */}
-                <div className="flex gap-1 mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <Star
-                      key={i}
-                      className={`w-4 h-4 ${
-                        i < (review.rating || 5)
-                          ? 'fill-amber-400 text-amber-400'
-                          : 'text-slate-800'
-                      }`}
-                    />
-                  ))}
-                </div>
-
-                {/* نص التقييم */}
-                <p className="text-sm text-slate-300 leading-relaxed line-clamp-4 font-normal">
-                  "{reviewText}"
-                </p>
-              </div>
-
-              {/* رابط العرض على جوجل */}
-              <a
-                href={review.authorAttribution?.uri || 'https://maps.google.com'}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-6 inline-flex items-center gap-2 text-xs text-indigo-400 hover:text-indigo-300 transition-colors pt-4 border-t border-indigo-950"
-              >
-                <ExternalLink className="w-3.5 h-3.5" />
-                <span>{t('viewOriginal')}</span>
-              </a>
-            </div>
-          );
-        })}
+        {/* حركات الشريط المتحرك */}
+        <style dangerouslySetInnerHTML={{ __html: `
+          @keyframes tickerAr {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(50%); }
+          }
+          @keyframes tickerEn {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+          }
+          .review-ticker-ar:hover, .review-ticker-en:hover {
+            animation-play-state: paused;
+          }
+        `}} />
       </div>
+
     </section>
   );
 }

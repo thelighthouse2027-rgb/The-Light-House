@@ -13,7 +13,6 @@ import { client } from '@/sanity/lib/client';
 
 export const revalidate = 0;
 
-// جلب بيانات البنر والعروض
 async function getPromoBanner() {
   const query = `*[_type == "promoBanner"][0]{
     ...,
@@ -22,7 +21,6 @@ async function getPromoBanner() {
   return await client.fetch(query);
 }
 
-// جلب إعدادات الـ SEO الخاصة بالصفحة الرئيسية
 async function getHomeSeo(locale: string) {
   const currentLang = ['en', 'de', 'fr', 'pl'].includes(locale) ? locale : 'en';
   const query = `*[_type == "homeSeo"][0]{
@@ -32,7 +30,6 @@ async function getHomeSeo(locale: string) {
   return await client.fetch(query, { currentLang });
 }
 
-// توليد الميتا ديسكربشن والعنوان للرئيسية ديناميكياً لكل لغة
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   const seoData = await getHomeSeo(locale);
@@ -75,7 +72,6 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         <Hero />
       </div>
 
-      {/* قسم كورسات الغوص الجديد */}
       <div className="w-full pb-10 px-2 md:px-6">
         <DivingCoursesSection />
       </div>
@@ -100,7 +96,6 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         <InfoSection locale={locale} />
       </div>
 
-      {/* قسم تقييمات Google */}
       <div className="w-full pb-20 px-2 md:px-6">
         <GoogleReviews />
       </div>

@@ -197,5 +197,11 @@
     "sectionTitle": "Featured PADI Diving Courses",
     "sectionSubtitle": "Advance your diving career with our professional specialty courses in Hurghada.",
     "badge": "Red Sea Specialties"
+  },
+  "GoogleReviews": {
+    "tag": "Guest Reviews on Google Maps",
+    "title": "Visitor Reviews for The Light House",
+    "reviewsCount": "Based on verified reviews",
+    "googleBtn": "View original review on Google"
   }
 }
