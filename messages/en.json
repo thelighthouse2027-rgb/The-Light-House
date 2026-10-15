@@ -147,6 +147,7 @@
     "servicesTitle": "Our Services",
     "about": "About Us",
     "services": "Services",
+    "media":"Media",
     "exploreAndBook": "Explore & Book",
     "contact": "Contact Us",
     "safari": "Desert Safari",
@@ -159,6 +160,7 @@
     "home": "Home",
     "about": "About Us",
     "services": "Services",
+    "media": "Media",
     "exploreAndBook": "Explore & Book",
     "contact": "Contact"
   },

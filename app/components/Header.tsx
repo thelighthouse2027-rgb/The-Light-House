@@ -52,10 +52,11 @@ export default function Header({ locale }: { locale: string }) {
         </Link>
 
         {/* القائمة الرئيسية - الديسكتوب */}
-        <nav className="hidden lg:flex items-center gap-8 text-white font-medium text-sm">
+        <nav className="hidden lg:flex items-center gap-7 text-white font-medium text-sm">
           <Link href={`/${locale}`} title={t('home')} className="hover:text-blue-400 hover:drop-shadow-[0_0_8px_rgba(59,130,246,0.8)] transition-all">{t('home')}</Link>
           <Link href={`/${locale}/about`} title={t('about')} className="text-white/90 hover:text-blue-400 hover:drop-shadow-[0_0_8px_rgba(59,130,246,0.8)] transition-all">{t('about')}</Link>
           <Link href={`/${locale}/services`} title={t('services')} className="text-white/90 hover:text-blue-400 hover:drop-shadow-[0_0_8px_rgba(59,130,246,0.8)] transition-all">{t('services')}</Link>
+          <Link href={`/${locale}/media`} title={t('media')} className="text-white/90 hover:text-blue-400 hover:drop-shadow-[0_0_8px_rgba(59,130,246,0.8)] transition-all">{t('media')}</Link>
           <Link href={`/${locale}/search`} title={t('exploreAndBook')} className="text-white/90 hover:text-blue-400 hover:drop-shadow-[0_0_8px_rgba(59,130,246,0.8)] transition-all">{t('exploreAndBook')}</Link>
           <Link href={`/${locale}/contact`} title={t('contact')} className="text-white/90 hover:text-blue-400 hover:drop-shadow-[0_0_8px_rgba(59,130,246,0.8)] transition-all">{t('contact')}</Link>
         </nav>
@@ -172,6 +173,7 @@ export default function Header({ locale }: { locale: string }) {
             <Link href={`/${locale}`} title={t('home')} aria-label={t('home')} onClick={() => setMobileMenuOpen(false)} className="text-white/90 text-lg hover:text-blue-400 transition-colors drop-shadow-md">{t('home')}</Link>
             <Link href={`/${locale}/about`} title={t('about')} aria-label={t('about')} onClick={() => setMobileMenuOpen(false)} className="text-white/90 text-lg hover:text-blue-400 transition-colors drop-shadow-md">{t('about')}</Link>
             <Link href={`/${locale}/services`} title={t('services')} aria-label={t('services')} onClick={() => setMobileMenuOpen(false)} className="text-white/90 text-lg hover:text-blue-400 transition-colors drop-shadow-md">{t('services')}</Link>
+            <Link href={`/${locale}/media`} title={t('media')} aria-label={t('media')} onClick={() => setMobileMenuOpen(false)} className="text-white/90 text-lg hover:text-blue-400 transition-colors drop-shadow-md">{t('media')}</Link>
             <Link href={`/${locale}/search`} title={t('exploreAndBook')} aria-label={t('exploreAndBook')} onClick={() => setMobileMenuOpen(false)} className="text-white/90 text-lg hover:text-blue-400 transition-colors drop-shadow-md">{t('exploreAndBook')}</Link>
             <Link href={`/${locale}/contact`} title={t('contact')} aria-label={t('contact')} onClick={() => setMobileMenuOpen(false)} className="text-white/90 text-lg hover:text-blue-400 transition-colors drop-shadow-md">{t('contact')}</Link>
           </nav>

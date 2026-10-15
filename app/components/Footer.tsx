@@ -12,6 +12,7 @@ export default function Footer() {
   const quickLinks = [
     { name: t('about'), slug: 'about' },
     { name: t('services'), slug: 'services' },
+    { name: t('media'), slug: 'media' }, // <-- تمت إضافة صفحة الميديا هنا في الفوتر
     { name: t('exploreAndBook'), slug: 'search' }, 
     { name: t('contact'), slug: 'contact' },
   ];
