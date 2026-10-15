@@ -90,7 +90,9 @@ export default function Features() {
                 alt={imageText}
                 title={imageText}
                 fill
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 30vw, 20vw"
+                // تم تعديل الـ sizes بدقة لكي تتناسب مع مساحة عرض الكارد النشط وغير النشط وتجنب تحميل أحجام ضخمة بلا داعٍ
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) ${isActive ? '60vw' : '15vw'}, 400px"
+                quality={80} // ضبط الجودة بدقة لتحسين الأداء وسرعة التحميل
                 className={`object-cover transition-transform duration-[1200ms] ${
                   isActive ? 'scale-105' : 'scale-100 grayscale-[40%]'
                 }`}
@@ -122,7 +124,7 @@ export default function Features() {
                   <div className="mt-3 md:mt-6">
                     <Link 
                       href={`/${locale}/features/${item.slug}`}
-                      title={imageText} // <-- إضافة الـ title لرابط الاستكشاف لتجاوز أخطاء أدوات الفحص
+                      title={imageText}
                       onClick={(e) => e.stopPropagation()} 
                     >
                       <button className="px-5 py-2 md:px-8 md:py-3 bg-white/10 hover:bg-blue-600 border border-white/20 hover:border-blue-500 backdrop-blur-md rounded-xl md:rounded-2xl text-white text-xs md:text-sm font-bold transition-all duration-300 cursor-pointer shadow-[0_0_15px_rgba(37,99,235,0.2)]">
