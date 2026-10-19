@@ -170,7 +170,6 @@ export default function AIChatWidget() {
 
       <div className="fixed bottom-4 right-4 z-[99999] flex flex-col items-end">
         
-        {/* نافذة الواتساب المنبثقة باللغة الإنجليزية والشكل المطلوب */}
         {!isExcluded && isWhatsAppOpen && (
           <div className="fixed inset-0 z-[999999] flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 animate-in fade-in duration-200">
             <div className="bg-[#1c1c1e] text-white rounded-3xl shadow-2xl border border-gray-800 p-6 w-full max-w-sm flex flex-col items-center text-center gap-4 relative">

@@ -35,10 +35,8 @@ export default function Header({ locale }: { locale: string }) {
 
   return (
     <header className="absolute top-0 left-0 w-full z-50 px-4 sm:px-8 pt-4">
-      {/* هيدر متحرك مع السكرول غير ثابت */}
       <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-3 rounded-2xl bg-black/90 backdrop-blur-2xl border-2 border-blue-600/40 shadow-[0_10px_30px_rgba(37,99,235,0.2)]">
         
-        {/* اللوجو مع الإضاءة الزرقاء القوية الملتصقة بالحواف */}
         <Link href={`/${locale}`} title="The Light House Home" className="py-1 inline-block" aria-label="The Light House Home">
           <Image 
             src="/logoo.webp" 
@@ -51,7 +49,6 @@ export default function Header({ locale }: { locale: string }) {
           />
         </Link>
 
-        {/* القائمة الرئيسية - الديسكتوب */}
         <nav className="hidden lg:flex items-center gap-7 text-white font-medium text-sm">
           <Link href={`/${locale}`} title={t('home')} className="hover:text-blue-400 hover:drop-shadow-[0_0_8px_rgba(59,130,246,0.8)] transition-all">{t('home')}</Link>
           <Link href={`/${locale}/about`} title={t('about')} className="text-white/90 hover:text-blue-400 hover:drop-shadow-[0_0_8px_rgba(59,130,246,0.8)] transition-all">{t('about')}</Link>

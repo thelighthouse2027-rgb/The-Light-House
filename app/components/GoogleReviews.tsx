@@ -1,11 +1,7 @@
-'use client';
-
-import { useState, useEffect } from 'react';
-import { useTranslations, useLocale } from 'next-intl';
+import { getTranslations, getLocale } from 'next-intl/server';
 import { client } from '@/sanity/lib/client';
-import { defineQuery } from 'next-sanity';
 
-const REVIEWS_QUERY = defineQuery(`
+const REVIEWS_QUERY = `
   *[_type == "review"] | order(_createdAt desc){
     authorName,
     reviewText,
@@ -14,30 +10,33 @@ const REVIEWS_QUERY = defineQuery(`
     googleLink,
     "avatarUrl": avatar.asset->url
   }
-`);
+`;
 
-export default function GoogleReviews() {
-  const t = useTranslations('GoogleReviews');
-  const locale = useLocale();
+// إجبار الكومبوننت على عدم تخزين نسخة ميتة من البيانات
+export const revalidate = 0; 
+
+export default async function GoogleReviews() {
+  // استخدام دوال السيرفر بدلاً من (useTranslations و useLocale)
+  const t = await getTranslations('GoogleReviews');
+  const locale = await getLocale();
   const lang = locale === 'ar' ? 'ar' : 'en';
 
-  const [reviews, setReviews] = useState<any[]>([]);
+  // جلب البيانات مباشرة من السيرفر
+  let reviews: any[] = [];
+  try {
+    reviews = await client.fetch(REVIEWS_QUERY);
+  } catch (err) {
+    console.error('Error fetching reviews from Sanity:', err);
+  }
 
-  useEffect(() => {
-    client.fetch(REVIEWS_QUERY)
-      .then((data) => setReviews(data || []))
-      .catch((err) => console.error('Error fetching reviews from Sanity:', err));
-  }, []);
-
-  // تكرار المصفوفة لضمان استمرار الشريط المتحرك بسلاسة دون فراغات
-  const duplicatedReviews = reviews.length > 0 
+  // تكرار التقييمات لصنع شريط متحرك مستمر
+  const duplicatedReviews = reviews?.length > 0 
     ? [...reviews, ...reviews, ...reviews, ...reviews, ...reviews] 
     : [];
 
   return (
     <section className="py-20 w-full overflow-hidden bg-black" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
       
-      {/* عنوان السكشن والتقييم العام مترجم عبر ملفات الـ JSON */}
       <div className="text-center mb-16 px-6 max-w-7xl mx-auto">
         <span className="inline-block px-4 py-1.5 mb-4 rounded-full bg-blue-600/20 border border-blue-500/40 text-blue-400 text-xs font-bold tracking-wider">
           {t('tag')}
@@ -55,7 +54,6 @@ export default function GoogleReviews() {
         </div>
       </div>
 
-      {/* شريط المراجعات المتحرك */}
       <div className="relative w-full overflow-hidden flex whitespace-nowrap py-4">
         {duplicatedReviews.length > 0 ? (
           <div 
@@ -67,7 +65,6 @@ export default function GoogleReviews() {
             }}
           >
             {duplicatedReviews.map((review: any, idx: number) => {
-              // المراجعات من سانتي تدعم اللغات أو النص المباشر
               const authorName = review?.authorName 
                 ? (typeof review.authorName === 'object' 
                     ? (review.authorName[lang] || review.authorName.ar || review.authorName.en || 'مستخدم') 
@@ -91,7 +88,6 @@ export default function GoogleReviews() {
                   key={idx} 
                   className="bg-[#0b0f19]/90 border border-neutral-800/80 p-8 rounded-[2rem] shadow-2xl flex flex-col justify-between relative group hover:border-blue-500/50 transition duration-300 w-[380px] md:w-[420px] whitespace-normal shrink-0"
                 >
-                  {/* أيقونة الاقتباس */}
                   <div className="absolute top-6 end-6 text-indigo-950/80 group-hover:text-blue-900/40 transition duration-300 pointer-events-none">
                     <svg width="36" height="36" viewBox="0 0 24 24" fill="currentColor">
                       <path d="M6 17h3l2-4V7H5v6h3zm8 0h3l2-4V7h-6v6h3z" />
@@ -143,7 +139,6 @@ export default function GoogleReviews() {
           </div>
         )}
 
-        {/* حركات الشريط المتحرك */}
         <style dangerouslySetInnerHTML={{ __html: `
           @keyframes tickerAr {
             0% { transform: translateX(0); }

@@ -6,7 +6,6 @@ export default function BookingForm({ adultPrice = 150, childPrice = 150, locale
   const router = useRouter();
   const [date, setDate] = useState('');
   
-  // تم تغيير القيم الافتراضية لتكون فارغة تماماً بدلاً من 1 و 0
   const [adults, setAdults] = useState<number | string>('');
   const [children, setChildren] = useState<number | string>('');
   
@@ -16,16 +15,13 @@ export default function BookingForm({ adultPrice = 150, childPrice = 150, locale
   const [country, setCountry] = useState('');
   const [notes, setNotes] = useState('');
   
-  // حماية من مشكلة الـ Hydration عبر توحيد أول رندر
   const [isMounted, setIsMounted] = useState(false);
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
-  // حساب الإجمالي مع التعامل بشكل صحيح مع الحقول الفارغة
   const totalCost = ((Number(adults) || 0) * Number(adultPrice)) + ((Number(children) || 0) * Number(childPrice));
 
-  // العنوان الذي سيظهر ديناميكياً بعد التحميل
   const displayTitle = formTitle || (serviceName ? `Book: ${serviceName}` : 'Send an Inquiry');
 
   const handleSubmit = (e: React.FormEvent) => {

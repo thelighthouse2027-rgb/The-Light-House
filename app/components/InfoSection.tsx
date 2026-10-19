@@ -31,7 +31,6 @@ export default function AboutSection({ locale }: { locale: string }) {
           <div className="absolute -top-8 -left-8 w-40 h-40 bg-zinc-600/20 blur-3xl rounded-full pointer-events-none"></div>
         </div>
 
-        {/* قسم النصوص */}
         <div className="w-full lg:w-1/2 flex flex-col items-start text-start z-10">
           
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-zinc-900/80 border border-zinc-700 backdrop-blur-md mb-6 shadow-lg">
@@ -53,7 +52,6 @@ export default function AboutSection({ locale }: { locale: string }) {
             {t('description')}
           </p>
 
-          {/* الكروت مع إضاءة وتوهج أزرق فخم */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-10 w-full max-w-xl">
             <div className="flex items-center gap-3 p-4 rounded-2xl bg-zinc-900/80 border border-blue-600/40 backdrop-blur-sm shadow-[0_0_20px_rgba(37,99,235,0.2)] hover:shadow-[0_0_30px_rgba(37,99,235,0.4)] hover:border-blue-500 transition-all duration-300">
               <span className="text-2xl">🌊</span>

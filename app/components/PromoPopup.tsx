@@ -50,7 +50,6 @@ export default function PromoPopup({ data, locale }: PromoPopupProps) {
     <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/75 backdrop-blur-md p-4 animate-fadeIn">
       <div className="relative bg-[#0b0f19] border border-indigo-500/30 rounded-2xl shadow-[0_0_50px_rgba(79,70,229,0.3)] max-w-lg w-full overflow-hidden flex flex-col">
         
-        {/* زر الإغلاق */}
         <button
           onClick={() => setIsVisible(false)}
           title="Close"
@@ -60,7 +59,6 @@ export default function PromoPopup({ data, locale }: PromoPopupProps) {
           ✕
         </button>
 
-        {/* الصورة */}
         <div className="w-full h-60 md:h-72 relative bg-gray-900">
           <img
             src={data.imageUrl}

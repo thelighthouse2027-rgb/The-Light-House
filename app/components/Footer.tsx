@@ -12,7 +12,7 @@ export default function Footer() {
   const quickLinks = [
     { name: t('about'), slug: 'about' },
     { name: t('services'), slug: 'services' },
-    { name: t('media'), slug: 'media' }, // <-- تمت إضافة صفحة الميديا هنا في الفوتر
+    { name: t('media'), slug: 'media' }, 
     { name: t('exploreAndBook'), slug: 'search' }, 
     { name: t('contact'), slug: 'contact' },
   ];
@@ -58,7 +58,6 @@ export default function Footer() {
           </div>
 
           <div className="flex flex-wrap items-center justify-center gap-4">
-            {/* الإيميل */}
             <a 
               href="mailto:thelighthouse2027@gmail.com" 
               title="Email Us: thelighthouse2027@gmail.com"
@@ -69,7 +68,6 @@ export default function Footer() {
               <span className="text-zinc-100 text-sm font-medium">thelighthouse2027@gmail.com</span>
             </a>
             
-            {/* التليفون */}
             <a 
               href="https://wa.me/201273327311" 
               target="_blank" 
@@ -82,7 +80,6 @@ export default function Footer() {
               <span className="text-zinc-100 text-sm font-mono">+20 127 332 7311</span>
             </a>
 
-            {/* روابط السوشيال ميديا */}
             <div className="flex flex-wrap items-center justify-center gap-3 ml-2">
               <a 
                 href="https://wa.me/201273327311" 

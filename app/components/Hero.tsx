@@ -41,7 +41,6 @@ export default function Hero() {
 
         <div className="flex flex-col sm:flex-row items-center gap-4 mt-6">
           
-          {/* تحويل زر Explore Tours إلى Link ينقل لصفحة الخدمات مع دعم اللغة الحالية */}
           <Link 
             href={`/${locale}/services`}
             title="Explore Tours"
