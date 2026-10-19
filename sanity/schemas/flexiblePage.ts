@@ -182,16 +182,13 @@ export default {
                       title: 'نص السعر على الكارت (مثل: From €45)',
                       type: 'string'
                     },
-                    // --- تمت إضافة حقول الموقع بشكل آمن هنا ---
                     createMultiLangField('locationText', 'نص الموقع على الخريطة (مثل: Hurghada, Red Sea)'),
                     {
                       name: 'locationMapUrl',
                       title: 'رابط خريطة الموقع (Google Maps URL)',
                       type: 'url'
                     },
-                    // ------------------------------------------
                     createMultiLangField('badgeText', 'نص الشارة المميزة على الكارت (مثل: Most Popular)'),
-                    // --- تمت إضافة حقل أيقونة الشارة بشكل منفصل وآمن ---
                     {
                       name: 'badgeEmoji',
                       title: 'اختر أيقونة للشارة',
@@ -212,7 +209,6 @@ export default {
                         layout: 'dropdown'
                       }
                     },
-                    // ---------------------------------------------------
                     {
                       name: 'servicePrice',
                       title: 'سعر الخدمة (€) - رقمي',
@@ -357,6 +353,33 @@ export default {
               ]
             }
           ]
+        },
+
+        // 7. سكشن الكود المخصص (Custom HTML) الجديد
+        {
+          type: 'object',
+          name: 'customHtmlSection',
+          title: 'Custom HTML (كود مخصص / ويدجت خارجية)',
+          fields: [
+            createMultiLangField('sectionTitle', 'عنوان السكشن (اختياري)'),
+            {
+              name: 'htmlCode',
+              title: 'كود HTML / Embed / iFrame',
+              type: 'text',
+              description: 'انسخ والصق كود الـ HTML هنا (مثل: ويدجت تقييمات جوجل، خرائط، فورم خارجية، إلخ)'
+            }
+          ],
+          preview: {
+            select: {
+              title: 'sectionTitle.en',
+            },
+            prepare(selection: { title?: string }) {
+              return {
+                title: selection.title || 'Custom HTML Section',
+                subtitle: 'كود مخصص'
+              };
+            }
+          }
         }
       ]
     },

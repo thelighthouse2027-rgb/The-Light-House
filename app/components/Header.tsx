@@ -63,7 +63,6 @@ export default function Header({ locale }: { locale: string }) {
 
         <div className="flex items-center gap-4 md:gap-5">
           
-          {/* روابط السوشيال ميديا - ديسكتوب */}
           <div className="hidden md:flex items-center gap-3">
             <a 
               href="https://wa.me/201273327311" 
@@ -86,7 +85,7 @@ export default function Header({ locale }: { locale: string }) {
               <FaFacebookF className="text-md" aria-hidden="true" />
             </a>
             <a 
-              href="https://www.instagram.com/thelighthouse2027/" 
+              href="https://www.instagram.com/thelighthouse_hurghada/" 
               target="_blank" 
               rel="noopener noreferrer" 
               title="Instagram"
@@ -96,7 +95,7 @@ export default function Header({ locale }: { locale: string }) {
               <FaInstagram className="text-lg" aria-hidden="true" />
             </a>
             <a 
-              href="https://www.tiktok.com/@user5211356814778" 
+              href="https://www.tiktok.com/@thelighthouse27" 
               target="_blank" 
               rel="noopener noreferrer" 
               title="TikTok"
@@ -178,7 +177,6 @@ export default function Header({ locale }: { locale: string }) {
             <Link href={`/${locale}/contact`} title={t('contact')} aria-label={t('contact')} onClick={() => setMobileMenuOpen(false)} className="text-white/90 text-lg hover:text-blue-400 transition-colors drop-shadow-md">{t('contact')}</Link>
           </nav>
           
-          {/* روابط السوشيال ميديا - موبايل */}
           <div className="mt-6 pt-6 border-t border-blue-600/40 flex justify-center gap-3 sm:gap-4 flex-wrap">
             <a 
               href="https://wa.me/201273327311" 
@@ -201,7 +199,7 @@ export default function Header({ locale }: { locale: string }) {
               <FaFacebookF className="text-lg" aria-hidden="true" />
             </a>
             <a 
-              href="https://www.instagram.com/thelighthouse2027/" 
+              href="https://www.instagram.com/thelighthouse_hurghada/" 
               target="_blank" 
               rel="noopener noreferrer" 
               title="Instagram"
@@ -211,7 +209,7 @@ export default function Header({ locale }: { locale: string }) {
               <FaInstagram className="text-xl" aria-hidden="true" />
             </a>
             <a 
-              href="https://www.tiktok.com/@user5211356814778" 
+              href="https://www.tiktok.com/@thelighthouse27" 
               target="_blank" 
               rel="noopener noreferrer" 
               title="TikTok"

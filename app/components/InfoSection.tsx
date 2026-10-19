@@ -66,7 +66,7 @@ export default function AboutSection({ locale }: { locale: string }) {
           </div>
 
           <Link
-            href={`/${locale}/aboutus`}
+            href={`/${locale}/about`}
             title={t('exploreBtn')}
             aria-label={t('exploreBtn')}
             className="px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-2xl transition-all duration-300 shadow-[0_0_25px_rgba(37,99,235,0.4)] hover:shadow-[0_0_40px_rgba(37,99,235,0.7)] hover:-translate-y-1 flex items-center gap-3 cursor-pointer"

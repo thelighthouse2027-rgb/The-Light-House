@@ -50,6 +50,7 @@ async function getFlexiblePage(slug: string, locale: string) {
       formTitle,
       defaultAdultPrice,
       defaultChildPrice,
+      htmlCode,
       pages[]->{
         "title": pageTitle,
         "slug": slug.current,
@@ -289,7 +290,6 @@ function renderSingleSection(section: any, currentLang: string, locale: string, 
         )}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {section.cards?.map((card: any, cIdx: number) => {
-            // تم إزالة النص الافتراضي، لو الحقل فاضي المتغير هيكون undefined
             const cardBtnText = card.cardCtaText?.[currentLang]; 
             const cardBtnUrl = formatUrl(card.cardCtaUrl?.[currentLang], card.serviceSlug || '#');
             const cardTitleText = card.cardTitle?.[currentLang] || pageName;
@@ -378,11 +378,9 @@ function renderSingleSection(section: any, currentLang: string, locale: string, 
                   )}
                 </div>
 
-                {/* --- توزيع الأزرار بشكل ذكي فقط إذا كان هناك أزرار سيتم عرضها --- */}
                 {hasAnyButton && (
                   <div className="mt-auto">
                     
-                    {/* حالة 1: تفعيل الواتساب (بدون AI) */}
                     {!showAi && showWa && (
                       hasCta ? (
                         <div className="flex items-center gap-3">
@@ -417,7 +415,6 @@ function renderSingleSection(section: any, currentLang: string, locale: string, 
                       )
                     )}
 
-                    {/* حالة 2: تفعيل كل الأزرار (AI + WA) */}
                     {showAi && showWa && (
                       <div className="space-y-3">
                         {hasCta ? (
@@ -464,7 +461,6 @@ function renderSingleSection(section: any, currentLang: string, locale: string, 
                       </div>
                     )}
 
-                    {/* حالة 3: تفعيل زر AI فقط (بدون واتساب) */}
                     {showAi && !showWa && (
                       hasCta ? (
                         <div className="grid grid-cols-2 gap-3">
@@ -499,7 +495,6 @@ function renderSingleSection(section: any, currentLang: string, locale: string, 
                       )
                     )}
 
-                    {/* حالة 4: لا يوجد AI ولا WA (زر الانتقال فقط) */}
                     {!showAi && !showWa && hasCta && (
                       <Link 
                         href={cardBtnUrl}
@@ -512,7 +507,7 @@ function renderSingleSection(section: any, currentLang: string, locale: string, 
                   </div>
                 )}
 
-                {/* --- نافذة الواتساب الخاصة بالكارت (تُفتح وتقفل بالـ CSS فقط عن طريق الـ peer-checked) --- */}
+                {/* --- نافذة الواتساب الخاصة بالكارت --- */}
                 {showWa && (
                   <div className="hidden peer-checked:flex fixed inset-0 z-[99999] items-center justify-center p-4">
                     <label htmlFor={modalId} className="absolute inset-0 bg-black/80 backdrop-blur-sm cursor-pointer"></label>
@@ -564,6 +559,25 @@ function renderSingleSection(section: any, currentLang: string, locale: string, 
             );
           })}
         </div>
+      </div>
+    );
+  }
+
+  if (section._type === 'customHtmlSection') {
+    return (
+      <div key={index} className="space-y-8 w-full pt-8">
+        {section.sectionTitle?.[currentLang] && (
+          <h2 className="text-3xl font-bold text-start mb-8 text-white">
+            {section.sectionTitle[currentLang]}
+          </h2>
+        )}
+        
+        {section.htmlCode && (
+          <div 
+            className="w-full custom-html-wrapper"
+            dangerouslySetInnerHTML={{ __html: section.htmlCode }} 
+          />
+        )}
       </div>
     );
   }

@@ -105,7 +105,7 @@ export default function Footer() {
                 <FaFacebookF className="text-xl" aria-hidden="true" />
               </a>
               <a 
-                href="https://www.instagram.com/thelighthouse2027/" 
+                href="https://www.instagram.com/thelighthouse_hurghada/" 
                 target="_blank" 
                 rel="noopener noreferrer" 
                 title="Instagram"
@@ -115,7 +115,7 @@ export default function Footer() {
                 <FaInstagram className="text-xl" aria-hidden="true" />
               </a>
               <a 
-                href="https://www.tiktok.com/@user5211356814778" 
+                href="https://www.tiktok.com/@thelighthouse27" 
                 target="_blank" 
                 rel="noopener noreferrer" 
                 title="TikTok"
