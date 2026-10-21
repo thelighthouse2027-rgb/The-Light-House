@@ -1,71 +1,166 @@
-'use client';
-
-import React from 'react';
+import { getTranslations, getLocale } from 'next-intl/server';
+import { client } from '@/sanity/lib/client';
 import Link from 'next/link';
-import { useTranslations } from 'next-intl';
+import Image from 'next/image';
 
-const courseKeys = [
-  'nitrox',
-  'drysuit',
-  'deep',
-  'navigator',
-  'wreck',
-  'sidemount',
-  'night',
-  'buoyancy',
-];
+export const revalidate = 0; 
 
-export default function DivingCoursesSection() {
-  const t = useTranslations('Courses');
+const COURSES_QUERY = `
+  *[_type == "flexiblePage" && defined(slug.current) && !(slug.current in [
+    "courses",
+    "boat-trips",
+    "daily-diving",
+    "safari",
+    "specialties",
+    "diving-courses"
+  ])] | order(_createdAt asc) {
+    "slug": slug.current,
+    "title": pageTitle,
+    "desc": seo.metaDescription,
+    "img": coalesce(
+      sections[_type == "heroSection"][0].image.asset->url,
+      sections[_type == "heroSection"][0].bgImage.asset->url,
+      sections[_type == "splitSection"][0].image.asset->url,
+      "/a.webp" 
+    ),
+    "videoUrl": coalesce(
+      sections[_type == "heroSection"][0].bgVideoUrl,
+      sections[_type == "heroSection"][0].bgVideoFile.asset->url,
+      sections[_type == "splitSection"][0].videoUrl,
+      sections[_type == "splitSection"][0].videoFile.asset->url
+    )
+  }
+`;
 
-  const coursesList = courseKeys.map((key) => ({
-    title: t(key),
-    href: '#',
+export default async function DivingCoursesSection() {
+  const t = await getTranslations('Features');
+  const locale = await getLocale();
+  const lang = locale === 'ar' ? 'ar' : 'en';
+
+  let pages: any[] = [];
+  try {
+    pages = await client.fetch(COURSES_QUERY);
+  } catch (err) {
+    console.error('Error fetching courses from Sanity:', err);
+  }
+
+  const courses = (pages || []).map((page) => ({
+    slug: page.slug,
+    img: page.img,
+    videoUrl: page.videoUrl,
+    title: page.title && typeof page.title === 'object' 
+      ? (page.title[lang] || page.title.en || 'Untitled') 
+      : (page.title || 'Untitled'),
+    desc: page.desc && typeof page.desc === 'object' 
+      ? (page.desc[lang] || page.desc.en || '') 
+      : (page.desc || '')
   }));
 
-  return (
-    <section className="py-20 bg-black overflow-hidden relative border-y border-blue-600/20">
-      
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[40vw] h-[20vw] bg-blue-600/10 rounded-full blur-[120px]"></div>
-      </div>
+  const duplicatedCourses = courses.length > 0 
+    ? [...courses, ...courses, ...courses, ...courses] 
+    : [];
 
-      <div className="text-center mb-12 relative z-10 px-6">
-        <span className="text-blue-500 font-semibold uppercase tracking-widest text-xs bg-blue-950/50 px-4 py-1.5 rounded-full border border-blue-500/30">
-          {t('badge')}
-        </span>
-        <h2 className="text-3xl md:text-4xl font-extrabold text-white mt-4 tracking-tight">
-          Featured PADI <span className="text-blue-600">Diving Courses</span>
+  return (
+    <section className="py-24 w-full overflow-hidden bg-black" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
+      
+      {/* عنوان السكشن */}
+      <div className="text-center mb-16 px-6 max-w-7xl mx-auto">
+        <h2 className="text-3xl md:text-5xl font-extrabold text-white mb-4 tracking-tight">
+          {t('heading')} <span className="text-blue-500">{t('headingHighlight')}</span>
         </h2>
-        <p className="text-zinc-400 text-base max-w-xl mx-auto mt-2">
-          {t('sectionSubtitle')}
+        <p className="text-zinc-400 text-lg max-w-xl mx-auto">
+          {t('subtitle')}
         </p>
       </div>
 
-      <div className="relative w-full flex whitespace-nowrap overflow-hidden group">
-        
-        <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-black to-transparent z-10 pointer-events-none" />
-        <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-black to-transparent z-10 pointer-events-none" />
+      {/* الشريط المتحرك (Ticker Container) */}
+      <div className="ticker-container relative w-full overflow-hidden flex whitespace-nowrap py-4">
+        {duplicatedCourses.length > 0 ? (
+          <div 
+            className={`flex gap-6 items-center shrink-0 course-ticker-${lang}`}
+            style={{
+              display: 'flex',
+              width: 'max-content',
+              animation: lang === 'ar' ? 'tickerAr 160s linear infinite' : 'tickerEn 160s linear infinite'
+            }}
+          >
+            {duplicatedCourses.map((course, idx) => (
+              <Link 
+                key={idx}
+                href={`/${locale}/services/${course.slug}`}
+                className="bg-[#0b0f19]/90 border border-neutral-800/80 rounded-[2rem] overflow-hidden shadow-2xl flex flex-col justify-between relative group hover:border-blue-500/50 transition duration-300 w-[320px] md:w-[380px] h-[420px] whitespace-normal shrink-0 cursor-pointer"
+              >
+                {/* الوسائط: فيديو أو صورة */}
+                <div className="relative w-full h-[220px] overflow-hidden bg-neutral-900 pointer-events-none">
+                  {course.videoUrl ? (
+                    <video
+                      src={course.videoUrl}
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                    />
+                  ) : (
+                    <Image
+                      src={course.img}
+                      alt={course.title}
+                      title={course.title}
+                      fill
+                      sizes="400px"
+                      quality={80}
+                      className="object-cover group-hover:scale-105 transition-transform duration-700"
+                    />
+                  )}
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0b0f19] via-transparent to-transparent pointer-events-none" />
+                </div>
 
-        <div className="flex gap-6 animate-marquee hover:[animation-play-state:paused] w-max px-3">
-          {[...coursesList, ...coursesList].map((course, index) => (
-            <Link
-              key={index}
-              href={course.href}
-              className="flex items-center gap-3 bg-zinc-950/80 hover:bg-zinc-900 border border-blue-500/20 hover:border-blue-500 text-white px-6 py-4 rounded-2xl shadow-xl transition-all duration-300 hover:scale-105 group/card cursor-pointer"
-            >
-              <div className="w-10 h-10 rounded-xl bg-blue-950/50 flex items-center justify-center text-blue-500 group-hover/card:bg-blue-600 group/card:text-white transition-colors">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-              </div>
-              <span className="font-medium text-sm md:text-base tracking-wide text-zinc-200 group-hover/card:text-white">
-                {course.title}
-              </span>
-            </Link>
-          ))}
-        </div>
+                {/* تفاصيل الكورس */}
+                <div className="p-6 flex flex-col justify-between flex-grow">
+                  <div>
+                    <h3 className="text-xl font-bold text-white mb-2 line-clamp-1 group-hover:text-blue-400 transition">
+                      {course.title}
+                    </h3>
+                    <p className="text-zinc-400 text-xs line-clamp-2 font-light leading-relaxed">
+                      {course.desc}
+                    </p>
+                  </div>
+
+                  <div className="pt-4 border-t border-neutral-800/80 flex items-center justify-between">
+                    <span className="text-xs text-blue-400 font-medium inline-flex items-center gap-1">
+                      {t('exploreMore')}
+                    </span>
+                    <span className="text-blue-500 text-sm">↗</span>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        ) : (
+          <div className="w-full text-center text-gray-500 py-10">
+            {lang === 'ar' ? 'لا توجد كورسات مضافة حالياً في لوحة التحكم.' : 'No courses added in the studio yet.'}
+          </div>
+        )}
+
+        {/* أنيميشن الحركة مع إيقافها فوراً عند وضع الماوس على الحاوية أو الكروت */}
+        <style dangerouslySetInnerHTML={{ __html: `
+          @keyframes tickerAr {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(50%); }
+          }
+          @keyframes tickerEn {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+          }
+          .ticker-container:hover .course-ticker-ar,
+          .ticker-container:hover .course-ticker-en,
+          .course-ticker-ar:hover, 
+          .course-ticker-en:hover {
+            animation-play-state: paused !important;
+          }
+        `}} />
       </div>
+
     </section>
   );
 }

@@ -18,7 +18,12 @@ async function getPromoBanner() {
     ...,
     "imageUrl": image.asset->url
   }`;
-  return await client.fetch(query);
+  try {
+    return await client.fetch(query);
+  } catch (error) {
+    console.error("Error fetching Promo Banner:", error);
+    return null;
+  }
 }
 
 async function getHomeSeo(locale: string) {
@@ -27,7 +32,12 @@ async function getHomeSeo(locale: string) {
     "metaTitle": metaTitle[$currentLang],
     "metaDescription": metaDescription[$currentLang]
   }`;
-  return await client.fetch(query, { currentLang });
+  try {
+    return await client.fetch(query, { currentLang });
+  } catch (error) {
+    console.error("Error fetching Home SEO:", error);
+    return null;
+  }
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
