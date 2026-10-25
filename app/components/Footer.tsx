@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useTranslations, useLocale } from 'next-intl';
-import { FaWhatsapp, FaFacebookF, FaYoutube, FaPhoneAlt, FaEnvelope, FaInstagram, FaTiktok } from 'react-icons/fa';
+import { FaWhatsapp, FaFacebookF, FaYoutube, FaPhoneAlt, FaEnvelope, FaInstagram, FaTiktok, FaTripadvisor } from 'react-icons/fa';
 
 export default function Footer() {
   const t = useTranslations('Footer');
@@ -130,6 +130,16 @@ export default function Footer() {
                 className="p-3 bg-zinc-900/80 border border-blue-600/30 text-blue-400 hover:bg-blue-600 hover:text-white rounded-xl transition-all shadow-[0_0_15px_rgba(37,99,235,0.15)] hover:shadow-[0_0_25px_rgba(37,99,235,0.4)]"
               >
                 <FaYoutube className="text-xl" aria-hidden="true" />
+              </a>
+              <a 
+                href="https://www.tripadvisor.com.eg/Profile/thelighthousee?fid=1cc9f543-000a-4ed1-a83d-2baad59ed658" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                title="TripAdvisor"
+                aria-label="TripAdvisor" 
+                className="p-3 bg-zinc-900/80 border border-blue-600/30 text-blue-400 hover:bg-blue-600 hover:text-white rounded-xl transition-all shadow-[0_0_15px_rgba(37,99,235,0.15)] hover:shadow-[0_0_25px_rgba(37,99,235,0.4)]"
+              >
+                <FaTripadvisor className="text-xl" aria-hidden="true" />
               </a>
             </div>
           </div>

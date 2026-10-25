@@ -2,7 +2,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { FaWhatsapp, FaFacebookF, FaYoutube, FaInstagram, FaTiktok } from 'react-icons/fa';
+import { FaWhatsapp, FaFacebookF, FaYoutube, FaInstagram, FaTiktok, FaTripadvisor } from 'react-icons/fa';
 import { useTranslations } from 'next-intl';
 
 const languages = [
@@ -110,6 +110,16 @@ export default function Header({ locale }: { locale: string }) {
               className="text-zinc-300 hover:text-blue-400 hover:drop-shadow-[0_0_8px_rgba(59,130,246,0.8)] transition-all"
             >
               <FaYoutube className="text-lg" aria-hidden="true" />
+            </a>
+            <a 
+              href="https://www.tripadvisor.com.eg/Profile/thelighthousee?fid=1cc9f543-000a-4ed1-a83d-2baad59ed658" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              title="TripAdvisor"
+              aria-label="TripAdvisor" 
+              className="text-zinc-300 hover:text-blue-400 hover:drop-shadow-[0_0_8px_rgba(59,130,246,0.8)] transition-all"
+            >
+              <FaTripadvisor className="text-lg" aria-hidden="true" />
             </a>
           </div>
 
@@ -224,6 +234,16 @@ export default function Header({ locale }: { locale: string }) {
               className="p-3 bg-blue-600/10 border border-blue-500 text-white hover:bg-blue-600 rounded-xl transition-all shadow-[0_0_15px_rgba(37,99,235,0.3)]"
             >
               <FaYoutube className="text-xl" aria-hidden="true" />
+            </a>
+            <a 
+              href="https://www.tripadvisor.com.eg/Profile/thelighthousee?fid=1cc9f543-000a-4ed1-a83d-2baad59ed658" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              title="TripAdvisor"
+              aria-label="TripAdvisor" 
+              className="p-3 bg-blue-600/10 border border-blue-500 text-white hover:bg-blue-600 rounded-xl transition-all shadow-[0_0_15px_rgba(37,99,235,0.3)]"
+            >
+              <FaTripadvisor className="text-xl" aria-hidden="true" />
             </a>
           </div>
         </div>
