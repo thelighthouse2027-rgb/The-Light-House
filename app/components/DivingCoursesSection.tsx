@@ -5,6 +5,7 @@ import Image from 'next/image';
 
 export const revalidate = 0; 
 
+// استعلام لجلب كل الصفحات باستثناء الـ 6 صفحات المحددة لضمان خفة وأداء عالي
 const COURSES_QUERY = `
   *[_type == "flexiblePage" && defined(slug.current) && !(slug.current in [
     "courses",
@@ -22,12 +23,6 @@ const COURSES_QUERY = `
       sections[_type == "heroSection"][0].bgImage.asset->url,
       sections[_type == "splitSection"][0].image.asset->url,
       "/a.webp" 
-    ),
-    "videoUrl": coalesce(
-      sections[_type == "heroSection"][0].bgVideoUrl,
-      sections[_type == "heroSection"][0].bgVideoFile.asset->url,
-      sections[_type == "splitSection"][0].videoUrl,
-      sections[_type == "splitSection"][0].videoFile.asset->url
     )
   }
 `;
@@ -44,10 +39,10 @@ export default async function DivingCoursesSection() {
     console.error('Error fetching courses from Sanity:', err);
   }
 
+  // معالجة البيانات بأمان وحمايتها من قيم الـ null
   const courses = (pages || []).map((page) => ({
     slug: page.slug,
     img: page.img,
-    videoUrl: page.videoUrl,
     title: page.title && typeof page.title === 'object' 
       ? (page.title[lang] || page.title.en || 'Untitled') 
       : (page.title || 'Untitled'),
@@ -56,6 +51,7 @@ export default async function DivingCoursesSection() {
       : (page.desc || '')
   }));
 
+  // تكرار الكورسات لصنع شريط متحرك مستمر بلا توقف
   const duplicatedCourses = courses.length > 0 
     ? [...courses, ...courses, ...courses, ...courses] 
     : [];
@@ -81,7 +77,7 @@ export default async function DivingCoursesSection() {
             style={{
               display: 'flex',
               width: 'max-content',
-              animation: lang === 'ar' ? 'tickerAr 160s linear infinite' : 'tickerEn 160s linear infinite'
+              animation: lang === 'ar' ? 'tickerAr 320s linear infinite' : 'tickerEn 320s linear infinite'
             }}
           >
             {duplicatedCourses.map((course, idx) => (
@@ -90,28 +86,17 @@ export default async function DivingCoursesSection() {
                 href={`/${locale}/services/${course.slug}`}
                 className="bg-[#0b0f19]/90 border border-neutral-800/80 rounded-[2rem] overflow-hidden shadow-2xl flex flex-col justify-between relative group hover:border-blue-500/50 transition duration-300 w-[320px] md:w-[380px] h-[420px] whitespace-normal shrink-0 cursor-pointer"
               >
-                {/* الوسائط: فيديو أو صورة */}
-                <div className="relative w-full h-[220px] overflow-hidden bg-neutral-900 pointer-events-none">
-                  {course.videoUrl ? (
-                    <video
-                      src={course.videoUrl}
-                      autoPlay
-                      muted
-                      loop
-                      playsInline
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                    />
-                  ) : (
-                    <Image
-                      src={course.img}
-                      alt={course.title}
-                      title={course.title}
-                      fill
-                      sizes="400px"
-                      quality={80}
-                      className="object-cover group-hover:scale-105 transition-transform duration-700"
-                    />
-                  )}
+                {/* صورة الكورس بأداء سريع وخفيف */}
+                <div className="relative w-full h-[220px] overflow-hidden bg-neutral-900">
+                  <Image
+                    src={course.img}
+                    alt={course.title}
+                    title={course.title}
+                    fill
+                    sizes="400px"
+                    quality={80}
+                    className="object-cover group-hover:scale-105 transition-transform duration-700"
+                  />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#0b0f19] via-transparent to-transparent pointer-events-none" />
                 </div>
 
