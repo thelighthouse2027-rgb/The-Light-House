@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   title: 'The Light House | Diving & Safari Center',
   description: 'Explore and book your diving, snorkeling, and safari adventures with The Light House.',
   verification: {
-    google: '8lcpDVvQKEfWiEv3e_O1V37srR_FkRb-KNchOeOV3Jg',
+    google: 'uTh7j9DgOVKNqb3Iv--B4MSk3gY9u_G5XlSTZ-ArhhU',
   },
 };
 
