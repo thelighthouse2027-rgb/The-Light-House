@@ -4,7 +4,7 @@ import { getMessages } from 'next-intl/server';
 import Header from '@/app/components/Header';
 import Footer from '@/app/components/Footer'; 
 import AIChatWidget from '@/app/components/AIChatWidget';
-import Script from 'next/script'; // 1. استيراد مكون Script
+import Script from 'next/script';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -28,16 +28,18 @@ export default async function LocaleLayout({
   return (
     <html lang={locale} dir={locale === 'ar' ? 'rtl' : 'ltr'}>
       <head>
-        {/* 2. إضافة سكريبت جوجل تاق مانجر/أناليتكس */}
+        {/* Google Analytics (GA4) */}
         <Script
-          src="https://www.googletagmanager.com/gtm.js?id=GTM-T9ZSGSH4"
+          src="https://www.googletagmanager.com/gtag/js?id=G-39GZ9E351N"
           strategy="afterInteractive"
         />
-        <Script id="google-tag-init" strategy="afterInteractive">
+        <Script id="google-analytics" strategy="afterInteractive">
           {`
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
+
+            gtag('config', 'G-39GZ9E351N');
           `}
         </Script>
       </head>
