@@ -4,6 +4,7 @@ import { getMessages } from 'next-intl/server';
 import Header from '@/app/components/Header';
 import Footer from '@/app/components/Footer'; 
 import AIChatWidget from '@/app/components/AIChatWidget';
+import Script from 'next/script'; // 1. استيراد مكون Script
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -26,6 +27,20 @@ export default async function LocaleLayout({
 
   return (
     <html lang={locale} dir={locale === 'ar' ? 'rtl' : 'ltr'}>
+      <head>
+        {/* 2. إضافة سكريبت جوجل تاق مانجر/أناليتكس */}
+        <Script
+          src="https://www.googletagmanager.com/gtm.js?id=GTM-T9ZSGSH4"
+          strategy="afterInteractive"
+        />
+        <Script id="google-tag-init" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+          `}
+        </Script>
+      </head>
       <body className="bg-black text-white antialiased min-h-screen relative selection:bg-red-600 selection:text-white overflow-x-hidden">
         <NextIntlClientProvider messages={messages} locale={locale}>
           
