@@ -1,3 +1,4 @@
+// app/sitemap.ts
 import { MetadataRoute } from 'next'
 import { client } from '@/sanity/lib/client' 
 
@@ -7,8 +8,9 @@ const baseUrl = 'https://www.thelighthousee.com'
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const sitemapEntries: MetadataRoute.Sitemap = []
 
+  // 1. الصفحات الثابتة والـ Features (شاملة الصفحة الرئيسية لكل لغة '')
   const staticRoutes = [
-    '', // تم إرجاع الصفحة الرئيسية هنا لكي يتم أرشفة روابط en/, fr/, de/, pl/ الرئيسية
+    '', 
     '/about',
     '/services',
     '/media',
@@ -32,28 +34,30 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     })
   })
 
+  // 2. جلب جميع الصفحات ديناميكياً من Sanity (من نوع flexiblePage)
   try {
     const sanityPages = await client.fetch(`
-      *[_type == "post"] {
+      *[_type == "flexiblePage" && defined(slug.current)] {
         "slug": slug.current,
         _updatedAt
       }
     `)
 
     sanityPages.forEach((page: { slug: string; _updatedAt: string }) => {
-      if (!page.slug) return
+      // إذا كانت الصفحة الرئيسية تم إنشاؤها في سانتي ولها slug فارغ أو '/', نتجنب تكرارها
+      if (!page.slug || page.slug === '/') return
 
       languages.forEach((lang) => {
         sitemapEntries.push({
-          url: `${baseUrl}/${lang}/blog/${page.slug}`, // عدل مسار /blog/ إذا كان مختلفاً في موقعك
+          url: `${baseUrl}/${lang}/${page.slug}`, // الرابط المباشر لكل صفحة مرنة بكل لغة
           lastModified: page._updatedAt ? new Date(page._updatedAt) : new Date(),
           changeFrequency: 'weekly',
-          priority: 0.6,
+          priority: 0.7,
         })
       })
     })
   } catch (error) {
-    console.error('Error fetching Sanity data for sitemap:', error)
+    console.error('Error fetching Sanity pages for sitemap:', error)
   }
 
   return sitemapEntries
