@@ -8,6 +8,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const sitemapEntries: MetadataRoute.Sitemap = []
 
   const staticRoutes = [
+    '', // تم إرجاع الصفحة الرئيسية هنا لكي يتم أرشفة روابط en/, fr/, de/, pl/ الرئيسية
     '/about',
     '/services',
     '/media',
