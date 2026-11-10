@@ -62,7 +62,7 @@ export default function Header({ locale }: { locale: string }) {
           
           <div className="hidden md:flex items-center gap-3">
             <a 
-              href="https://wa.me/201273327311" 
+              href="https://wa.me/201036930803" 
               target="_blank" 
               rel="noopener noreferrer" 
               title="WhatsApp"
@@ -186,7 +186,7 @@ export default function Header({ locale }: { locale: string }) {
           
           <div className="mt-6 pt-6 border-t border-blue-600/40 flex justify-center gap-3 sm:gap-4 flex-wrap">
             <a 
-              href="https://wa.me/201273327311" 
+              href="https://wa.me/201036930803" 
               target="_blank" 
               rel="noopener noreferrer" 
               title="WhatsApp"
