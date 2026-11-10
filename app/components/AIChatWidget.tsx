@@ -185,7 +185,7 @@ export default function AIChatWidget() {
                 
                 {/* الرقم الأول */}
                 <a
-                  href="https://wa.me/201273327311"
+                  href="https://wa.me/201036930803"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex flex-col items-center gap-2 group cursor-pointer"
@@ -200,7 +200,7 @@ export default function AIChatWidget() {
 
                 {/* الرقم الثاني */}
                 <a
-                  href="https://wa.me/201550503959"
+                  href="https://wa.me/201289562737"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex flex-col items-center gap-2 group cursor-pointer"
