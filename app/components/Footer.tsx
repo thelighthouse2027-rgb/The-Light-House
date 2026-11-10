@@ -2,7 +2,16 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useTranslations, useLocale } from 'next-intl';
-import { FaWhatsapp, FaFacebookF, FaYoutube, FaPhoneAlt, FaEnvelope, FaInstagram, FaTiktok, FaTripadvisor } from 'react-icons/fa';
+import { 
+  FaWhatsapp, 
+  FaFacebookF, 
+  FaYoutube, 
+  FaPhoneAlt, 
+  FaEnvelope, 
+  FaInstagram, 
+  FaTiktok, 
+  FaTripadvisor 
+} from 'react-icons/fa';
 
 export default function Footer() {
   const t = useTranslations('Footer');
@@ -19,9 +28,9 @@ export default function Footer() {
 
   const serviceLinks = [
     { name: t('safari'), slug: 'services/safari' },
-    { name: t('divingTrips'), slug: 'diving-trips' },
+    { name: t('divingTrips'), slug: 'services/daily-diving' },
     { name: t('boatTrips'), slug: 'services/boat-trips' },
-    { name: t('divingCourses'), slug: 'diving-courses' },
+    { name: t('divingCourses'), slug: 'services/diving-courses' },
   ];
 
   return (
@@ -194,7 +203,7 @@ export default function Footer() {
             © {new Date().getFullYear()} The Light House. {t('rights')}
           </p>
           <p className="text-zinc-300 text-xs font-medium flex items-center gap-1">
-            Made with <span className="text-blue-400 animate-pulse drop-shadow-[0_0_8px_rgba(37,99,235,0.8)]">❤</span> in Hurghada
+            Made with <span className="text-blue-400 animate-pulse drop-shadow-[0_0_8px_rgba(37,99,235,0.8)]">💙</span> in Hurghada
           </p>
         </div>
 
