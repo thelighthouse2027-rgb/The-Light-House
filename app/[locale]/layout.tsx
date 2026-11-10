@@ -53,7 +53,18 @@ export default async function LocaleLayout({
             style={{ display: 'none', visibility: 'hidden' }}
           />
         </noscript>
-
+<Script
+          strategy="afterInteractive"
+          src="https://www.googletagmanager.com/gtag/js?id=GTM-55X8232T"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'GTM-55X8232T');
+          `}
+        </Script>
         <NextIntlClientProvider messages={messages} locale={locale}>
           
           <div className="fixed top-0 left-0 w-full h-full z-[-1] overflow-hidden pointer-events-none bg-black">
