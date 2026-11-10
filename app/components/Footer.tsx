@@ -78,20 +78,20 @@ export default function Footer() {
             </a>
             
             <a 
-              href="https://wa.me/201273327311" 
+              href="https://wa.me/201036930803" 
               target="_blank" 
               rel="noopener noreferrer"
-              title="Call Us: +20 127 332 7311"
+              title="Call Us: +20 103 693 0803"
               aria-label="Call Us"
               className="flex items-center gap-3 bg-zinc-900/80 border border-blue-600/30 hover:border-blue-500 shadow-[0_0_15px_rgba(37,99,235,0.15)] hover:shadow-[0_0_25px_rgba(37,99,235,0.4)] transition-all duration-300 px-5 py-3 rounded-2xl"
             >
               <FaPhoneAlt className="text-blue-400" />
-              <span className="text-zinc-100 text-sm font-mono">+20 127 332 7311</span>
+              <span className="text-zinc-100 text-sm font-mono">+20 103 693 0803</span>
             </a>
 
             <div className="flex flex-wrap items-center justify-center gap-3 ml-2">
               <a 
-                href="https://wa.me/201273327311" 
+                href="https://wa.me/201036930803" 
                 target="_blank" 
                 rel="noopener noreferrer" 
                 title="WhatsApp"
