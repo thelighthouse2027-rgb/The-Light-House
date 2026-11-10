@@ -53,14 +53,14 @@ export default function LocationSection({ locale }: { locale?: string }) {
                 <div>
                   <h4 className="font-semibold text-white mb-1">{t('phoneTitle')}</h4>
                   <a 
-                    href="https://wa.me/201273327311" 
+                    href="https://wa.me/201036930803" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     title="+20 127 332 7311"
                     aria-label="Phone and WhatsApp contact"
                     className="text-blue-400 hover:text-blue-300 font-mono text-lg transition-colors block"
                   >
-                    +20 127 332 7311
+                    +20 103 693 0803
                   </a>
                 </div>
               </div>
@@ -72,7 +72,7 @@ export default function LocationSection({ locale }: { locale?: string }) {
               </h4>
               <div className="flex items-center gap-4">
                 <a
-                  href="https://wa.me/201273327311"
+                  href="https://wa.me/201036930803"
                   target="_blank"
                   rel="noopener noreferrer"
                   title="WhatsApp"
