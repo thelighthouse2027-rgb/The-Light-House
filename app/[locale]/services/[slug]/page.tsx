@@ -461,28 +461,28 @@ function renderSingleSection(section: any, currentLang: string, locale: string, 
                       </div>
                     )}
 
-{showAi && !showWa && (
-  <div className={hasCta ? "grid grid-cols-2 gap-3" : "w-full"}>
-    {hasCta && (
-      <Link
-        href={cardBtnUrl}
-        title={cardBtnText}
-        className="py-3 px-2 bg-gradient-to-r from-[#06b6d4] to-[#3b82f6] hover:from-[#0891b2] hover:to-[#2563eb] text-white font-bold rounded-2xl transition-all text-center shadow-lg text-sm flex items-center justify-center gap-1.5"
-      >
-        <span className="truncate">{cardBtnText}</span>
-      </Link>
-    )}
-    <button
-      type="button"
-      data-ai-trigger="true"
-      title={aiGuideText}
-      className={`py-3 ${hasCta ? "px-2" : "w-full px-4"} bg-[#1e293b] hover:bg-[#334155] text-white font-bold rounded-2xl transition-all text-center shadow-lg text-sm flex items-center justify-center gap-1.5 border border-white/5`}
-    >
-      <span>✨</span>
-      <span className="truncate">{aiGuideText}</span>
-    </button>
-  </div>
-)}
+                    {showAi && !showWa && (
+                      <div className={hasCta ? "grid grid-cols-2 gap-3" : "w-full"}>
+                        {hasCta && (
+                          <Link
+                            href={cardBtnUrl}
+                            title={cardBtnText}
+                            className="py-3 px-2 bg-gradient-to-r from-[#06b6d4] to-[#3b82f6] hover:from-[#0891b2] hover:to-[#2563eb] text-white font-bold rounded-2xl transition-all text-center shadow-lg text-sm flex items-center justify-center gap-1.5"
+                          >
+                            <span className="truncate">{cardBtnText}</span>
+                          </Link>
+                        )}
+                        <button
+                          type="button"
+                          data-ai-trigger="true"
+                          title={aiGuideText}
+                          className={`py-3 ${hasCta ? "px-2" : "w-full px-4"} bg-[#1e293b] hover:bg-[#334155] text-white font-bold rounded-2xl transition-all text-center shadow-lg text-sm flex items-center justify-center gap-1.5 border border-white/5`}
+                        >
+                          <span>✨</span>
+                          <span className="truncate">{aiGuideText}</span>
+                        </button>
+                      </div>
+                    )}
 
                     {!showAi && !showWa && hasCta && (
                       <Link 
@@ -493,6 +493,8 @@ function renderSingleSection(section: any, currentLang: string, locale: string, 
                         <span>{cardBtnText}</span>
                       </Link>
                     )}                
+                  </div>
+                )}
 
                 {/* --- نافذة الواتساب الخاصة بالكارت --- */}
                 {showWa && (
@@ -502,7 +504,7 @@ function renderSingleSection(section: any, currentLang: string, locale: string, 
                     <div className="relative z-10 bg-[#1e1e1e] border border-zinc-800 rounded-3xl shadow-2xl p-6 w-80 text-white flex flex-col items-center text-center animate-in fade-in zoom-in duration-200">
                       <h3 className="text-base font-medium text-zinc-100 mb-2">Select an app to open</h3>
                       <p className="text-[11px] text-zinc-400 mb-6 leading-relaxed">
-                        To set a default app to open, go to "Settings - Apps - App Cloner". <span className="text-[#3b82f6] cursor-pointer hover:underline">Settings</span>
+                        To set a default app to open, go to &quot;Settings - Apps - App Cloner&quot;. <span className="text-[#3b82f6] cursor-pointer hover:underline">Settings</span>
                       </p>
 
                       <div className="flex items-center justify-center gap-8 mb-6 w-full">
@@ -543,7 +545,7 @@ function renderSingleSection(section: any, currentLang: string, locale: string, 
                 )}
 
               </div>
-            )
+            );
           })}
         </div>
       </div>
@@ -606,3 +608,6 @@ function renderSingleSection(section: any, currentLang: string, locale: string, 
       </div>
     );
   }
+
+  return null;
+}
