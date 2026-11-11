@@ -494,7 +494,7 @@ function renderSingleSection(section: any, currentLang: string, locale: string, 
                       </Link>
                     )}
                   </div>
-                )}
+                
 
                 {/* --- نافذة الواتساب الخاصة بالكارت --- */}
                 {showWa && (
