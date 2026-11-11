@@ -483,27 +483,6 @@ function renderSingleSection(section: any, currentLang: string, locale: string, 
     </button>
   </div>
 )}
-                            type="button"
-                            data-ai-trigger="true"
-                            title={aiGuideText}
-                            className="py-3 px-2 bg-[#1e293b] hover:bg-[#334155] text-white font-bold rounded-2xl transition-all text-center shadow-lg text-sm flex items-center justify-center gap-1.5 border border-white/5"
-                          >
-                            <span>✨</span>
-                            <span className="truncate">{aiGuideText}</span>
-                          </button>
-                        </div>
-                      ) : (
-                        <button 
-                          type="button"
-                          data-ai-trigger="true"
-                          title={aiGuideText}
-                          className="w-full py-3 px-4 bg-[#1e293b] hover:bg-[#334155] text-white font-bold rounded-2xl transition-all text-center shadow-lg text-sm flex items-center justify-center gap-1.5 border border-white/5"
-                        >
-                          <span>✨</span>
-                          <span className="truncate">{aiGuideText}</span>
-                        </button>
-                      )
-                    )}
 
                     {!showAi && !showWa && hasCta && (
                       <Link 
