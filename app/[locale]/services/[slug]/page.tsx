@@ -543,7 +543,7 @@ function renderSingleSection(section: any, currentLang: string, locale: string, 
                 )}
 
               </div>
-            );
+            )
           })}
         </div>
       </div>
