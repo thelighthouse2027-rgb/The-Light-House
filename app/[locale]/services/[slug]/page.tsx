@@ -492,9 +492,7 @@ function renderSingleSection(section: any, currentLang: string, locale: string, 
                       >
                         <span>{cardBtnText}</span>
                       </Link>
-                    )}
-                  </div>
-                
+                    )}                
 
                 {/* --- نافذة الواتساب الخاصة بالكارت --- */}
                 {showWa && (
@@ -608,6 +606,3 @@ function renderSingleSection(section: any, currentLang: string, locale: string, 
       </div>
     );
   }
-
-  return null;
-}
