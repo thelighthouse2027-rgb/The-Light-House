@@ -461,7 +461,28 @@ function renderSingleSection(section: any, currentLang: string, locale: string, 
                       </div>
                     )}
 
-                    {showAi && !showWa && (
+                  {showAi && !showWa && (
+  <div className={hasCta ? "grid grid-cols-2 gap-3" : "w-full"}>
+    {hasCta && (
+      <Link
+        href={cardBtnUrl}
+        title={cardBtnText}
+        className="py-3 px-2 bg-gradient-to-r from-[#06b6d4] to-[#3b82f6] hover:from-[#0891b2] hover:to-[#2563eb] text-white font-bold rounded-2xl transition-all text-center shadow-lg text-sm flex items-center justify-center gap-1.5"
+      >
+        <span className="truncate">{cardBtnText}</span>
+      </Link>
+    )}
+    <button
+      type="button"
+      data-ai-trigger="true"
+      title={aiGuideText}
+      className={`py-3 ${hasCta ? "px-2" : "w-full px-4"} bg-[#1e293b] hover:bg-[#334155] text-white font-bold rounded-2xl transition-all text-center shadow-lg text-sm flex items-center justify-center gap-1.5 border border-white/5`}
+    >
+      <span>✨</span>
+      <span className="truncate">{aiGuideText}</span>
+    </button>
+  </div>
+)}  {showAi && !showWa && (
                       hasCta ? (
                         <div className="grid grid-cols-2 gap-3">
                           <Link 
