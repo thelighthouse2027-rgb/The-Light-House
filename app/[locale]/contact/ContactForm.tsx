@@ -2,21 +2,16 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-
 export default function ContactPage() {
   const t = useTranslations('Contact');
   const searchParams = useSearchParams();
-  
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [selectedService, setSelectedService] = useState('');
-
-  // قراءة المعامل service من الـ URL وتعيينه أوتوماتيكياً في الـ Select
   useEffect(() => {
     const serviceParam = searchParams.get('service');
     if (serviceParam) {
-      // يمكنك مطابقة القيم هنا حسب ما يرسله موقعك
       if (serviceParam.includes('safari')) {
         setSelectedService('Desert Safari');
       } else if (serviceParam.includes('boat') || serviceParam.includes('day-diving')) {
@@ -32,18 +27,14 @@ export default function ContactPage() {
     setIsSubmitting(true);
     setSuccessMessage('');
     setErrorMessage('');
-
     const form = e.currentTarget;
     const formData = new FormData(form);
-    
     formData.append("access_key", "fa1cb842-131e-4cff-8891-a9eddc67babc");
-
     try {
       const response = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
         body: formData
       });
-
       const data = await response.json();
 
       if (response.ok) {

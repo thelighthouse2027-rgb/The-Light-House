@@ -6,14 +6,31 @@ import Footer from '@/app/components/Footer';
 import AIChatWidget from '@/app/components/AIChatWidget';
 import Script from 'next/script';
 import type { Metadata } from 'next';
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const domain = 'https://www.thelighthousee.com';
 
-export const metadata: Metadata = {
-  title: 'The Light House | Diving & Safari Center',
-  description: 'Explore and book your diving, snorkeling, and safari adventures with The Light House.',
-  verification: {
-    google: 'uTh7j9DgOVKNqb3Iv--B4MSk3gY9u_G5XlSTZ-ArhhU',
-  },
-};
+  return {
+    title: 'The Light House | Diving & Safari Center',
+    description: 'Explore and book your diving, snorkeling, and safari adventures with The Light House.',
+    verification: {
+      google: 'uTh7j9DgOVKNqb3Iv--B4MSk3gY9u_G5XlSTZ-ArhhU',
+    },
+    alternates: {
+      canonical: `${domain}/${locale}`,
+      languages: {
+        'en': `${domain}/en`,
+        'de': `${domain}/de`,
+        'fr': `${domain}/fr`,
+        'pl': `${domain}/pl`,
+      },
+    },
+  };
+}
 
 export default async function LocaleLayout({
   children,
@@ -28,7 +45,6 @@ export default async function LocaleLayout({
   return (
     <html lang={locale} dir={locale === 'ar' ? 'rtl' : 'ltr'}>
       <head>
-        {/* Google Tag Manager - Head Script */}
         <Script
           id="google-tag-manager"
           strategy="afterInteractive"
@@ -44,7 +60,6 @@ export default async function LocaleLayout({
         />
       </head>
       <body className="bg-black text-white antialiased min-h-screen relative selection:bg-red-600 selection:text-white overflow-x-hidden">
-        {/* Google Tag Manager (noscript) - Body Fallback */}
         <noscript>
           <iframe
             src="https://www.googletagmanager.com/ns.html?id=GTM-T9ZSGSH4"
@@ -53,7 +68,7 @@ export default async function LocaleLayout({
             style={{ display: 'none', visibility: 'hidden' }}
           />
         </noscript>
-<Script
+        <Script
           strategy="afterInteractive"
           src="https://www.googletagmanager.com/gtag/js?id=GTM-55X8232T"
         />

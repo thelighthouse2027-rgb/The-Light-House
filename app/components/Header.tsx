@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { usePathname } from 'next/navigation';
 import { FaWhatsapp, FaFacebookF, FaYoutube, FaInstagram, FaTiktok, FaTripadvisor } from 'react-icons/fa';
 import { useTranslations } from 'next-intl';
 
@@ -14,6 +15,7 @@ const languages = [
 
 export default function Header({ locale }: { locale: string }) {
   const t = useTranslations('Header');
+  const pathname = usePathname();
   const [langDropdownOpen, setLangDropdownOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   
@@ -32,6 +34,18 @@ export default function Header({ locale }: { locale: string }) {
   }, []);
 
   const currentLang = languages.find((l) => l.code === locale) || languages[0];
+
+  // دالة استبدال رمز اللغة مع البقاء في نفس الصفحة الحالية
+  const getLocalizedPath = (targetLocale: string) => {
+    if (!pathname) return `/${targetLocale}`;
+    const segments = pathname.split('/');
+    // segments[0] يكون فارغاً، و segments[1] هو رمز اللغة الحالية
+    if (['en', 'de', 'fr', 'pl', 'ar'].includes(segments[1])) {
+      segments[1] = targetLocale;
+      return segments.join('/') || `/${targetLocale}`;
+    }
+    return `/${targetLocale}${pathname.startsWith('/') ? pathname : `/${pathname}`}`;
+  };
 
   return (
     <header className="absolute top-0 left-0 w-full z-50 px-4 sm:px-8 pt-4">
@@ -142,7 +156,7 @@ export default function Header({ locale }: { locale: string }) {
                 {languages.map((l) => (
                   <Link 
                     key={l.code} 
-                    href={`/${l.code}`} 
+                    href={getLocalizedPath(l.code)} 
                     title={l.name}
                     aria-label={l.name}
                     onClick={() => setLangDropdownOpen(false)}
