@@ -15,14 +15,12 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
-      // 1. الحائط الأول: الروابط اللي فيها لغة (en, fr, de, pl) بس ناقصة كلمة services
-      // مثال: /en/padi-open-water-referral -> /en/services/padi-open-water-referral
       {
-        source: '/:locale(en|de|fr|pl)/:slug((?!services).* )',
+        source: '/:locale(en|de|fr|pl)/:slug((?!services).+)',
         destination: '/:locale/services/:slug',
         permanent: true,
       },
-      {
+            {
         source: '/services/:path*',
         destination: '/en/services/:path*',
         permanent: true,
