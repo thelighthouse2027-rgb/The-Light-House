@@ -16,11 +16,17 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
-        source: '/:locale(en|de|fr|pl)/:slug((?!services).+)',
+        source: '/:locale(en|de|fr|pl)/services/:page(about|contact|media|search|privacy|terms|faq)',
+        destination: '/:locale/:page',
+        permanent: false,
+      },
+      {
+        source:
+          '/:locale(en|de|fr|pl)/:slug((?!services$|about$|contact$|media$|search$|privacy$|terms$|faq$|studio$|api$|_next$|favicon\\.ico$|robots\\.txt$|sitemap\\.xml$)[^/]+)',
         destination: '/:locale/services/:slug',
         permanent: true,
       },
-            {
+      {
         source: '/services/:path*',
         destination: '/en/services/:path*',
         permanent: true,
