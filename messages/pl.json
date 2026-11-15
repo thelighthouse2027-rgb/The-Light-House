@@ -174,16 +174,19 @@
     "cancelText": "Anuluj"
   },
   "GoogleReviews": {
-  "badge": "Opinie gości na Google Maps",
+  "tag": "Opinie gości w Mapach Google",
+  "title": "Opinie odwiedzających The Light House",
+  "badge": "Opinie gości w Mapach Google",
   "titlePrefix": "Opinie odwiedzających dla",
   "basedOn": "Na podstawie",
-  "reviewsSuffix": "zweryfikowanych opinii",
-  "monthAgo": "Miesiąc temu",
+  "reviewsCount": "Na podstawie zweryfikowanych opinii",
+  "googleBtn": "Zobacz oryginalną opinię w Google",
+  "monthAgo": "miesiąc temu",
   "threeWeeksAgo": "3 tygodnie temu",
   "twoMonthsAgo": "2 miesiące temu",
   "recently": "Niedawno",
-  "noComment": "Doskonała ocena bez komentarza pisanego.",
-  "guestUser": "Gość Google",
+  "noComment": "Doskonała opinia bez pisemnego komentarza.",
+  "guestUser": "Użytkownik Google",
   "viewOriginal": "Zobacz oryginalną opinię w Google"
 },
   "Courses": {
@@ -197,11 +200,5 @@
     "buoyancy": "Specjalistyczny kurs doskonałej pływalności PADI w Hurghadzie",
     "badge": "Specjalności Morza Czerwonego",
     "sectionSubtitle": "Rozwijaj swoją karierę nurkową dzięki naszym profesjonalnym kursom specjalistycznym w Hurghadzie."
-  },
-  "GoogleReviews": {
-    "tag": "Opinie gości w Mapach Google",
-    "title": "Opinie odwiedzających The Light House",
-    "reviewsCount": "Na podstawie zweryfikowanych opinii",
-    "googleBtn": "Zobacz oryginalną opinię w Google"
   }
 }

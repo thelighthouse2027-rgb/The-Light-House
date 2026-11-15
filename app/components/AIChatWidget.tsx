@@ -33,31 +33,49 @@ export default function AIChatWidget() {
 
   useEffect(() => {
     setIsMounted(true);
+  }, []);
 
-    if (document.getElementById('mojeeb-chat-widget')) return;
+  useEffect(() => {
+    if (!isMounted) return;
 
-    const script = document.createElement('script');
-    script.id = 'mojeeb-chat-widget';
-    script.src = 'https://mojeebcdn.z7.web.core.windows.net/mojeeb-widget.js';
-    script.setAttribute('data-widget-id', '7612d4f3-edbf-486d-be9e-f60a342adcde');
-    script.setAttribute('data-mode', 'headless');
-    script.setAttribute('data-config', '{}');
-    script.async = true;
+    if (!document.getElementById('mojeeb-chat-widget')) {
+      const script = document.createElement('script');
+      script.id = 'mojeeb-chat-widget';
+      script.src = 'https://mojeebcdn.z7.web.core.windows.net/mojeeb-widget.js';
+      script.setAttribute('data-widget-id', '7612d4f3-edbf-486d-be9e-f60a342adcde');
+      script.setAttribute('data-mode', 'headless');
+      script.setAttribute('data-config', '{}');
+      script.async = true;
+      document.body.appendChild(script);
+    }
 
-    document.body.appendChild(script);
+    let attachInterval: ReturnType<typeof setInterval> | null = null;
 
     const attachWidget = () => {
-      if ((window as any).MojeebWidget) {
-        try {
-          (window as any).MojeebWidget.attach('#my-chat-button', {});
-        } catch (e) {
-          console.error(e);
-        }
+      const btn = document.getElementById('my-chat-button');
+      const widget = (window as any).MojeebWidget;
+
+      if (!btn || !widget) return;
+
+      // لو اتربط قبل كده منربطوش تاني ونوقف الـ interval فوراً لمنع تحذيرات الكونسول
+      if (btn.getAttribute('data-mojeeb-attached') === 'true') {
+        if (attachInterval) clearInterval(attachInterval);
+        return;
+      }
+
+      try {
+        widget.attach('#my-chat-button', {});
+        btn.setAttribute('data-mojeeb-attached', 'true');
+        if (attachInterval) clearInterval(attachInterval);
+      } catch (e) {
+        // نتجاهل الخطأ ونوقف التكرار إذا كان مربوطاً بالفعل
+        btn.setAttribute('data-mojeeb-attached', 'true');
+        if (attachInterval) clearInterval(attachInterval);
       }
     };
 
-    const timer = setTimeout(attachWidget, 100);
-    const interval = setInterval(attachWidget, 500);
+    const timer = setTimeout(attachWidget, 150);
+    attachInterval = setInterval(attachWidget, 500);
 
     const checkWidgetState = () => {
       const chatWindow = document.querySelector('.mojeeb-widget-window') || document.querySelector('iframe[style*="visibility: visible"]');
@@ -101,15 +119,15 @@ export default function AIChatWidget() {
     const observer = new MutationObserver(checkWidgetState);
     observer.observe(document.body, { childList: true, subtree: true, attributes: true });
 
-    const stateInterval = setInterval(checkWidgetState, 500);
+    const stateInterval = setInterval(checkWidgetState, 1000);
 
     return () => {
       clearTimeout(timer);
-      clearInterval(interval);
+      if (attachInterval) clearInterval(attachInterval);
       clearInterval(stateInterval);
       observer.disconnect();
     };
-  }, [locale]);
+  }, [isMounted, locale, currentLangTexts.headerTitle, currentLangTexts.online, currentLangTexts.placeholder]);
 
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -128,10 +146,6 @@ export default function AIChatWidget() {
     }
     
     setIsOpen((prev) => !prev);
-    const btn = document.getElementById('my-chat-button');
-    if (btn) {
-      btn.click();
-    }
   };
 
   if (!isMounted) return null;
@@ -242,7 +256,7 @@ export default function AIChatWidget() {
             </button>
           )}
 
-          {/* أيقونة البوت (دائرية بالكامل وبها النص Ask Guide فقط بدون أي أيقونات أو أشكال) */}
+          {/* أيقونة البوت */}
           <button
             id="my-chat-button"
             onClick={handleClick}

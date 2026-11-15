@@ -175,16 +175,20 @@
   },
 
   "GoogleReviews": {
+  "tag": "Guest Reviews on Google Maps",
+  "title": "Visitor Reviews for The Light House",
   "badge": "Guest Reviews on Google Maps",
   "titlePrefix": "Visitor Reviews for",
   "basedOn": "Based on",
-  "reviewsSuffix": "verified reviews",
+  "reviewsCount": "Based on verified reviews",
+  "reviewssuffix": "verified reviews",
   "monthAgo": "1 month ago",
   "threeWeeksAgo": "3 weeks ago",
   "twoMonthsAgo": "2 months ago",
   "recently": "Recently",
   "noComment": "Excellent review without written comment.",
   "guestUser": "Google Visitor",
+  "googleBtn": "View original review on Google",
   "viewOriginal": "View original review on Google"
 },
   "Courses": {
@@ -199,11 +203,5 @@
     "sectionTitle": "Featured PADI Diving Courses",
     "sectionSubtitle": "Advance your diving career with our professional specialty courses in Hurghada.",
     "badge": "Red Sea Specialties"
-  },
-  "GoogleReviews": {
-    "tag": "Guest Reviews on Google Maps",
-    "title": "Visitor Reviews for The Light House",
-    "reviewsCount": "Based on verified reviews",
-    "googleBtn": "View original review on Google"
   }
 }

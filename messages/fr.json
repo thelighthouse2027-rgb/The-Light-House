@@ -174,13 +174,16 @@
     "cancelText": "Annuler"
   },
   "GoogleReviews": {
+  "tag": "Avis des clients sur Google Maps",
+  "title": "Avis des visiteurs pour The Light House",
   "badge": "Avis des clients sur Google Maps",
   "titlePrefix": "Avis des visiteurs pour",
   "basedOn": "Basé sur",
-  "reviewsSuffix": "avis vérifiés",
-  "monthAgo": "Il y a 1 mois",
-  "threeWeeksAgo": "Il y a 3 semaines",
-  "twoMonthsAgo": "Il y a 2 mois",
+  "reviewsCount": "Basé sur des avis vérifiés",
+  "googleBtn": "Voir l'avis original sur Google",
+  "monthAgo": "il y a 1 mois",
+  "threeWeeksAgo": "il y a 3 semaines",
+  "twoMonthsAgo": "il y a 2 mois",
   "recently": "Récemment",
   "noComment": "Excellente évaluation sans commentaire écrit.",
   "guestUser": "Visiteur Google",
@@ -197,11 +200,5 @@
     "buoyancy": "Cours de spécialité PADI Peak Performance Buoyancy à Hurghada",
     "badge": "Spécialités de la Mer Rouge",
     "sectionSubtitle": "Faites progresser votre carrière de plongeur avec nos cours de spécialité professionnels à Hurghada."
-  },
-  "GoogleReviews": {
-    "tag": "Avis des clients sur Google Maps",
-    "title": "Avis des visiteurs pour The Light House",
-    "reviewsCount": "Basé sur des avis vérifiés",
-    "googleBtn": "Voir l'avis original sur Google"
   }
 }

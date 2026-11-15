@@ -180,10 +180,8 @@ export default async function ServiceDetailPage({
     ? (bookingSection.formTitle[currentLang] || bookingSection.formTitle.en) 
     : null;
 
-  // استخراج بيانات السعر والعملات وسعة اليخت والواتساب من التبويبات الجديدة
+  // استخراج بيانات السعر باليورو فقط وسعة اليخت والواتساب
   const basePriceEur = typeof pageData.basePriceEur === 'number' && pageData.basePriceEur > 0 ? pageData.basePriceEur : null;
-  const priceUsd = basePriceEur ? (basePriceEur * 1.08).toFixed(0) : null;
-  const priceEgp = basePriceEur ? Math.round(basePriceEur * 53).toLocaleString() : null;
 
   const vessel = pageData.capacityOps?.vessel;
   const maxCap = pageData.capacityOps?.maxCapacity || 20;
@@ -244,29 +242,21 @@ export default async function ServiceDetailPage({
       )}
 
       {/* ===================================================================== */}
-      {/* 1. شريط معلومات اليخت والمقاعد وحاسبة العملات والواتساب (Trip Info Bar) */}
+      {/* 1. شريط معلومات اليخت والمقاعد والسعر والواتساب (Trip Info Bar) */}
       {/* ===================================================================== */}
       {hasTripDashboardBar && (
         <div className="max-w-6xl mx-auto mb-12 bg-[#0f172a] border border-[#1e293b] rounded-[24px] p-6 md:p-8 shadow-2xl">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
             
-            {/* السعر باليورو + المعادل بالدولار والمصري */}
+            {/* السعر باليورو فقط بدون العملة المصرية */}
             <div className="flex flex-col gap-1 border-b md:border-b-0 md:border-r border-[#1e293b] pb-4 md:pb-0 md:pr-6">
               <span className="text-xs uppercase tracking-wider text-zinc-400 font-bold">
                 {locale === 'de' ? 'Preis pro Person' : locale === 'fr' ? 'Prix par personne' : locale === 'pl' ? 'Cena za osobę' : 'Package Price'}
               </span>
               {basePriceEur ? (
-                <>
-                  <div className="flex items-baseline gap-3 mt-1">
-                    <span className="text-3xl md:text-4xl font-extrabold text-[#38bdf8]">€{basePriceEur}</span>
-                    <span className="text-xs font-semibold text-[#34d399] bg-[#064e3b]/60 border border-[#059669]/40 px-2.5 py-0.5 rounded-full">
-                      ~${priceUsd} USD
-                    </span>
-                  </div>
-                  <span className="text-xs text-amber-400 font-medium mt-1">
-                    Local Equivalent: ~{priceEgp} E£
-                  </span>
-                </>
+                <div className="flex items-baseline gap-3 mt-1">
+                  <span className="text-3xl md:text-4xl font-extrabold text-[#38bdf8]">€{basePriceEur}</span>
+                </div>
               ) : (
                 <span className="text-lg font-bold text-white mt-1">Contact for Custom Quote</span>
               )}
@@ -587,7 +577,6 @@ function renderSingleSection(section: any, currentLang: string, locale: string, 
             const cardTitleText = card.cardTitle?.[currentLang] || card.cardTitle?.en || pageName;
             const cardDescContent = card.cardDesc?.[currentLang] || card.cardDesc?.en;
             const displayPrice = card.priceText || (card.servicePrice ? `€${card.servicePrice}` : null);
-            const egpEquivalent = card.servicePrice ? `~${Math.round(card.servicePrice * 53).toLocaleString()} E£` : null;
             
             const hasCta = !!cardBtnText;
             const showAi = card.showAiGuide !== false;
@@ -635,10 +624,10 @@ function renderSingleSection(section: any, currentLang: string, locale: string, 
                         </Link>
                       )}
 
+                      {/* عرض السعر باليورو فقط بدون العملة المصرية */}
                       {displayPrice && (
-                        <div className="absolute top-3 right-3 z-10 bg-[#0f172a]/95 text-[#38bdf8] border border-white/10 px-3.5 py-1.5 rounded-2xl text-right shadow-md">
+                        <div className="absolute top-3 right-3 z-10 bg-[#0f172a]/95 text-[#38bdf8] border border-white/10 px-4 py-1.5 rounded-full text-center shadow-md">
                           <div className="text-sm font-extrabold leading-tight">{displayPrice}</div>
-                          {egpEquivalent && <div className="text-[10px] text-amber-400 font-medium">{egpEquivalent}</div>}
                         </div>
                       )}
                     </div>

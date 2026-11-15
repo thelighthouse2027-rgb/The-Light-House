@@ -10,8 +10,9 @@ import PromoBanner from '../components/PromoBanner';
 import PromoPopup from '../components/PromoPopup';
 import GoogleReviews from '../components/GoogleReviews';
 import { client } from '@/sanity/lib/client';
+import type { Metadata } from 'next';
 
-export const revalidate = 0;
+export const revalidate = 60;
 
 async function getPromoBanner() {
   const query = `*[_type == "promoBanner"][0]{
@@ -40,9 +41,10 @@ async function getHomeSeo(locale: string) {
   }
 }
 
-export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
   const seoData = await getHomeSeo(locale);
+  const domain = 'https://www.thelighthousee.com';
 
   const defaultTitles: Record<string, string> = {
     en: "The Light House - Diving & Safari Adventures",
@@ -63,6 +65,16 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   return {
     title: seoData?.metaTitle || defaultTitles[currentLang],
     description: seoData?.metaDescription || defaultDescriptions[currentLang],
+    alternates: {
+      canonical: `${domain}/${currentLang}`,
+      languages: {
+        'x-default': `${domain}/en`,
+        'en': `${domain}/en`,
+        'de': `${domain}/de`,
+        'fr': `${domain}/fr`,
+        'pl': `${domain}/pl`,
+      },
+    },
   };
 }
 

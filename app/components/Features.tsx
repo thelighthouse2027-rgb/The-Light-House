@@ -65,7 +65,7 @@ export default function Features() {
                 if (!isActive) {
                   setActive(index);
                 } else {
-                  router.push(`/${locale}/features/${item.slug}`); 
+                  router.push(`/${locale}/services/${item.slug}`); 
                 }
               }}
               onKeyDown={(e) => {
@@ -74,7 +74,7 @@ export default function Features() {
                   if (!isActive) {
                     setActive(index);
                   } else {
-                    router.push(`/${locale}/features/${item.slug}`);
+                    router.push(`/${locale}/services/${item.slug}`);
                   }
                 }
               }}
@@ -89,7 +89,7 @@ export default function Features() {
                 alt={imageText}
                 title={imageText}
                 fill
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) ${isActive ? '60vw' : '15vw'}, 400px"
+                sizes={`(max-width: 768px) 100vw, (max-width: 1200px) ${isActive ? '60vw' : '15vw'}, 400px`}
                 quality={80} 
                 className={`object-cover transition-transform duration-[1200ms] ${
                   isActive ? 'scale-105' : 'scale-100 grayscale-[40%]'
@@ -121,7 +121,7 @@ export default function Features() {
                   
                   <div className="mt-3 md:mt-6">
                     <Link 
-                      href={`/${locale}/features/${item.slug}`}
+                      href={`/${locale}/services/${item.slug}`}
                       title={imageText}
                       onClick={(e) => e.stopPropagation()} 
                     >

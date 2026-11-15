@@ -14,7 +14,8 @@ export default function Hero() {
         loop
         muted
         playsInline
-        preload="none"
+        preload="auto"
+        poster="/diving.webp"
         className="absolute inset-0 w-full h-full object-cover z-0"
       >
         <source src="/videos/hero.webm" type="video/webm" />

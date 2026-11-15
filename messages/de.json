@@ -174,17 +174,20 @@
     "cancelText": "Abbrechen"
   },
   "GoogleReviews": {
+  "tag": "Gästebewertungen auf Google Maps",
+  "title": "Besucherbewertungen für The Light House",
   "badge": "Gästebewertungen auf Google Maps",
   "titlePrefix": "Besucherbewertungen für",
   "basedOn": "Basierend auf",
-  "reviewsSuffix": "verifizierten Bewertungen",
-  "monthAgo": "Vor 1 Monat",
-  "threeWeeksAgo": "Vor 3 Wochen",
-  "twoMonthsAgo": "Vor 2 Monaten",
+  "reviewsCount": "Basierend auf verifizierten Bewertungen",
+  "googleBtn": "Originalbewertung auf Google ansehen",
+  "monthAgo": "vor 1 Monat",
+  "threeWeeksAgo": "vor 3 Wochen",
+  "twoMonthsAgo": "vor 2 Monaten",
   "recently": "Kürzlich",
-  "noComment": "Hervorragende Bewertung ohne geschriebenen Kommentar.",
+  "noComment": "Ausgezeichnete Bewertung ohne schriftlichen Kommentar.",
   "guestUser": "Google-Besucher",
-  "viewOriginal": "Originalbewertung auf Google anzeigen"
+  "viewOriginal": "Originalbewertung auf Google ansehen"
 },
   "Courses": {
     "nitrox": "PADI Enriched Air (Nitrox) Tauchkurs in Hurghada",
@@ -197,11 +200,5 @@
     "buoyancy": "PADI Peak Performance Buoyancy Spezialkurs in Hurghada",
     "badge": "Rotes Meer Spezialitäten",
     "sectionSubtitle": "Bringen Sie Ihre Tauchkarriere mit unseren professionellen Spezialkursen in Hurghada voran."
-  },
-  "GoogleReviews": {
-      "tag": "Gästebewertungen auf Google Maps",
-      "title": "Besucherbewertungen für The Light House",
-      "reviewsCount": "Basierend auf verifizierten Bewertungen",
-      "googleBtn": "Originalbewertung auf Google ansehen"
   }
 }
