@@ -838,9 +838,6 @@ export function CapacityOpsInput(props: ObjectInputProps) {
   );
 }
 
-// ==========================================
-// 4. مكون معاينة الواتساب ومولد روابط UTM
-// ==========================================
 export function WhatsAppMarketingInput(props: ObjectInputProps) {
   const val = (props.value as { utmSource?: string; whatsappPhone?: string; customMessage?: string }) || {};
 
