@@ -7,6 +7,7 @@ import AIChatWidget from '@/app/components/AIChatWidget';
 import Script from 'next/script';
 import type { Metadata } from 'next';
 import { Analytics } from '@vercel/analytics/next';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 export async function generateMetadata({
   params,
 }: {
@@ -100,6 +101,7 @@ export default async function LocaleLayout({
 
         </NextIntlClientProvider>
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
