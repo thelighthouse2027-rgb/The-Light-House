@@ -6,6 +6,7 @@ import Footer from '@/app/components/Footer';
 import AIChatWidget from '@/app/components/AIChatWidget';
 import Script from 'next/script';
 import type { Metadata } from 'next';
+import { Analytics } from '@vercel/analytics/next';
 export async function generateMetadata({
   params,
 }: {
@@ -98,6 +99,7 @@ export default async function LocaleLayout({
           <AIChatWidget />
 
         </NextIntlClientProvider>
+        <Analytics />
       </body>
     </html>
   );
