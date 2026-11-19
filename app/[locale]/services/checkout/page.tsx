@@ -59,7 +59,7 @@ _I need assistance regarding my payment or booking._`;
       setLoadingPay(true);
       setErrorMessage('');
 
-      // 1. طلب session ID من السيرفر
+      // 1. جلب الـ Session من السيرفر
       const res = await fetch('/api/pay', {
         method: 'POST'
       });
@@ -74,7 +74,7 @@ _I need assistance regarding my payment or booking._`;
       const formattedAmount = numericTotal.toFixed(2);
       const orderId = `LH-${Date.now()}`;
 
-      // 2. إعداد بوابة الدفع بجميع الحقول المطلوبة لـ QNB MPGS
+      // 2. إعداد الـ configure النظيف فقط بدون أي دوال مرفوضة
       if (typeof window !== 'undefined' && window.Checkout) {
         window.Checkout.configure({
           session: {
@@ -90,23 +90,11 @@ _I need assistance regarding my payment or booking._`;
             operation: 'PURCHASE',
             merchant: {
               name: 'The Light House Diving Center'
-            },
-            displayControl: {
-              billingAddress: 'HIDE',
-              customerEmail: 'HIDE'
             }
-          },
-          error: function(err: any) {
-            console.error('Checkout error:', err);
-            setLoadingPay(false);
-            setErrorMessage('Payment process interrupted. Please retry.');
-          },
-          cancel: function() {
-            setLoadingPay(false);
           }
         });
 
-        // 3. عرض شاشة إدخال البطاقة
+        // 3. فتح شاشة إدخال البطاقة
         window.Checkout.showPaymentPage();
       } else {
         window.location.href = `https://qnbalahli.test.gateway.mastercard.com/checkout/pay/${data.sessionId}`;
@@ -198,7 +186,6 @@ _I need assistance regarding my payment or booking._`;
             </div>
 
             <div className="space-y-4">
-              {/* صف الأزرار */}
               <div className="flex items-center gap-3">
                 <button 
                   type="button"
