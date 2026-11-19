@@ -104,7 +104,7 @@ export default async function GoogleReviews() {
                         </div>
                       )}
                       <div>
-                        <p className="font-bold text-white text-base text-start">{authorName}</h4>
+                        <p className="font-bold text-white text-base text-start">{authorName}</p>
                         <span className="text-xs text-gray-100 text-start block">{timeAgo}</span>
                       </div>
                     </div>
