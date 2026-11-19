@@ -59,17 +59,9 @@ _I need assistance regarding my payment or booking._`;
       setLoadingPay(true);
       setErrorMessage('');
 
-      const numericTotal = parseFloat(total) || 250;
-
-      // 1. طلب session ID من السيرفر وتثبيت تفاصيل الطلب
+      // 1. إنشاء Session بدون إرسال أي باراميتر يسبب تعارض
       const res = await fetch('/api/pay', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          amount: numericTotal,
-          currency: 'EUR',
-          serviceName: service
-        })
+        method: 'POST'
       });
 
       const data = await res.json();
@@ -78,11 +70,21 @@ _I need assistance regarding my payment or booking._`;
         throw new Error(data.error || 'Failed to initiate payment session');
       }
 
-      // 2. إعداد وتشغيل بوابة البنك
+      const numericTotal = parseFloat(total) || 250;
+      const formattedAmount = numericTotal.toFixed(2);
+      const orderId = `LH-${Date.now()}`;
+
+      // 2. إعداد بوابة الدفع بالبيانات المطلوبة
       if (typeof window !== 'undefined' && window.Checkout) {
         window.Checkout.configure({
           session: {
             id: data.sessionId
+          },
+          order: {
+            amount: formattedAmount,
+            currency: 'EGP',
+            description: service.slice(0, 100),
+            id: orderId
           },
           interaction: {
             merchant: {
@@ -96,17 +98,16 @@ _I need assistance regarding my payment or booking._`;
           error: function(err: any) {
             console.error('Checkout error:', err);
             setLoadingPay(false);
-            setErrorMessage('Payment window encountered an error. Please try again.');
+            setErrorMessage('Payment process interrupted. Please retry.');
           },
           cancel: function() {
             setLoadingPay(false);
           }
         });
 
-        // 3. فتح شاشة البنك المنبثقة
+        // 3. عرض شاشة إدخال البطاقة
         window.Checkout.showPaymentPage();
       } else {
-        // تحويل احتياطي مباشر
         window.location.href = `https://qnbalahli.test.gateway.mastercard.com/checkout/pay/${data.sessionId}`;
       }
     } catch (err: any) {
