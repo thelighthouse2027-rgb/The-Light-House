@@ -13,7 +13,7 @@ export default async function DivingCoursesSection() {
   const currentLang = ['en', 'de', 'fr', 'pl'].includes(locale) ? locale : 'en';
   const isRtl = locale === 'ar';
 
-  // استعلام متطابق 100% مع أسماء الحقول الفعلية في السكيما
+  // استعلام متوافق مع سكيما سانتي الخاصة بك
   const COURSES_QUERY = `
     *[_type == "flexiblePage" && defined(slug.current) && isActive != false && (
       pageCategory == "courses" || 
@@ -31,14 +31,14 @@ export default async function DivingCoursesSection() {
         ""
       ),
       
-      // الحقل الحقيقي للسعر في السكيما basePriceEur
+      // السعر من حقل basePriceEur
       "price": coalesce(
         basePriceEur,
         sections[_type == "gridCardsSection"][0].cards[0].servicePrice,
         null
       ),
 
-      // صورة الغلاف من السكيما mainCoverImage
+      // الصورة الرئيسية
       "img": coalesce(
         mainCoverImage.asset->url,
         sections[_type == "heroSection"][0].bgImage.asset->url,
@@ -70,7 +70,7 @@ export default async function DivingCoursesSection() {
   }));
 
   return (
-    <section className="py-20 w-full overflow-hidden bg-black" dir={isRtl ? 'rtl' : 'ltr'}>
+    <section className="py-20 w-full overflow-hidden bg-black animate-fadeIn" dir={isRtl ? 'rtl' : 'ltr'}>
       <div className="max-w-7xl mx-auto px-6">
         
         {/* رأس القسم مع أسهم التنقل */}
@@ -106,7 +106,7 @@ export default async function DivingCoursesSection() {
           )}
         </div>
 
-        {/* السلايدر */}
+        {/* مسار السلايدر */}
         {courses.length > 0 ? (
           <div
             id="courses-slider-track"
@@ -117,7 +117,7 @@ export default async function DivingCoursesSection() {
               <Link
                 key={idx}
                 href={`/${locale}/services/${course.slug}`}
-                className="snap-start shrink-0 w-[290px] md:w-[335px] bg-[#0b0f19]/90 border border-neutral-800/80 rounded-[1.75rem] overflow-hidden shadow-xl flex flex-col justify-between relative group hover:border-blue-500/50 transition duration-300 cursor-pointer"
+                className="snap-start shrink-0 w-[280px] md:w-[335px] bg-[#0b0f19]/90 border border-neutral-800/80 rounded-[1.75rem] overflow-hidden shadow-xl flex flex-col justify-between relative group hover:border-blue-500/50 transition duration-300 cursor-pointer"
               >
                 {/* الصورة والتدرج الداكن */}
                 <div className="relative w-full h-[185px] overflow-hidden bg-neutral-900">
@@ -144,7 +144,7 @@ export default async function DivingCoursesSection() {
                     </p>
                   </div>
 
-                  {/* الجزء السفلي: السعر وزر Details & Book طبق الأصل من الصورة المطلوبة */}
+                  {/* الجزء السفلي: السعر وزر Details & Book */}
                   <div className="pt-4 mt-4 border-t border-neutral-800/80 flex items-center justify-between gap-3">
                     <div className="flex flex-col">
                       <span className="text-[11px] text-zinc-400 font-medium">
@@ -188,6 +188,7 @@ export default async function DivingCoursesSection() {
 
       </div>
 
+      {/* سكريبت التمرير السلس مع تفادي أي تعارض بالـ Build */}
       <script dangerouslySetInnerHTML={{ __html: `
         (function() {
           const track = document.getElementById('courses-slider-track');
@@ -196,4 +197,16 @@ export default async function DivingCoursesSection() {
           if (!track || !prev || !next) return;
 
           const scrollStep = 330;
-          const isRtl = document.documentElement.
+          const isRtl = document.documentElement.dir === 'rtl' || ${isRtl ? 'true' : 'false'};
+
+          prev.onclick = function() {
+            track.scrollBy({ left: (isRtl ? scrollStep : -scrollStep), behavior: 'smooth' });
+          };
+          next.onclick = function() {
+            track.scrollBy({ left: (isRtl ? -scrollStep : scrollStep), behavior: 'smooth' });
+          };
+        })();
+      ` }} />
+    </section>
+  );
+}
