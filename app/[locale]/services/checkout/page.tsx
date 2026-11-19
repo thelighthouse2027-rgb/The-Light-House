@@ -61,6 +61,7 @@ _I need assistance regarding my payment or booking._`;
 
       const numericTotal = parseFloat(total) || 250;
 
+      // 1. طلب الجلسة من السيرفر
       const res = await fetch('/api/pay', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -76,6 +77,7 @@ _I need assistance regarding my payment or booking._`;
         throw new Error(data.error || 'Failed to initiate payment session');
       }
 
+      // 2. تشغيل شاشة البنك بجميع البيانات المطلوبة
       if (typeof window !== 'undefined' && window.Checkout) {
         window.Checkout.configure({
           session: {
@@ -88,6 +90,7 @@ _I need assistance regarding my payment or booking._`;
             id: data.orderId
           },
           interaction: {
+            operation: 'PURCHASE',
             merchant: {
               name: 'The Light House Diving Center'
             }
@@ -96,7 +99,7 @@ _I need assistance regarding my payment or booking._`;
 
         window.Checkout.showPaymentPage();
       } else {
-        throw new Error('Payment gateway is loading, please try again.');
+        throw new Error('Payment gateway is still loading, please click again.');
       }
     } catch (err: any) {
       console.error('Payment Error:', err);
@@ -110,7 +113,7 @@ _I need assistance regarding my payment or booking._`;
     <>
       <Script
         src="https://qnbalahli.test.gateway.mastercard.com/static/checkout/checkout.min.js"
-        strategy="beforeInteractive"
+        strategy="afterInteractive"
       />
 
       <main className="min-h-screen bg-black text-white pt-32 pb-20 px-6">
