@@ -3,11 +3,10 @@ import { NextResponse } from 'next/server';
 export async function POST(req: Request) {
   try {
     const body = await req.json().catch(() => ({}));
-    const { amount = 250, currency = 'EGP', serviceName = 'Diving Service' } = body;
+    const { amount = 250, currency = 'EGP' } = body;
 
-    // قراءة البيانات من متغيرات البيئة أو استخدام القيم الافتراضية
     const host = process.env.QNB_MPGS_HOST || 'qnbalahli.test.gateway.mastercard.com';
-    const version = process.env.QNB_API_VERSION || '61'; // الإصدار 61 متوافق ومستقر مع بوابة QNB
+    const version = process.env.QNB_API_VERSION || '61';
     const merchantId = process.env.QNB_MERCHANT_ID || 'NWTOKEN';
     const username = process.env.QNB_API_USERNAME || `merchant.${merchantId}`;
     const password = process.env.QNB_API_PASSWORD || 'cb0af0e0fefa7169b4b7374e145fe1c6';
@@ -16,13 +15,10 @@ export async function POST(req: Request) {
     const endpoint = `https://${host}/api/rest/version/${version}/merchant/${merchantId}/session`;
 
     const orderId = `LH-${Date.now()}`;
-    
-    // تأكيد المبلغ بصيغة رقمية صحيحة (خانة عشرية)
     const formattedAmount = (Number(amount) > 0 ? Number(amount) : 250).toFixed(2);
-    
-    // بوابة QNB التجريبية في مصر تدعم EGP كعملة أساسية
     const paymentCurrency = currency === 'EUR' ? 'EGP' : currency;
 
+    // تم حذف order.description ليتطابق مع مواصفات QNB MPGS الدقيقة
     const payload = {
       apiOperation: 'INITIATE_CHECKOUT',
       checkoutMode: 'WEBSITE',
@@ -36,8 +32,7 @@ export async function POST(req: Request) {
       order: {
         currency: paymentCurrency,
         amount: formattedAmount,
-        id: orderId,
-        description: serviceName.slice(0, 100)
+        id: orderId
       }
     };
 
