@@ -3,7 +3,14 @@
 import React, { Suspense, useState } from 'react';
 import { useSearchParams, useParams } from 'next/navigation';
 import Link from 'next/link';
+import Script from 'next/script';
 import { FaWhatsapp, FaCreditCard, FaShieldAlt } from 'react-icons/fa';
+
+declare global {
+  interface Window {
+    Checkout?: any;
+  }
+}
 
 function CheckoutContent() {
   const params = useParams();
@@ -52,9 +59,15 @@ _I need assistance regarding my payment or booking._`;
       setLoadingPay(true);
       setErrorMessage('');
 
-      // 1. إنشاء الجلسة من الـ API الداخلي
+      const numericTotal = parseFloat(total) || 250;
+
       const res = await fetch('/api/pay', {
-        method: 'POST'
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          amount: numericTotal,
+          currency: 'EUR'
+        })
       });
 
       const data = await res.json();
@@ -63,124 +76,151 @@ _I need assistance regarding my payment or booking._`;
         throw new Error(data.error || 'Failed to initiate payment session');
       }
 
-      // 2. التحويل المباشر لصفحة الدفع الرسمية الخاصة بـ QNB MPGS
-      window.location.href = `https://qnbalahli.test.gateway.mastercard.com/checkout/pay/${data.sessionId}`;
+      if (typeof window !== 'undefined' && window.Checkout) {
+        window.Checkout.configure({
+          session: {
+            id: data.sessionId
+          },
+          order: {
+            amount: data.amount,
+            currency: data.currency,
+            description: 'Diving Tour Booking',
+            id: data.orderId
+          },
+          interaction: {
+            merchant: {
+              name: 'The Light House Diving Center'
+            }
+          }
+        });
 
+        window.Checkout.showPaymentPage();
+      } else {
+        throw new Error('Payment gateway is loading, please try again.');
+      }
     } catch (err: any) {
       console.error('Payment Error:', err);
       setErrorMessage(err.message || 'Payment initiation failed.');
+    } finally {
       setLoadingPay(false);
     }
   };
 
   return (
-    <main className="min-h-screen bg-black text-white pt-32 pb-20 px-6">
-      <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 bg-[#101033] border border-blue-600/30 rounded-3xl p-8 shadow-2xl">
-        
-        {/* ملخص الحجز */}
-        <div className="flex flex-col justify-between border-b md:border-b-0 md:border-r border-blue-600/30 pb-8 md:pb-0 md:pr-8">
-          <div>
-            <h2 className="text-2xl font-extrabold mb-6 text-white tracking-wide">Booking Summary</h2>
-            <div className="space-y-3 text-zinc-300 text-sm">
-              <div className="flex justify-between border-b border-white/10 pb-2">
-                <span className="text-zinc-400">Service:</span>
-                <span className="font-bold text-white text-right max-w-[60%]">{service}</span>
+    <>
+      <Script
+        src="https://qnbalahli.test.gateway.mastercard.com/static/checkout/checkout.min.js"
+        strategy="beforeInteractive"
+      />
+
+      <main className="min-h-screen bg-black text-white pt-32 pb-20 px-6">
+        <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 bg-[#101033] border border-blue-600/30 rounded-3xl p-8 shadow-2xl">
+          
+          {/* ملخص الحجز */}
+          <div className="flex flex-col justify-between border-b md:border-b-0 md:border-r border-blue-600/30 pb-8 md:pb-0 md:pr-8">
+            <div>
+              <h2 className="text-2xl font-extrabold mb-6 text-white tracking-wide">Booking Summary</h2>
+              <div className="space-y-3 text-zinc-300 text-sm">
+                <div className="flex justify-between border-b border-white/10 pb-2">
+                  <span className="text-zinc-400">Service:</span>
+                  <span className="font-bold text-white text-right max-w-[60%]">{service}</span>
+                </div>
+                <div className="flex justify-between border-b border-white/10 pb-2">
+                  <span className="text-zinc-400">Date:</span>
+                  <span className="font-bold text-white">{date}</span>
+                </div>
+                <div className="flex justify-between border-b border-white/10 pb-2">
+                  <span className="text-zinc-400">Adults / Kids:</span>
+                  <span className="font-bold text-white">{adults} Adults, {children} Children</span>
+                </div>
+                <div className="flex justify-between border-b border-white/10 pb-2">
+                  <span className="text-zinc-400">Name:</span>
+                  <span className="font-bold text-white">{name}</span>
+                </div>
+                <div className="flex justify-between border-b border-white/10 pb-2">
+                  <span className="text-zinc-400">Email:</span>
+                  <span className="font-bold text-white">{email}</span>
+                </div>
+                <div className="flex justify-between border-b border-white/10 pb-2">
+                  <span className="text-zinc-400">Phone:</span>
+                  <span className="font-bold text-white">{phone}</span>
+                </div>
+                <div className="flex justify-between border-b border-white/10 pb-2">
+                  <span className="text-zinc-400">Country:</span>
+                  <span className="font-bold text-white">{country}</span>
+                </div>
               </div>
-              <div className="flex justify-between border-b border-white/10 pb-2">
-                <span className="text-zinc-400">Date:</span>
-                <span className="font-bold text-white">{date}</span>
+            </div>
+
+            <div className="pt-6 mt-6 border-t border-blue-600/30 flex justify-between items-center">
+              <span className="text-lg font-bold">Total to Pay</span>
+              <span className="text-3xl font-extrabold text-amber-400">€ {total}</span>
+            </div>
+          </div>
+
+          {/* لوحة الدفع */}
+          <div className="flex flex-col justify-between">
+            <div>
+              <h2 className="text-2xl font-extrabold mb-6 text-white tracking-wide">Checkout</h2>
+              
+              <div className="bg-blue-950/40 border border-blue-500/30 rounded-2xl p-6 mb-6 text-sm text-zinc-300 space-y-4 shadow-inner">
+                <div className="flex items-center gap-2 text-blue-400 font-semibold text-base">
+                  <FaShieldAlt className="text-lg" />
+                  <span>QNB AlAhli Secure Gateway</span>
+                </div>
+                <p className="text-xs text-zinc-300 leading-relaxed">
+                  Click the button below to complete your payment securely with Visa or Mastercard via the bank&apos;s encrypted portal.
+                </p>
+                <div className="pt-2 border-t border-white/10 flex items-center justify-between text-xs text-zinc-400">
+                  <span>Amount to be charged:</span>
+                  <span className="font-bold text-white text-base">€ {total}</span>
+                </div>
               </div>
-              <div className="flex justify-between border-b border-white/10 pb-2">
-                <span className="text-zinc-400">Adults / Kids:</span>
-                <span className="font-bold text-white">{adults} Adults, {children} Children</span>
+
+              {errorMessage && (
+                <div className="mb-4 p-3 rounded-xl bg-red-900/40 border border-red-500/50 text-red-200 text-xs">
+                  {errorMessage}
+                </div>
+              )}
+            </div>
+
+            <div className="space-y-4">
+              <div className="flex items-center gap-3">
+                <button 
+                  type="button"
+                  onClick={handleCardPayment}
+                  disabled={loadingPay}
+                  className="flex-1 flex items-center justify-center gap-3 py-4 bg-blue-600 hover:bg-blue-500 disabled:bg-blue-800 disabled:cursor-not-allowed text-white font-extrabold rounded-2xl transition-all duration-300 shadow-[0_0_20px_rgba(37,99,235,0.35)] hover:shadow-[0_0_30px_rgba(37,99,235,0.55)] text-center cursor-pointer text-lg"
+                >
+                  <FaCreditCard className="text-xl" />
+                  <span>{loadingPay ? 'Connecting to Bank...' : `Pay Now (€ ${total})`}</span>
+                </button>
+
+                <a 
+                  href={whatsappUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title="Contact Support on WhatsApp"
+                  className="w-14 h-14 flex items-center justify-center shrink-0 bg-emerald-600 hover:bg-emerald-500 text-white rounded-2xl transition-all duration-300 shadow-[0_0_15px_rgba(16,185,129,0.3)] hover:shadow-[0_0_25px_rgba(16,185,129,0.5)] cursor-pointer"
+                >
+                  <FaWhatsapp className="text-2xl" />
+                </a>
               </div>
-              <div className="flex justify-between border-b border-white/10 pb-2">
-                <span className="text-zinc-400">Name:</span>
-                <span className="font-bold text-white">{name}</span>
-              </div>
-              <div className="flex justify-between border-b border-white/10 pb-2">
-                <span className="text-zinc-400">Email:</span>
-                <span className="font-bold text-white">{email}</span>
-              </div>
-              <div className="flex justify-between border-b border-white/10 pb-2">
-                <span className="text-zinc-400">Phone:</span>
-                <span className="font-bold text-white">{phone}</span>
-              </div>
-              <div className="flex justify-between border-b border-white/10 pb-2">
-                <span className="text-zinc-400">Country:</span>
-                <span className="font-bold text-white">{country}</span>
+
+              <div className="text-center pt-2">
+                <Link 
+                  href={`/${locale}`} 
+                  className="text-xs text-zinc-400 hover:text-zinc-200 hover:underline transition-colors"
+                >
+                  Cancel and return to home
+                </Link>
               </div>
             </div>
           </div>
 
-          <div className="pt-6 mt-6 border-t border-blue-600/30 flex justify-between items-center">
-            <span className="text-lg font-bold">Total to Pay</span>
-            <span className="text-3xl font-extrabold text-amber-400">€ {total}</span>
-          </div>
         </div>
-
-        {/* لوحة الدفع */}
-        <div className="flex flex-col justify-between">
-          <div>
-            <h2 className="text-2xl font-extrabold mb-6 text-white tracking-wide">Checkout</h2>
-            
-            <div className="bg-blue-950/40 border border-blue-500/30 rounded-2xl p-6 mb-6 text-sm text-zinc-300 space-y-4 shadow-inner">
-              <div className="flex items-center gap-2 text-blue-400 font-semibold text-base">
-                <FaShieldAlt className="text-lg" />
-                <span>QNB AlAhli Secure Gateway</span>
-              </div>
-              <p className="text-xs text-zinc-300 leading-relaxed">
-                Click the button below to complete your payment securely with Visa or Mastercard via the bank&apos;s encrypted portal.
-              </p>
-              <div className="pt-2 border-t border-white/10 flex items-center justify-between text-xs text-zinc-400">
-                <span>Amount to be charged:</span>
-                <span className="font-bold text-white text-base">€ {total}</span>
-              </div>
-            </div>
-
-            {errorMessage && (
-              <div className="mb-4 p-3 rounded-xl bg-red-900/40 border border-red-500/50 text-red-200 text-xs">
-                {errorMessage}
-              </div>
-            )}
-          </div>
-
-          <div className="space-y-4">
-            <div className="flex items-center gap-3">
-              <button 
-                type="button"
-                onClick={handleCardPayment}
-                disabled={loadingPay}
-                className="flex-1 flex items-center justify-center gap-3 py-4 bg-blue-600 hover:bg-blue-500 disabled:bg-blue-800 disabled:cursor-not-allowed text-white font-extrabold rounded-2xl transition-all duration-300 shadow-[0_0_20px_rgba(37,99,235,0.35)] hover:shadow-[0_0_30px_rgba(37,99,235,0.55)] text-center cursor-pointer text-lg"
-              >
-                <FaCreditCard className="text-xl" />
-                <span>{loadingPay ? 'Redirecting to Bank...' : `Pay Now (€ ${total})`}</span>
-              </button>
-
-              <a 
-                href={whatsappUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                title="Contact Support on WhatsApp"
-                className="w-14 h-14 flex items-center justify-center shrink-0 bg-emerald-600 hover:bg-emerald-500 text-white rounded-2xl transition-all duration-300 shadow-[0_0_15px_rgba(16,185,129,0.3)] hover:shadow-[0_0_25px_rgba(16,185,129,0.5)] cursor-pointer"
-              >
-                <FaWhatsapp className="text-2xl" />
-              </a>
-            </div>
-
-            <div className="text-center pt-2">
-              <Link 
-                href={`/${locale}`} 
-                className="text-xs text-zinc-400 hover:text-zinc-200 hover:underline transition-colors"
-              >
-                Cancel and return to home
-              </Link>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </main>
+      </main>
+    </>
   );
 }
 
