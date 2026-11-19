@@ -6,11 +6,11 @@ import { useTranslations } from 'next-intl';
 export default function Services({ locale }: { locale: string }) {
   const t = useTranslations('ServicesSection');
 
+  // الكروت الثلاثة فقط بعد حذف السفاري
   const services = [
     { slug: 'courses', img: '/divingcourses.webp', key: 'diving-courses' },
     { slug: 'boat-trips', img: '/cruises.webp', key: 'boat-trips' },
     { slug: 'daily-diving', img: '/diving.webp', key: 'diving-trips' },
-    { slug: 'safari', img: '/safari.webp', key: 'safari' },
   ];
 
   return (
@@ -25,7 +25,8 @@ export default function Services({ locale }: { locale: string }) {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      {/* تقسيم متناسق لـ 3 كروت مع التوسيط */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
         {services.map((service) => {
           const serviceTitle = t(`items.${service.key}.title`);
 
@@ -35,7 +36,7 @@ export default function Services({ locale }: { locale: string }) {
               href={`/${locale}/services/${service.slug}`}
               title={serviceTitle}
               aria-label={serviceTitle}
-              className="group relative h-[420px] rounded-3xl overflow-hidden border border-white/10 shadow-2xl transition-all duration-500 hover:-translate-y-3 hover:shadow-[0_0_35px_rgba(37,99,235,0.35)] block"
+              className="group relative h-[440px] rounded-3xl overflow-hidden border border-white/10 shadow-2xl transition-all duration-500 hover:-translate-y-3 hover:shadow-[0_0_35px_rgba(37,99,235,0.35)] block"
             >
               <div className="absolute inset-0 w-full h-full">
                 <Image 
@@ -43,7 +44,7 @@ export default function Services({ locale }: { locale: string }) {
                   alt={serviceTitle} 
                   title={serviceTitle}
                   fill
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   className="object-cover transition-transform duration-700 group-hover:scale-110"
                 />
               </div>
