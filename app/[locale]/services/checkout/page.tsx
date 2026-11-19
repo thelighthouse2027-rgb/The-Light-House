@@ -59,9 +59,9 @@ _I need assistance regarding my payment or booking._`;
       setLoadingPay(true);
       setErrorMessage('');
 
-      const numericTotal = parseFloat(total) || 250;
+      const numericTotal = parseFloat(total) || 150;
 
-      // 1. طلب الجلسة من السيرفر
+      // 1. طلب session ID من السيرفر
       const res = await fetch('/api/pay', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -77,29 +77,35 @@ _I need assistance regarding my payment or booking._`;
         throw new Error(data.error || 'Failed to initiate payment session');
       }
 
-      // 2. تشغيل شاشة البنك بجميع البيانات المطلوبة
+      // 2. التحقق من تحميل سكريبت البنك
       if (typeof window !== 'undefined' && window.Checkout) {
         window.Checkout.configure({
-          session: {
-            id: data.sessionId
-          },
+          merchant: 'NWTOKEN',
           order: {
             amount: data.amount,
             currency: data.currency,
-            description: 'Diving Tour Booking',
+            description: 'The Light House Diving Booking',
             id: data.orderId
           },
           interaction: {
-            operation: 'PURCHASE',
             merchant: {
               name: 'The Light House Diving Center'
+            },
+            operation: 'PURCHASE',
+            displayControl: {
+              billingAddress: 'HIDE',
+              customerEmail: 'HIDE'
             }
+          },
+          session: {
+            id: data.sessionId
           }
         });
 
+        // تشغيل النافذة المضمنة (Lightbox) داخل الصفحة بدلاً من فتح نافذة خارجية معطلة
         window.Checkout.showPaymentPage();
       } else {
-        throw new Error('Payment gateway is still loading, please click again.');
+        throw new Error('Payment gateway script is loading, please try again.');
       }
     } catch (err: any) {
       console.error('Payment Error:', err);
@@ -111,15 +117,18 @@ _I need assistance regarding my payment or booking._`;
 
   return (
     <>
+      {/* تحميل سكريبت البنك مع ربط التاجر عبر data-attributes المعتمدة لدى MPGS */}
       <Script
         src="https://qnbalahli.test.gateway.mastercard.com/static/checkout/checkout.min.js"
-        strategy="afterInteractive"
+        data-error="errorCallback"
+        data-cancel="cancelCallback"
+        strategy="beforeInteractive"
       />
 
       <main className="min-h-screen bg-black text-white pt-32 pb-20 px-6">
         <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 bg-[#101033] border border-blue-600/30 rounded-3xl p-8 shadow-2xl">
           
-          {/* ملخص الحجز */}
+          {/* Booking Summary */}
           <div className="flex flex-col justify-between border-b md:border-b-0 md:border-r border-blue-600/30 pb-8 md:pb-0 md:pr-8">
             <div>
               <h2 className="text-2xl font-extrabold mb-6 text-white tracking-wide">Booking Summary</h2>
@@ -161,7 +170,7 @@ _I need assistance regarding my payment or booking._`;
             </div>
           </div>
 
-          {/* لوحة الدفع */}
+          {/* Checkout Panel */}
           <div className="flex flex-col justify-between">
             <div>
               <h2 className="text-2xl font-extrabold mb-6 text-white tracking-wide">Checkout</h2>
