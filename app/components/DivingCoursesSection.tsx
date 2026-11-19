@@ -2,7 +2,7 @@ import { getTranslations, getLocale } from 'next-intl/server';
 import { client } from '@/sanity/lib/client';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -13,46 +13,37 @@ export default async function DivingCoursesSection() {
   const currentLang = ['en', 'de', 'fr', 'pl'].includes(locale) ? locale : 'en';
   const isRtl = locale === 'ar';
 
-  // استعلام سانتي لجلب البيانات والسعر التلقائي مباشرة
+  // استعلام متطابق 100% مع أسماء الحقول الفعلية في السكيما
   const COURSES_QUERY = `
-    *[_type == "flexiblePage" && defined(slug.current) && !(slug.current in [
-      "courses",
-      "boat-trips",
-      "daily-diving",
-      "safari",
-      "specialties",
-      "diving-courses",
-      "desert-safari",
-      "quad-safari"
-    ]) && !(lower(slug.current) match "*safari*")
-       && !(lower(coalesce(pageTitle[$currentLang], pageTitle.en, pageTitle, "")) match "*safari*")
-    ] | order(_createdAt asc) {
+    *[_type == "flexiblePage" && defined(slug.current) && isActive != false && (
+      pageCategory == "courses" || 
+      (lower(slug.current) match "*course*" || lower(slug.current) match "*padi*" || lower(slug.current) match "*cmas*")
+    )] | order(_createdAt asc) {
       "slug": slug.current,
       "title": pageTitle,
-      "desc": coalesce(seo.metaDescription[$currentLang], shortDescription[$currentLang], ""),
       
-      // مسارات السعر التلقائية من سانتي
+      // استخراج النص من Portable Text المترجم
+      "desc": coalesce(
+        pt::text(shortDescription[$currentLang]),
+        pt::text(shortDescription.en),
+        seo.metaDescription[$currentLang],
+        seo.metaDescription.en,
+        ""
+      ),
+      
+      // الحقل الحقيقي للسعر في السكيما basePriceEur
       "price": coalesce(
-        price,
-        servicePrice,
-        coursePrice,
-        pricing.price,
-        sections[_type == "pricingSection"][0].plans[0].price,
-        sections[_type == "pricingSection"][0].tiers[0].price,
-        sections[_type == "gridCardsSection"][0].cards[0].price,
+        basePriceEur,
         sections[_type == "gridCardsSection"][0].cards[0].servicePrice,
-        sections[_type == "featuresSection"][0].price,
         null
       ),
-      "priceUnit": coalesce(priceUnit, "/ person"),
 
-      // مسار استخراج الصور الأصلي
+      // صورة الغلاف من السكيما mainCoverImage
       "img": coalesce(
         mainCoverImage.asset->url,
-        sections[_type == "heroSection"][0].image.asset->url,
         sections[_type == "heroSection"][0].bgImage.asset->url,
         sections[_type == "splitSection"][0].image.asset->url,
-        "/a.webp" 
+        "/a.webp"
       )
     }
   `;
@@ -72,13 +63,10 @@ export default async function DivingCoursesSection() {
     slug: page.slug,
     img: page.img,
     price: page.price,
-    priceUnit: page.priceUnit,
     title: page.title && typeof page.title === 'object'
       ? (page.title[currentLang] || page.title.en || 'Untitled')
       : (page.title || 'Untitled'),
-    desc: page.desc && typeof page.desc === 'object'
-      ? (page.desc[currentLang] || page.desc.en || '')
-      : (page.desc || '')
+    desc: page.desc || ''
   }));
 
   return (
@@ -118,7 +106,7 @@ export default async function DivingCoursesSection() {
           )}
         </div>
 
-        {/* مسار السلايدر: كروت أصغر، تدعم السحب بالأصابع على الموبايل */}
+        {/* السلايدر */}
         {courses.length > 0 ? (
           <div
             id="courses-slider-track"
@@ -129,23 +117,23 @@ export default async function DivingCoursesSection() {
               <Link
                 key={idx}
                 href={`/${locale}/services/${course.slug}`}
-                className="snap-start shrink-0 w-[280px] md:w-[320px] bg-[#0b0f19]/90 border border-neutral-800/80 rounded-[1.75rem] overflow-hidden shadow-xl flex flex-col justify-between relative group hover:border-blue-500/50 transition duration-300 cursor-pointer"
+                className="snap-start shrink-0 w-[290px] md:w-[335px] bg-[#0b0f19]/90 border border-neutral-800/80 rounded-[1.75rem] overflow-hidden shadow-xl flex flex-col justify-between relative group hover:border-blue-500/50 transition duration-300 cursor-pointer"
               >
-                {/* الصورة مع نفس التدرج الداكن المندمج مع جسم الكارت */}
+                {/* الصورة والتدرج الداكن */}
                 <div className="relative w-full h-[185px] overflow-hidden bg-neutral-900">
                   <Image
                     src={course.img}
                     alt={course.title}
                     title={course.title}
                     fill
-                    sizes="(max-width: 768px) 280px, 320px"
+                    sizes="(max-width: 768px) 290px, 335px"
                     quality={80}
                     className="object-cover group-hover:scale-105 transition-transform duration-700"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#0b0f19] via-transparent to-transparent pointer-events-none" />
                 </div>
 
-                {/* تفاصيل الكارت */}
+                {/* البيانات */}
                 <div className="p-5 flex flex-col justify-between flex-grow">
                   <div>
                     <h3 className="text-lg font-bold text-white mb-1.5 line-clamp-1 group-hover:text-blue-400 transition">
@@ -156,28 +144,36 @@ export default async function DivingCoursesSection() {
                     </p>
                   </div>
 
-                  {/* الجزء السفلي: السعر من سانتي وزر الاستكشاف الأصلي */}
-                  <div className="pt-3.5 mt-4 border-t border-neutral-800/80 flex items-center justify-between">
-                    <div>
-                      {course.price ? (
-                        <div className="flex items-baseline gap-1">
-                          <span className="text-lg font-extrabold text-white tracking-tight">
-                            €{course.price}
+                  {/* الجزء السفلي: السعر وزر Details & Book طبق الأصل من الصورة المطلوبة */}
+                  <div className="pt-4 mt-4 border-t border-neutral-800/80 flex items-center justify-between gap-3">
+                    <div className="flex flex-col">
+                      <span className="text-[11px] text-zinc-400 font-medium">
+                        Diving Course
+                      </span>
+                      <div className="flex items-baseline gap-1">
+                        {course.price ? (
+                          <>
+                            <span className="text-2xl font-black text-white tracking-tight">
+                              €{course.price}
+                            </span>
+                            <span className="text-[11px] text-zinc-400 font-normal">
+                              / person
+                            </span>
+                          </>
+                        ) : (
+                          <span className="text-sm font-semibold text-zinc-400">
+                            Check Details
                           </span>
-                          <span className="text-[10px] text-zinc-400 font-light">
-                            {course.priceUnit}
-                          </span>
-                        </div>
-                      ) : (
-                        <span className="text-xs text-zinc-400 font-medium">
-                          {t('exploreMore')}
-                        </span>
-                      )}
+                        )}
+                      </div>
                     </div>
 
-                    <div className="text-xs text-blue-400 group-hover:text-blue-300 font-medium inline-flex items-center gap-1 transition">
-                      <span>{t('exploreMore')}</span>
-                      <span className="text-blue-500 group-hover:translate-x-0.5 transition-transform">↗</span>
+                    <div className="px-4 py-2 bg-[#081225] hover:bg-blue-600 text-white rounded-2xl border border-neutral-700/80 hover:border-blue-500 transition-all duration-300 flex items-center gap-2.5 shadow-md group/btn shrink-0">
+                      <div className="flex flex-col text-left leading-tight">
+                        <span className="text-[11px] font-bold tracking-tight">Details &</span>
+                        <span className="text-[11px] font-bold tracking-tight">Book</span>
+                      </div>
+                      <ArrowRight className="w-4 h-4 text-white group-hover/btn:translate-x-0.5 transition-transform" />
                     </div>
                   </div>
                 </div>
@@ -192,7 +188,6 @@ export default async function DivingCoursesSection() {
 
       </div>
 
-      {/* تحكم الأسهم يمين ويسار مع دعم اتجاه اللغة */}
       <script dangerouslySetInnerHTML={{ __html: `
         (function() {
           const track = document.getElementById('courses-slider-track');
@@ -200,17 +195,5 @@ export default async function DivingCoursesSection() {
           const next = document.getElementById('courses-next-btn');
           if (!track || !prev || !next) return;
 
-          const scrollStep = 320;
-          const isRtl = document.documentElement.dir === 'rtl' || ${isRtl};
-
-          prev.onclick = function() {
-            track.scrollBy({ left: (isRtl ? scrollStep : -scrollStep), behavior: 'smooth' });
-          };
-          next.onclick = function() {
-            track.scrollBy({ left: (isRtl ? -scrollStep : scrollStep), behavior: 'smooth' });
-          };
-        })();
-      `}} />
-    </section>
-  );
-}
+          const scrollStep = 330;
+          const isRtl = document.documentElement.
