@@ -20,7 +20,7 @@ export default function Services({ locale }: { locale: string }) {
         <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-4 tracking-tight">
           {t('title')}
         </h2>
-        <p className="text-zinc-400 text-lg max-w-xl mx-auto">
+        <p className="text-zinc-100 text-lg max-w-xl mx-auto">
           {t('subtitle')}
         </p>
       </div>
@@ -54,7 +54,7 @@ export default function Services({ locale }: { locale: string }) {
                   {serviceTitle}
                 </h3>
 
-                <p className="text-zinc-300 text-sm font-light mb-4 line-clamp-2">
+                <p className="text-zinc-100 text-sm font-light mb-4 line-clamp-2">
                   {t(`items.${service.key}.desc`)}
                 </p>
 
