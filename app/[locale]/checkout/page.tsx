@@ -1,19 +1,19 @@
 'use client';
-import React from 'react';
-import { useSearchParams } from 'next/navigation';
+
+import React, { Suspense } from 'react';
+import { useSearchParams, useParams } from 'next/navigation';
 import Link from 'next/link';
 
-export default function CheckoutPage({ params }: { params: Promise<{ locale: string }> }) {
-  const resolvedParams = React.use(params);
-  const locale = resolvedParams.locale;
-  
+function CheckoutContent() {
+  const params = useParams();
+  const locale = (params?.locale as string) || 'en';
   const searchParams = useSearchParams();
 
   const service = searchParams.get('service') || 'Diving Tour';
   const date = searchParams.get('date') || 'Not specified';
   const adults = searchParams.get('adults') || '1';
   const children = searchParams.get('children') || '0';
-  const total = searchParams.get('total') || '150';
+  const total = searchParams.get('total') || '0';
   const name = searchParams.get('name') || 'Not specified';
   const email = searchParams.get('email') || 'Not specified';
   const phone = searchParams.get('phone') || 'Not specified';
@@ -28,14 +28,14 @@ export default function CheckoutPage({ params }: { params: Promise<{ locale: str
     <main className="min-h-screen bg-black text-white pt-32 pb-20 px-6">
       <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 bg-[#101033] border border-blue-600/30 rounded-3xl p-8 shadow-2xl">
         
-        {/* ملخص الحجز المثبت تلقائياً من بيانات العميل */}
+        {/* ملخص الحجز */}
         <div className="flex flex-col justify-between border-b md:border-b-0 md:border-r border-blue-600/30 pb-8 md:pb-0 md:pr-8">
           <div>
             <h2 className="text-2xl font-extrabold mb-6 text-white">Booking Summary</h2>
             <div className="space-y-3 text-zinc-300 text-sm">
               <div className="flex justify-between border-b border-white/10 pb-2">
                 <span className="text-zinc-400">Service:</span>
-                <span className="font-bold text-white text-right">{service}</span>
+                <span className="font-bold text-white text-right max-w-[60%]">{service}</span>
               </div>
               <div className="flex justify-between border-b border-white/10 pb-2">
                 <span className="text-zinc-400">Date:</span>
@@ -70,7 +70,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ locale: str
           </div>
         </div>
 
-        {/* نموذج تفاصيل الدفع */}
+        {/* تفاصيل البطاقة */}
         <div>
           <h2 className="text-2xl font-extrabold mb-6 text-white">Payment Details</h2>
           
@@ -81,6 +81,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ locale: str
                 type="text" 
                 placeholder="Name on card" 
                 required
+                defaultValue={name !== 'Not specified' ? name : ''}
                 className="w-full bg-white text-zinc-900 rounded-xl px-4 py-3 text-sm focus:outline-none"
               />
             </div>
@@ -91,6 +92,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ locale: str
                 type="text" 
                 placeholder="1234 5678 9012 3456" 
                 required
+                maxLength={19}
                 className="w-full bg-white text-zinc-900 rounded-xl px-4 py-3 text-sm focus:outline-none"
               />
             </div>
@@ -102,6 +104,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ locale: str
                   type="text" 
                   placeholder="MM/YY" 
                   required
+                  maxLength={5}
                   className="w-full bg-white text-zinc-900 rounded-xl px-4 py-3 text-sm focus:outline-none"
                 />
               </div>
@@ -111,6 +114,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ locale: str
                   type="password" 
                   placeholder="123" 
                   required
+                  maxLength={4}
                   className="w-full bg-white text-zinc-900 rounded-xl px-4 py-3 text-sm focus:outline-none"
                 />
               </div>
@@ -119,8 +123,6 @@ export default function CheckoutPage({ params }: { params: Promise<{ locale: str
             <div className="pt-4">
               <button 
                 type="submit"
-                title={`Pay Now (€ ${total})`}
-                aria-label={`Pay Now (€ ${total})`}
                 className="w-full py-4 bg-red-600 hover:bg-red-700 text-white font-bold rounded-2xl transition-all shadow-lg text-center cursor-pointer"
               >
                 Pay Now (€ {total})
@@ -130,8 +132,6 @@ export default function CheckoutPage({ params }: { params: Promise<{ locale: str
             <div className="text-center mt-4">
               <Link 
                 href={`/${locale}`} 
-                title="Cancel and return to home"
-                aria-label="Cancel and return to home"
                 className="text-xs text-zinc-400 hover:underline"
               >
                 Cancel and return to home
@@ -142,5 +142,17 @@ export default function CheckoutPage({ params }: { params: Promise<{ locale: str
 
       </div>
     </main>
+  );
+}
+
+export default function CheckoutPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-black text-white flex items-center justify-center">
+        <span className="text-zinc-400 text-sm">Loading Checkout...</span>
+      </div>
+    }>
+      <CheckoutContent />
+    </Suspense>
   );
 }
