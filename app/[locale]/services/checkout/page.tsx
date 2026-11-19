@@ -30,7 +30,6 @@ function CheckoutContent() {
   const [loadingPay, setLoadingPay] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
-  // رسالة الواتساب للمساعدة السريعة
   const whatsappMessage = 
 `🌊 *BOOKING SUPPORT / INQUIRY* 🤿
 *The Light House Diving Center*
@@ -55,22 +54,19 @@ _I need assistance regarding my payment or booking._`;
 
   const whatsappUrl = `https://wa.me/201036930803?text=${encodeURIComponent(whatsappMessage)}`;
 
-  // بدء الدفع واستدعاء شاشة البنك
   const handleCardPayment = async () => {
     try {
       setLoadingPay(true);
       setErrorMessage('');
 
       const numericTotal = parseFloat(total) || 250;
+      const formattedAmount = numericTotal.toFixed(2);
+      const orderId = `LH-${Date.now()}`;
 
+      // 1. طلب session ID من السيرفر
       const res = await fetch('/api/pay', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          amount: numericTotal,
-          currency: 'EUR',
-          serviceName: service
-        })
+        headers: { 'Content-Type': 'application/json' }
       });
 
       const data = await res.json();
@@ -79,11 +75,16 @@ _I need assistance regarding my payment or booking._`;
         throw new Error(data.error || 'Failed to initiate payment session');
       }
 
+      // 2. تمرير بيانات الدفع للـ Hosted Checkout
       if (typeof window !== 'undefined' && window.Checkout) {
-        // تهيئة البوابة ببيانات الجلسة واسم التاجر لتفادي خطأ interaction.merchant
         window.Checkout.configure({
           session: {
             id: data.sessionId
+          },
+          order: {
+            amount: formattedAmount,
+            currency: 'EGP',
+            id: orderId
           },
           interaction: {
             merchant: {
@@ -101,15 +102,14 @@ _I need assistance regarding my payment or booking._`;
           cancel: function() {
             setLoadingPay(false);
           },
-          complete: function(result: any) {
+          complete: function() {
             window.location.href = `/${locale}`;
           }
         });
 
-        // تشغيل شاشة الدفع المنبثقة
+        // 3. فتح شاشة البنك
         window.Checkout.showPaymentPage();
       } else {
-        // تحويل احتياطي مباشر في حال تعذر تشغيل السكريبت
         window.location.href = `https://qnbalahli.test.gateway.mastercard.com/checkout/pay/${data.sessionId}`;
       }
     } catch (err: any) {
@@ -122,7 +122,6 @@ _I need assistance regarding my payment or booking._`;
 
   return (
     <>
-      {/* سكريبت بوابة QNB MPGS مع تحميل سريع بعد تفاعل الصفحة */}
       <Script
         src="https://qnbalahli.test.gateway.mastercard.com/static/checkout/checkout.min.js"
         strategy="afterInteractive"
