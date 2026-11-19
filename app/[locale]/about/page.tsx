@@ -11,6 +11,86 @@ export default async function AboutPage({
   const { locale } = await params;
   const t = await getTranslations('AboutPage');
 
+  // نصوص المؤسس والاعتمادات الرسمية مترجمة داخلياً لكل لغة تلقائياً
+  const contentMap: Record<string, {
+    founderRole: string;
+    founderName: string;
+    founderBio: string;
+    experienceBadge: string;
+    safetyBadge: string;
+    certificationsTitle: string;
+    cdwsTitle: string;
+    cdwsDesc: string;
+    padiTitle: string;
+    padiDesc: string;
+    isoTitle: string;
+    isoDesc: string;
+    verifyLink: string;
+  }> = {
+    de: {
+      founderRole: 'Gründer & Geschäftsführer',
+      founderName: 'Yasser Zidan',
+      founderBio: 'Angetrieben von einer tiefen Leidenschaft für das Rote Meer und langjähriger maritimer Erfahrung gründete Yasser Zidan The Light House Diving Center mit einer klaren Vision: internationale Tauchstandards mit echter Gastfreundschaft zu verbinden. Unter seiner Führung wird jeder Tauchgang zu einem inspirierenden und sicheren Unterwassererlebnis.',
+      experienceBadge: 'Jahre an maritimer Erfahrung',
+      safetyBadge: 'Höchste internationale Sicherheitsstandards',
+      certificationsTitle: 'Offizielle Akkreditierungen & Lizenzen',
+      cdwsTitle: 'CDWS Zertifiziert',
+      cdwsDesc: 'Offiziell zertifiziertes und lizenziertes Mitglied (#7181) gemäß den Vorschriften des ägyptischen Tourismusministeriums.',
+      padiTitle: 'PADI-zertifiziertes Tauchcenter',
+      padiDesc: 'Autorisiertes Tauchzentrum für erstklassige Ausbildung und geführte Tauchausflüge nach globalen Standards.',
+      isoTitle: 'ISO-Qualitätszertifiziert',
+      isoDesc: 'Vollständige Einhaltung internationaler Standards für Freizeittauchdienste und Sicherheit (ISO 24803).',
+      verifyLink: 'Offizielle Lizenz prüfen'
+    },
+    fr: {
+      founderRole: 'Fondateur et Directeur Général',
+      founderName: 'Yasser Zidan',
+      founderBio: "Animé par une véritable passion pour la mer Rouge et des années d'expertise maritime, Yasser Zidan a fondé The Light House Diving Center avec une vision claire : associer les normes internationales de plongée à une hospitalité authentique. Chaque plongée est une aventure inoubliable bâtie sur la confiance, le professionnalisme et l'excellence.",
+      experienceBadge: "Des années d'expérience en mer Rouge",
+      safetyBadge: 'Engagement absolu envers la sécurité',
+      certificationsTitle: 'Accréditations & Licences Officielles',
+      cdwsTitle: 'Certifié CDWS',
+      cdwsDesc: 'Membre officiel et agréé (#7181), en parfaite conformité avec les directives du Ministère égyptien du Tourisme.',
+      padiTitle: 'Centre de Plongée PADI',
+      padiDesc: "Centre agréé dispensant des formations récréatives et des sorties d'exploration selon les normes mondiales.",
+      isoTitle: 'Conformité aux Normes ISO',
+      isoDesc: 'Conformité totale avec les normes internationales relatives aux services de plongée de loisir (ISO 24803).',
+      verifyLink: 'Vérifier la licence officielle'
+    },
+    pl: {
+      founderRole: 'Założyciel i Dyrektor Zarządzający',
+      founderName: 'Yasser Zidan',
+      founderBio: 'Kierując się pasją do Morza Czerwonego oraz wieloletnim doświadczeniem morskim, Yasser Zidan założył The Light House Diving Center z wizją połączenia światowych standardów nurkowania z prawdziwą gościnnością. Pod jego kierownictwem każde nurkowanie staje się bezpieczną i niezapomnianą przygodą.',
+      experienceBadge: 'Lata doświadczenia na Morzu Czerwonym',
+      safetyBadge: 'Zgodność z normami bezpieczeństwa',
+      certificationsTitle: 'Oficjalne Akredytacje i Certyfikaty',
+      cdwsTitle: 'Certyfikat CDWS',
+      cdwsDesc: 'Oficjalnie certyfikowany członek (#7181), w pełni spełniający wymogi egipskiego Ministerstwa Turystyki.',
+      padiTitle: 'Centrum Nurkowe PADI',
+      padiDesc: 'Autoryzowane centrum oferujące szkolenia oraz profesjonalne wyprawy nurkowe według standardów światowych.',
+      isoTitle: 'Zgodność z Normami ISO',
+      isoDesc: 'Pełna zgodność z międzynarodowymi normami dotyczącymi rekreacyjnych usług nurkowych (ISO 24803).',
+      verifyLink: 'Sprawdź oficjalną licencję'
+    },
+    en: {
+      founderRole: 'Founder & Managing Director',
+      founderName: 'Yasser Zidan',
+      founderBio: 'Driven by a genuine passion for the Red Sea and years of maritime expertise, Yasser Zidan established The Light House Diving Center with a clear vision: delivering world-class diving standards alongside genuine Red Sea hospitality. Under his leadership, every dive is crafted as an inspiring underwater journey defined by trust, rigorous safety standards, and unforgettable memories for divers from around the world.',
+      experienceBadge: 'Years of Red Sea Leadership',
+      safetyBadge: 'Strict Safety & Quality Commitment',
+      certificationsTitle: 'Official Accreditations & Licenses',
+      cdwsTitle: 'CDWS Certified',
+      cdwsDesc: 'Officially certified and licensed member (#7181) under Egyptian Ministry of Tourism regulations.',
+      padiTitle: 'PADI Dive Center',
+      padiDesc: 'Authorized dive center delivering world-class recreational training and guided sea excursions.',
+      isoTitle: 'ISO Standards Compliant',
+      isoDesc: 'Full adherence to international safety and recreational diving service quality standards (ISO 24803).',
+      verifyLink: 'Verify Official License'
+    }
+  };
+
+  const currentContent = contentMap[locale] || contentMap.en;
+
   return (
     <main className="w-full min-h-screen bg-black text-white selection:bg-red-600 selection:text-white pb-24">
       
@@ -67,8 +147,8 @@ export default async function AboutPage({
               <div className="relative w-full max-w-[380px] aspect-[4/3] rounded-3xl overflow-hidden border-2 border-blue-500/40 shadow-[0_0_35px_rgba(37,99,235,0.25)] group">
                 <Image
                   src="/founder.jpeg" 
-                  alt={t('founderName')}
-                  title={t('founderName')}
+                  alt={currentContent.founderName}
+                  title={currentContent.founderName}
                   fill
                   sizes="(max-width: 1024px) 100vw, 400px"
                   className="object-cover transition-transform duration-700 group-hover:scale-105"
@@ -81,15 +161,15 @@ export default async function AboutPage({
             <div className="lg:col-span-7 flex flex-col justify-center space-y-6">
               <div>
                 <span className="inline-block px-4 py-1.5 rounded-full bg-blue-600/20 border border-blue-500/40 text-blue-400 text-xs font-bold uppercase tracking-wider mb-3">
-                  {t('founderRole')}
+                  {currentContent.founderRole}
                 </span>
                 <h2 className="text-3xl md:text-4xl font-extrabold text-white tracking-tight">
-                  {t('founderName')}
+                  {currentContent.founderName}
                 </h2>
               </div>
 
               <p className="text-zinc-300 text-base md:text-lg leading-relaxed font-light">
-                {t('founderBio')}
+                {currentContent.founderBio}
               </p>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-white/10">
@@ -98,7 +178,7 @@ export default async function AboutPage({
                     <FaAward className="text-xl" />
                   </div>
                   <span className="text-sm font-semibold text-zinc-200">
-                    {t('experienceBadge')}
+                    {currentContent.experienceBadge}
                   </span>
                 </div>
 
@@ -107,7 +187,7 @@ export default async function AboutPage({
                     <FaShieldAlt className="text-xl" />
                   </div>
                   <span className="text-sm font-semibold text-zinc-200">
-                    {t('safetyBadge')}
+                    {currentContent.safetyBadge}
                   </span>
                 </div>
               </div>
@@ -121,7 +201,7 @@ export default async function AboutPage({
         <div>
           <div className="text-center mb-10">
             <h2 className="text-2xl md:text-3xl font-extrabold text-white mb-2">
-              {t('certificationsTitle')}
+              {currentContent.certificationsTitle}
             </h2>
             <div className="w-16 h-1 bg-red-600 mx-auto rounded-full"></div>
           </div>
@@ -139,9 +219,9 @@ export default async function AboutPage({
                     className="object-contain p-1"
                   />
                 </div>
-                <h3 className="text-xl font-bold text-white mb-2">{t('cdwsTitle')}</h3>
+                <h3 className="text-xl font-bold text-white mb-2">{currentContent.cdwsTitle}</h3>
                 <p className="text-zinc-400 text-sm leading-relaxed mb-6">
-                  {t('cdwsDesc')}
+                  {currentContent.cdwsDesc}
                 </p>
               </div>
 
@@ -155,7 +235,7 @@ export default async function AboutPage({
                   <span className="w-6 h-6 rounded-lg bg-blue-500/20 flex items-center justify-center font-black text-[11px] text-blue-300 group-hover/btn:text-white">
                     CDWS
                   </span>
-                  <span>{t('verifyLink')}</span>
+                  <span>{currentContent.verifyLink}</span>
                 </div>
                 <FaExternalLinkAlt className="text-xs opacity-70 group-hover/btn:opacity-100" />
               </a>
@@ -172,9 +252,9 @@ export default async function AboutPage({
                     className="object-contain p-1"
                   />
                 </div>
-                <h3 className="text-xl font-bold text-white mb-2">{t('padiTitle')}</h3>
+                <h3 className="text-xl font-bold text-white mb-2">{currentContent.padiTitle}</h3>
                 <p className="text-zinc-400 text-sm leading-relaxed mb-6">
-                  {t('padiDesc')}
+                  {currentContent.padiDesc}
                 </p>
               </div>
 
@@ -188,7 +268,7 @@ export default async function AboutPage({
                   <span className="w-6 h-6 rounded-lg bg-red-500/20 flex items-center justify-center font-black text-[10px] text-red-300 group-hover/btn:text-white tracking-tighter">
                     PADI
                   </span>
-                  <span>{t('verifyLink')}</span>
+                  <span>{currentContent.verifyLink}</span>
                 </div>
                 <FaExternalLinkAlt className="text-xs opacity-70 group-hover/btn:opacity-100" />
               </a>
@@ -200,21 +280,21 @@ export default async function AboutPage({
                 <div className="w-16 h-16 rounded-2xl bg-emerald-600/15 border border-emerald-500/30 flex items-center justify-center p-2 mb-5 group-hover:scale-105 transition-transform">
                   <FaShieldAlt className="text-3xl text-emerald-400" />
                 </div>
-                <h3 className="text-xl font-bold text-white mb-2">{t('isoTitle')}</h3>
+                <h3 className="text-xl font-bold text-white mb-2">{currentContent.isoTitle}</h3>
                 <p className="text-zinc-400 text-sm leading-relaxed mb-6">
-                  {t('isoDesc')}
+                  {currentContent.isoDesc}
                 </p>
               </div>
 
               <div className="w-full py-3 px-4 rounded-xl bg-emerald-600/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold flex items-center justify-center text-center">
-                <span>{t('isoDesc')}</span>
+                <span>{currentContent.isoDesc}</span>
               </div>
             </div>
 
           </div>
         </div>
 
-        {/* شبكة الكروت القديمة pp.webp */}
+        {/* الكروت السابقة pp.webp */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           <div className="lg:col-span-7 space-y-8">
             <div className="bg-zinc-900/40 backdrop-blur-xl border border-white/10 rounded-[2.5rem] p-8 md:p-10 hover:border-red-600/50 transition-all duration-300 shadow-xl">
@@ -250,7 +330,7 @@ export default async function AboutPage({
           </div>
         </div>
 
-        {/* قسم السلامة */}
+        {/* قسم السلامة والأمان */}
         <div className="relative rounded-[2.5rem] overflow-hidden bg-gradient-to-r from-red-950/40 via-zinc-900/60 to-black border border-red-600/30 p-8 md:p-14 shadow-2xl">
           <div className="relative z-10 max-w-3xl">
             <h3 className="text-3xl md:text-4xl font-extrabold text-white mb-6">{t('safetyTitle')}</h3>
@@ -260,7 +340,7 @@ export default async function AboutPage({
           </div>
         </div>
 
-        {/* معرض الصور الثنائي */}
+        {/* معرض الصور */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="bg-zinc-900/40 backdrop-blur-xl border border-white/10 rounded-[2.5rem] p-8 md:p-10 flex flex-col justify-between">
             <div>
