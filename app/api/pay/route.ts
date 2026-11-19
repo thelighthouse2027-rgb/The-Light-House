@@ -5,16 +5,23 @@ export async function POST(req: Request) {
     const body = await req.json().catch(() => ({}));
     const { amount = 250, currency = 'EGP', serviceName = 'Diving Service' } = body;
 
+    // قراءة البيانات من متغيرات البيئة أو استخدام القيم الافتراضية
     const host = process.env.QNB_MPGS_HOST || 'qnbalahli.test.gateway.mastercard.com';
-    const version = process.env.QNB_API_VERSION || '100';
+    const version = process.env.QNB_API_VERSION || '61'; // الإصدار 61 متوافق ومستقر مع بوابة QNB
     const merchantId = process.env.QNB_MERCHANT_ID || 'NWTOKEN';
-    const username = process.env.QNB_API_USERNAME || 'merchant.NWTOKEN';
+    const username = process.env.QNB_API_USERNAME || `merchant.${merchantId}`;
     const password = process.env.QNB_API_PASSWORD || 'cb0af0e0fefa7169b4b7374e145fe1c6';
 
     const authHeader = 'Basic ' + Buffer.from(`${username}:${password}`).toString('base64');
     const endpoint = `https://${host}/api/rest/version/${version}/merchant/${merchantId}/session`;
 
     const orderId = `LH-${Date.now()}`;
+    
+    // تأكيد المبلغ بصيغة رقمية صحيحة (خانة عشرية)
+    const formattedAmount = (Number(amount) > 0 ? Number(amount) : 250).toFixed(2);
+    
+    // بوابة QNB التجريبية في مصر تدعم EGP كعملة أساسية
+    const paymentCurrency = currency === 'EUR' ? 'EGP' : currency;
 
     const payload = {
       apiOperation: 'INITIATE_CHECKOUT',
@@ -22,16 +29,15 @@ export async function POST(req: Request) {
       interaction: {
         operation: 'PURCHASE',
         merchant: {
-          name: 'The Light House Diving Center',
-          url: 'https://www.thelighthousee.com'
+          name: 'The Light House Diving Center'
         },
         returnUrl: 'https://www.thelighthousee.com/en'
       },
       order: {
-        currency: currency,
-        amount: Number(amount).toFixed(2),
+        currency: paymentCurrency,
+        amount: formattedAmount,
         id: orderId,
-        description: serviceName
+        description: serviceName.slice(0, 100)
       }
     };
 
@@ -46,7 +52,7 @@ export async function POST(req: Request) {
 
     const data = await res.json();
 
-    if (data.result === 'SUCCESS') {
+    if (res.ok && data.result === 'SUCCESS') {
       return NextResponse.json({
         success: true,
         sessionId: data.session?.id,
@@ -55,8 +61,14 @@ export async function POST(req: Request) {
       });
     }
 
+    console.error('QNB MPGS Error Response:', JSON.stringify(data));
+
     return NextResponse.json(
-      { success: false, error: 'QNB session creation failed', details: data },
+      { 
+        success: false, 
+        error: data?.error?.explanation || data?.cause || 'QNB session creation failed',
+        details: data 
+      },
       { status: 400 }
     );
   } catch (error: any) {
