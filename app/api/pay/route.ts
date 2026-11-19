@@ -2,6 +2,9 @@ import { NextResponse } from 'next/server';
 
 export async function POST(req: Request) {
   try {
+    const body = await req.json().catch(() => ({}));
+    const { amount = 250, currency = 'EGP' } = body;
+
     const host = process.env.QNB_MPGS_HOST || 'qnbalahli.test.gateway.mastercard.com';
     const version = process.env.QNB_API_VERSION || '61';
     const merchantId = process.env.QNB_MERCHANT_ID || 'NWTOKEN';
@@ -11,28 +14,48 @@ export async function POST(req: Request) {
     const authHeader = 'Basic ' + Buffer.from(`${username}:${password}`).toString('base64');
     const endpoint = `https://${host}/api/rest/version/${version}/merchant/${merchantId}/session`;
 
-    // طلب إنشاء Session فارغ تماماً وفق مواصفات MPGS الرسمية
+    const orderId = `LH-${Date.now()}`;
+    const formattedAmount = (Number(amount) > 0 ? Number(amount) : 250).toFixed(2);
+    const paymentCurrency = currency === 'EUR' ? 'EGP' : currency;
+
+    // بنية الجلسة المعتمدة لدى Mastercard MPGS لتوليد Checkout Session صالحة
+    const payload = {
+      apiOperation: 'INITIATE_CHECKOUT',
+      interaction: {
+        operation: 'PURCHASE',
+        merchant: {
+          name: 'The Light House Diving Center'
+        },
+        returnUrl: 'https://www.thelighthousee.com/en'
+      },
+      order: {
+        currency: paymentCurrency,
+        amount: formattedAmount,
+        id: orderId
+      }
+    };
+
     const res = await fetch(endpoint, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': authHeader
       },
-      body: JSON.stringify({})
+      body: JSON.stringify(payload)
     });
 
     const data = await res.json();
 
-    if (res.ok && data.session?.id) {
+    if (res.ok && (data.result === 'SUCCESS' || data.session?.id)) {
       return NextResponse.json({
         success: true,
         sessionId: data.session.id,
         successIndicator: data.successIndicator,
-        merchantId: merchantId
+        orderId: orderId
       });
     }
 
-    console.error('QNB MPGS Session Error:', JSON.stringify(data));
+    console.error('QNB Session Error:', JSON.stringify(data));
 
     return NextResponse.json(
       { 
@@ -48,11 +71,4 @@ export async function POST(req: Request) {
       { status: 500 }
     );
   }
-}
-
-export async function GET() {
-  return NextResponse.json({ 
-    status: 'Ready', 
-    message: 'QNB MPGS Gateway Endpoint is active' 
-  });
 }
