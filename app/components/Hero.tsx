@@ -36,7 +36,7 @@ export default function Hero() {
           {t('title')}
         </h1>
 
-        <p className="text-lg md:text-2xl text-zinc-300 max-w-2xl font-light leading-relaxed">
+        <p className="text-lg md:text-2xl text-zinc-100 max-w-2xl font-light leading-relaxed">
           {t('subtitle')}
         </p>
 
