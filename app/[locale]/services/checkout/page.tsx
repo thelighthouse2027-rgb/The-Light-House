@@ -55,7 +55,7 @@ _I need assistance regarding my payment or booking._`;
 
   const whatsappUrl = `https://wa.me/201036930803?text=${encodeURIComponent(whatsappMessage)}`;
 
-  // بدء الدفع واستدعاء شاشة البنك المنبثقة
+  // بدء الدفع واستدعاء شاشة البنك
   const handleCardPayment = async () => {
     try {
       setLoadingPay(true);
@@ -80,16 +80,40 @@ _I need assistance regarding my payment or booking._`;
       }
 
       if (typeof window !== 'undefined' && window.Checkout) {
+        // تهيئة البوابة ببيانات الجلسة واسم التاجر لتفادي خطأ interaction.merchant
         window.Checkout.configure({
           session: {
             id: data.sessionId
+          },
+          interaction: {
+            merchant: {
+              name: 'The Light House Diving Center'
+            },
+            displayControl: {
+              billingAddress: 'HIDE',
+              customerEmail: 'HIDE'
+            }
+          },
+          error: function(err: any) {
+            console.error('Checkout error:', err);
+            setLoadingPay(false);
+          },
+          cancel: function() {
+            setLoadingPay(false);
+          },
+          complete: function(result: any) {
+            window.location.href = `/${locale}`;
           }
         });
+
+        // تشغيل شاشة الدفع المنبثقة
         window.Checkout.showPaymentPage();
       } else {
-        throw new Error('Payment gateway script not loaded yet. Please try again.');
+        // تحويل احتياطي مباشر في حال تعذر تشغيل السكريبت
+        window.location.href = `https://qnbalahli.test.gateway.mastercard.com/checkout/pay/${data.sessionId}`;
       }
     } catch (err: any) {
+      console.error('Payment Error:', err);
       setErrorMessage(err.message || 'Payment initiation failed.');
     } finally {
       setLoadingPay(false);
@@ -98,10 +122,10 @@ _I need assistance regarding my payment or booking._`;
 
   return (
     <>
-      {/* سكريبت بوابة QNB MPGS */}
+      {/* سكريبت بوابة QNB MPGS مع تحميل سريع بعد تفاعل الصفحة */}
       <Script
         src="https://qnbalahli.test.gateway.mastercard.com/static/checkout/checkout.min.js"
-        strategy="lazyOnload"
+        strategy="afterInteractive"
       />
 
       <main className="min-h-screen bg-black text-white pt-32 pb-20 px-6">
@@ -176,7 +200,7 @@ _I need assistance regarding my payment or booking._`;
             </div>
 
             <div className="space-y-4">
-              {/* صف الأزرار: زر الدفع الكبير وبجانبه دائرة الواتساب */}
+              {/* صف الأزرار: زر الدفع الكبير وبجانبه زر الواتساب */}
               <div className="flex items-center gap-3">
                 <button 
                   type="button"
