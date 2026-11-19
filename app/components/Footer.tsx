@@ -18,6 +18,15 @@ export default function Footer() {
   const locale = useLocale();
   const isRtl = locale === 'ar';
 
+  const legalLabels: Record<string, { privacy: string; terms: string }> = {
+    en: { privacy: 'Privacy Policy', terms: 'Terms & Refund Policy' },
+    de: { privacy: 'Datenschutzerklärung', terms: 'AGB & Rückerstattung' },
+    fr: { privacy: 'Politique de Confidentialité', terms: 'Conditions & Remboursement' },
+    pl: { privacy: 'Polityka Prywatności', terms: 'Regulamin i Zwroty' },
+  };
+
+  const currentLegal = legalLabels[locale] || legalLabels.en;
+
   const quickLinks = [
     { name: t('about'), slug: 'about' },
     { name: t('services'), slug: 'services' },
@@ -198,10 +207,28 @@ export default function Footer() {
 
         </div>
 
+        {/* الشريط السفلي مع حقوق الملكية والروابط القانونية الرسمية */}
         <div className="mt-16 pt-6 border-t border-blue-600/20 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-zinc-300 text-xs font-medium">
             © {new Date().getFullYear()} The Light House. {t('rights')}
           </p>
+
+          <div className="flex items-center gap-6 text-xs font-medium">
+            <Link 
+              href={`/${locale}/privacy-policy`} 
+              className="text-zinc-400 hover:text-blue-400 transition-colors underline-offset-4 hover:underline"
+            >
+              {currentLegal.privacy}
+            </Link>
+            <span className="text-zinc-600">|</span>
+            <Link 
+              href={`/${locale}/terms`} 
+              className="text-zinc-400 hover:text-blue-400 transition-colors underline-offset-4 hover:underline"
+            >
+              {currentLegal.terms}
+            </Link>
+          </div>
+
           <p className="text-zinc-300 text-xs font-medium flex items-center gap-1">
             Made with <span className="text-blue-400 animate-pulse drop-shadow-[0_0_8px_rgba(37,99,235,0.8)]">💙</span> in Hurghada
           </p>
