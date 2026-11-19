@@ -214,7 +214,7 @@ export default function Footer() {
 
           <div className="flex items-center gap-6 text-xs font-medium">
             <Link 
-              href={`/${locale}/privacy-policy`} 
+              href={`/${locale}/privacy`} 
               className="text-zinc-400 hover:text-blue-400 transition-colors underline-offset-4 hover:underline"
             >
               {currentLegal.privacy}
