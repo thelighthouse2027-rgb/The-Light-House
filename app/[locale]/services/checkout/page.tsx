@@ -59,7 +59,7 @@ _I need assistance regarding my payment or booking._`;
       setLoadingPay(true);
       setErrorMessage('');
 
-      // 1. إنشاء Session بدون إرسال أي باراميتر يسبب تعارض
+      // 1. طلب session ID من السيرفر
       const res = await fetch('/api/pay', {
         method: 'POST'
       });
@@ -74,7 +74,7 @@ _I need assistance regarding my payment or booking._`;
       const formattedAmount = numericTotal.toFixed(2);
       const orderId = `LH-${Date.now()}`;
 
-      // 2. إعداد بوابة الدفع بالبيانات المطلوبة
+      // 2. إعداد بوابة الدفع بجميع الحقول المطلوبة لـ QNB MPGS
       if (typeof window !== 'undefined' && window.Checkout) {
         window.Checkout.configure({
           session: {
@@ -87,6 +87,7 @@ _I need assistance regarding my payment or booking._`;
             id: orderId
           },
           interaction: {
+            operation: 'PURCHASE',
             merchant: {
               name: 'The Light House Diving Center'
             },
@@ -197,7 +198,7 @@ _I need assistance regarding my payment or booking._`;
             </div>
 
             <div className="space-y-4">
-              {/* زر الدفع وبجانبه زر الواتساب */}
+              {/* صف الأزرار */}
               <div className="flex items-center gap-3">
                 <button 
                   type="button"
