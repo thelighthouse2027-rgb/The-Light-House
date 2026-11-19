@@ -14,7 +14,7 @@ export default function Hero() {
         loop
         muted
         playsInline
-        preload="auto"
+        preload="metadata"
         poster="/diving.webp"
         className="absolute inset-0 w-full h-full object-cover z-0"
       >
