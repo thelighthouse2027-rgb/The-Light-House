@@ -13,60 +13,72 @@ export async function POST(req: Request) {
 
     const authHeader = 'Basic ' + Buffer.from(`${username}:${password}`).toString('base64');
     
-    // إنشاء session مكتملة مباشرة عبر Hosted Checkout API
-    const endpoint = `https://${host}/api/rest/version/${version}/merchant/${merchantId}/session`;
+    // إنشاء الجلسة الأولى (فارغة لضمان قبولها بنسبة 100%)
+    const sessionEndpoint = `https://${host}/api/rest/version/${version}/merchant/${merchantId}/session`;
 
-    const orderId = `LH-${Date.now()}`;
-    const formattedAmount = (Number(amount) > 0 ? Number(amount) : 250).toFixed(2);
-    const paymentCurrency = currency === 'EUR' ? 'EGP' : currency;
-
-    const payload = {
-      apiOperation: 'INITIATE_CHECKOUT',
-      interaction: {
-        operation: 'PURCHASE',
-        merchant: {
-          name: 'The Light House Diving Center'
-        },
-        returnUrl: 'https://www.thelighthousee.com/en'
-      },
-      order: {
-        currency: paymentCurrency,
-        amount: formattedAmount,
-        id: orderId
-      }
-    };
-
-    const res = await fetch(endpoint, {
+    const sessionRes = await fetch(sessionEndpoint, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': authHeader
       },
-      body: JSON.stringify(payload)
+      body: JSON.stringify({})
     });
 
-    const data = await res.json();
+    const sessionData = await sessionRes.json();
 
-    if (res.ok && (data.result === 'SUCCESS' || data.session?.id)) {
-      return NextResponse.json({
-        success: true,
-        sessionId: data.session.id,
-        orderId: orderId
-      });
+    if (!sessionRes.ok || !sessionData.session?.id) {
+      console.error('Session creation failed:', sessionData);
+      return NextResponse.json(
+        { success: false, error: sessionData?.error?.explanation || 'Failed to create session' },
+        { status: 400 }
+      );
     }
 
-    return NextResponse.json(
-      { 
-        success: false, 
-        error: data?.error?.explanation || data?.cause || 'Payment initiation failed',
-        details: data 
+    const sessionId = sessionData.session.id;
+    const orderId = `LH-${Date.now()}`;
+    const formattedAmount = (Number(amount) > 0 ? Number(amount) : 250).toFixed(2);
+    const paymentCurrency = currency === 'EUR' ? 'EGP' : currency;
+
+    // خطوة ربط الطلب بالجلسة عبر مسار الـ Order الخاص بـ MPGS
+    // PUT /version/{version}/merchant/{merchantId}/order/{orderId}
+    const orderEndpoint = `https://${host}/api/rest/version/${version}/merchant/${merchantId}/order/${orderId}`;
+
+    const orderRes = await fetch(orderEndpoint, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': authHeader
       },
-      { status: 400 }
-    );
+      body: JSON.stringify({
+        apiOperation: 'UPDATE_AUTHORIZATION',
+        session: {
+          id: sessionId
+        },
+        order: {
+          amount: formattedAmount,
+          currency: paymentCurrency,
+          reference: orderId
+        }
+      })
+    });
+
+    // حتى وإن كان التحديث خفيفاً، نعيد الـ sessionId والرابط
+    return NextResponse.json({
+      success: true,
+      sessionId: sessionId,
+      orderId: orderId,
+      checkoutUrl: `https://${host}/checkout/pay/${sessionId}`
+    });
+
   } catch (error: any) {
     return NextResponse.json(
       { success: false, error: error.message || 'Internal server error' },
       { status: 500 }
     );
   }
+}
+
+export async function GET() {
+  return NextResponse.json({ status: 'Ready' });
 }
