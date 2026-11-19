@@ -13,7 +13,7 @@ export default async function DivingCoursesSection() {
   const currentLang = ['en', 'de', 'fr', 'pl'].includes(locale) ? locale : 'en';
   const isRtl = locale === 'ar';
 
-  // استعلام متوافق مع سكيما سانتي الخاصة بك
+  // استعلام متطابق 100% مع أسماء الحقول في السكيما
   const COURSES_QUERY = `
     *[_type == "flexiblePage" && defined(slug.current) && isActive != false && (
       pageCategory == "courses" || 
@@ -22,7 +22,6 @@ export default async function DivingCoursesSection() {
       "slug": slug.current,
       "title": pageTitle,
       
-      // استخراج النص من Portable Text المترجم
       "desc": coalesce(
         pt::text(shortDescription[$currentLang]),
         pt::text(shortDescription.en),
@@ -31,14 +30,12 @@ export default async function DivingCoursesSection() {
         ""
       ),
       
-      // السعر من حقل basePriceEur
       "price": coalesce(
         basePriceEur,
         sections[_type == "gridCardsSection"][0].cards[0].servicePrice,
         null
       ),
 
-      // الصورة الرئيسية
       "img": coalesce(
         mainCoverImage.asset->url,
         sections[_type == "heroSection"][0].bgImage.asset->url,
@@ -90,56 +87,56 @@ export default async function DivingCoursesSection() {
                 type="button"
                 id="courses-prev-btn"
                 aria-label="Previous"
-                className="w-10 h-10 rounded-full border border-neutral-800 bg-[#0b0f19]/90 hover:border-blue-500/50 text-white flex items-center justify-center transition-all duration-300 shadow cursor-pointer active:scale-95"
+                className="w-11 h-11 rounded-full border border-neutral-800 bg-[#0b0f19]/90 hover:border-blue-500/50 text-white flex items-center justify-center transition-all duration-300 shadow cursor-pointer active:scale-95"
               >
-                <ChevronLeft className="w-4 h-4 pointer-events-none text-zinc-300" />
+                <ChevronLeft className="w-5 h-5 pointer-events-none text-zinc-300" />
               </button>
               <button
                 type="button"
                 id="courses-next-btn"
                 aria-label="Next"
-                className="w-10 h-10 rounded-full border border-neutral-800 bg-[#0b0f19]/90 hover:border-blue-500/50 text-white flex items-center justify-center transition-all duration-300 shadow cursor-pointer active:scale-95"
+                className="w-11 h-11 rounded-full border border-neutral-800 bg-[#0b0f19]/90 hover:border-blue-500/50 text-white flex items-center justify-center transition-all duration-300 shadow cursor-pointer active:scale-95"
               >
-                <ChevronRight className="w-4 h-4 pointer-events-none text-zinc-300" />
+                <ChevronRight className="w-5 h-5 pointer-events-none text-zinc-300" />
               </button>
             </div>
           )}
         </div>
 
-        {/* مسار السلايدر */}
+        {/* السلايدر بمقاس أكبر وأكثر فخامة */}
         {courses.length > 0 ? (
           <div
             id="courses-slider-track"
-            className="flex gap-5 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4 pt-1 select-none"
+            className="flex gap-6 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-6 pt-1 select-none"
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
             {courses.map((course, idx) => (
               <Link
                 key={idx}
                 href={`/${locale}/services/${course.slug}`}
-                className="snap-start shrink-0 w-[280px] md:w-[335px] bg-[#0b0f19]/90 border border-neutral-800/80 rounded-[1.75rem] overflow-hidden shadow-xl flex flex-col justify-between relative group hover:border-blue-500/50 transition duration-300 cursor-pointer"
+                className="snap-start shrink-0 w-[320px] md:w-[380px] bg-[#0b0f19]/90 border border-neutral-800/80 rounded-[2rem] overflow-hidden shadow-2xl flex flex-col justify-between relative group hover:border-blue-500/50 transition duration-300 cursor-pointer"
               >
-                {/* الصورة والتدرج الداكن */}
-                <div className="relative w-full h-[185px] overflow-hidden bg-neutral-900">
+                {/* مساحة الصورة أكبر */}
+                <div className="relative w-full h-[225px] overflow-hidden bg-neutral-900">
                   <Image
                     src={course.img}
                     alt={course.title}
                     title={course.title}
                     fill
-                    sizes="(max-width: 768px) 290px, 335px"
+                    sizes="(max-width: 768px) 320px, 380px"
                     quality={80}
                     className="object-cover group-hover:scale-105 transition-transform duration-700"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#0b0f19] via-transparent to-transparent pointer-events-none" />
                 </div>
 
-                {/* البيانات */}
-                <div className="p-5 flex flex-col justify-between flex-grow">
+                {/* المحتوى الداخلي مع إتاحة سطرين للعنوان بالكامل */}
+                <div className="p-6 flex flex-col justify-between flex-grow">
                   <div>
-                    <h3 className="text-lg font-bold text-white mb-1.5 line-clamp-1 group-hover:text-blue-400 transition">
+                    <h3 className="text-xl font-bold text-white mb-2 line-clamp-2 min-h-[3.25rem] group-hover:text-blue-400 transition leading-snug">
                       {course.title}
                     </h3>
-                    <p className="text-zinc-400 text-xs line-clamp-2 font-light leading-relaxed">
+                    <p className="text-zinc-400 text-xs line-clamp-2 font-light leading-relaxed mb-1">
                       {course.desc}
                     </p>
                   </div>
@@ -188,7 +185,7 @@ export default async function DivingCoursesSection() {
 
       </div>
 
-      {/* سكريبت التمرير السلس مع تفادي أي تعارض بالـ Build */}
+      {/* سكريبت التمرير السلس المعدل لمقاس الكارت الجديد (380px) */}
       <script dangerouslySetInnerHTML={{ __html: `
         (function() {
           const track = document.getElementById('courses-slider-track');
@@ -196,7 +193,7 @@ export default async function DivingCoursesSection() {
           const next = document.getElementById('courses-next-btn');
           if (!track || !prev || !next) return;
 
-          const scrollStep = 330;
+          const scrollStep = 380;
           const isRtl = document.documentElement.dir === 'rtl' || ${isRtl ? 'true' : 'false'};
 
           prev.onclick = function() {
