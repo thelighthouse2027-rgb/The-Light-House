@@ -207,7 +207,6 @@ export default function Footer() {
 
         </div>
 
-        {/* الشريط السفلي مع حقوق الملكية والروابط القانونية الرسمية */}
         <div className="mt-16 pt-6 border-t border-blue-600/20 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-zinc-300 text-xs font-medium">
             © {new Date().getFullYear()} The Light House. {t('rights')}
