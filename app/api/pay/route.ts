@@ -13,7 +13,7 @@ export async function POST(req: Request) {
 
     const authHeader = 'Basic ' + Buffer.from(`${username}:${password}`).toString('base64');
     
-    // إنشاء الجلسة الأولى (فارغة لضمان قبولها بنسبة 100%)
+    // إنشاء الجلسة بطلب فارغ حتى يقبلها مسار Session v61
     const sessionEndpoint = `https://${host}/api/rest/version/${version}/merchant/${merchantId}/session`;
 
     const sessionRes = await fetch(sessionEndpoint, {
@@ -28,9 +28,8 @@ export async function POST(req: Request) {
     const sessionData = await sessionRes.json();
 
     if (!sessionRes.ok || !sessionData.session?.id) {
-      console.error('Session creation failed:', sessionData);
       return NextResponse.json(
-        { success: false, error: sessionData?.error?.explanation || 'Failed to create session' },
+        { success: false, error: sessionData?.error?.explanation || 'Session creation failed' },
         { status: 400 }
       );
     }
@@ -40,35 +39,13 @@ export async function POST(req: Request) {
     const formattedAmount = (Number(amount) > 0 ? Number(amount) : 250).toFixed(2);
     const paymentCurrency = currency === 'EUR' ? 'EGP' : currency;
 
-    // خطوة ربط الطلب بالجلسة عبر مسار الـ Order الخاص بـ MPGS
-    // PUT /version/{version}/merchant/{merchantId}/order/{orderId}
-    const orderEndpoint = `https://${host}/api/rest/version/${version}/merchant/${merchantId}/order/${orderId}`;
-
-    const orderRes = await fetch(orderEndpoint, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': authHeader
-      },
-      body: JSON.stringify({
-        apiOperation: 'UPDATE_AUTHORIZATION',
-        session: {
-          id: sessionId
-        },
-        order: {
-          amount: formattedAmount,
-          currency: paymentCurrency,
-          reference: orderId
-        }
-      })
-    });
-
-    // حتى وإن كان التحديث خفيفاً، نعيد الـ sessionId والرابط
+    // إرجاع البيانات للواجهة لتمريرها في Checkout.configure
     return NextResponse.json({
       success: true,
       sessionId: sessionId,
       orderId: orderId,
-      checkoutUrl: `https://${host}/checkout/pay/${sessionId}`
+      amount: formattedAmount,
+      currency: paymentCurrency
     });
 
   } catch (error: any) {
