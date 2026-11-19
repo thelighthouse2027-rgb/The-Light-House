@@ -104,14 +104,14 @@ export default async function GoogleReviews() {
                         </div>
                       )}
                       <div>
-                        <h4 className="font-bold text-white text-base text-start">{authorName}</h4>
-                        <span className="text-xs text-gray-400 text-start block">{timeAgo}</span>
+                        <p className="font-bold text-white text-base text-start">{authorName}</h4>
+                        <span className="text-xs text-gray-100 text-start block">{timeAgo}</span>
                       </div>
                     </div>
 
                     <div className="text-yellow-500 mb-4 text-sm tracking-widest text-start">★★★★★</div>
 
-                    <p className="text-gray-300 text-sm leading-relaxed mb-6 font-light text-start line-clamp-4">
+                    <p className="text-gray-100 text-sm leading-relaxed mb-6 font-light text-start line-clamp-4">
                       "{reviewText}"
                     </p>
                   </div>
