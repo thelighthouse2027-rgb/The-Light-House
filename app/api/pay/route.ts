@@ -18,10 +18,8 @@ export async function POST(req: Request) {
     const formattedAmount = (Number(amount) > 0 ? Number(amount) : 250).toFixed(2);
     const paymentCurrency = currency === 'EUR' ? 'EGP' : currency;
 
-    // تم حذف order.description ليتطابق مع مواصفات QNB MPGS الدقيقة
     const payload = {
       apiOperation: 'INITIATE_CHECKOUT',
-      checkoutMode: 'WEBSITE',
       interaction: {
         operation: 'PURCHASE',
         merchant: {
