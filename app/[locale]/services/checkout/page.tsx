@@ -60,13 +60,16 @@ _I need assistance regarding my payment or booking._`;
       setErrorMessage('');
 
       const numericTotal = parseFloat(total) || 250;
-      const formattedAmount = numericTotal.toFixed(2);
-      const orderId = `LH-${Date.now()}`;
 
-      // 1. طلب session ID من السيرفر
+      // 1. طلب session ID من السيرفر وتثبيت تفاصيل الطلب
       const res = await fetch('/api/pay', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' }
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          amount: numericTotal,
+          currency: 'EUR',
+          serviceName: service
+        })
       });
 
       const data = await res.json();
@@ -75,16 +78,11 @@ _I need assistance regarding my payment or booking._`;
         throw new Error(data.error || 'Failed to initiate payment session');
       }
 
-      // 2. تمرير بيانات الدفع للـ Hosted Checkout
+      // 2. إعداد وتشغيل بوابة البنك
       if (typeof window !== 'undefined' && window.Checkout) {
         window.Checkout.configure({
           session: {
             id: data.sessionId
-          },
-          order: {
-            amount: formattedAmount,
-            currency: 'EGP',
-            id: orderId
           },
           interaction: {
             merchant: {
@@ -98,18 +96,17 @@ _I need assistance regarding my payment or booking._`;
           error: function(err: any) {
             console.error('Checkout error:', err);
             setLoadingPay(false);
+            setErrorMessage('Payment window encountered an error. Please try again.');
           },
           cancel: function() {
             setLoadingPay(false);
-          },
-          complete: function() {
-            window.location.href = `/${locale}`;
           }
         });
 
-        // 3. فتح شاشة البنك
+        // 3. فتح شاشة البنك المنبثقة
         window.Checkout.showPaymentPage();
       } else {
+        // تحويل احتياطي مباشر
         window.location.href = `https://qnbalahli.test.gateway.mastercard.com/checkout/pay/${data.sessionId}`;
       }
     } catch (err: any) {
@@ -199,7 +196,7 @@ _I need assistance regarding my payment or booking._`;
             </div>
 
             <div className="space-y-4">
-              {/* صف الأزرار: زر الدفع الكبير وبجانبه زر الواتساب */}
+              {/* زر الدفع وبجانبه زر الواتساب */}
               <div className="flex items-center gap-3">
                 <button 
                   type="button"
