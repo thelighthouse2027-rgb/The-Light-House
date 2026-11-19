@@ -2,9 +2,6 @@ import { NextResponse } from 'next/server';
 
 export async function POST(req: Request) {
   try {
-    const body = await req.json().catch(() => ({}));
-    const { amount = 250, currency = 'EGP' } = body;
-
     const host = process.env.QNB_MPGS_HOST || 'qnbalahli.test.gateway.mastercard.com';
     const version = process.env.QNB_API_VERSION || '61';
     const merchantId = process.env.QNB_MERCHANT_ID || 'NWTOKEN';
@@ -14,45 +11,28 @@ export async function POST(req: Request) {
     const authHeader = 'Basic ' + Buffer.from(`${username}:${password}`).toString('base64');
     const endpoint = `https://${host}/api/rest/version/${version}/merchant/${merchantId}/session`;
 
-    const orderId = `LH-${Date.now()}`;
-    const formattedAmount = (Number(amount) > 0 ? Number(amount) : 250).toFixed(2);
-    const paymentCurrency = currency === 'EUR' ? 'EGP' : currency;
-
-    // تهيئة الجلسة بالبيانات المطلوبة لـ interaction
+    // طلب إنشاء Session فارغ تماماً وفق مواصفات MPGS الرسمية
     const res = await fetch(endpoint, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': authHeader
       },
-      body: JSON.stringify({
-        interaction: {
-          operation: 'PURCHASE',
-          merchant: {
-            name: 'The Light House Diving Center'
-          },
-          returnUrl: 'https://www.thelighthousee.com/en'
-        },
-        order: {
-          amount: formattedAmount,
-          currency: paymentCurrency,
-          id: orderId
-        }
-      })
+      body: JSON.stringify({})
     });
 
     const data = await res.json();
 
-    if (res.ok && (data.result === 'SUCCESS' || data.session?.id)) {
+    if (res.ok && data.session?.id) {
       return NextResponse.json({
         success: true,
         sessionId: data.session.id,
         successIndicator: data.successIndicator,
-        orderId: orderId
+        merchantId: merchantId
       });
     }
 
-    console.error('QNB MPGS Error Response:', JSON.stringify(data));
+    console.error('QNB MPGS Session Error:', JSON.stringify(data));
 
     return NextResponse.json(
       { 
