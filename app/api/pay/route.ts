@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-export async function POST(req: Request) {
+export async function POST() {
   try {
     const host = process.env.QNB_MPGS_HOST || 'qnbalahli.test.gateway.mastercard.com';
     const version = process.env.QNB_API_VERSION || '61';
@@ -9,17 +9,16 @@ export async function POST(req: Request) {
     const password = process.env.QNB_API_PASSWORD || 'cb0af0e0fefa7169b4b7374e145fe1c6';
 
     const authHeader = 'Basic ' + Buffer.from(`${username}:${password}`).toString('base64');
-    
-    // مسار إنشاء Session فارغ تماماً - ممنوع إرسال أي order هنا
     const endpoint = `https://${host}/api/rest/version/${version}/merchant/${merchantId}/session`;
 
+    // طلب إنشاء Session فارغ تماماً لتجنب خطأ order.amount
     const res = await fetch(endpoint, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': authHeader
       },
-      body: JSON.stringify({}) // جسم الطلب فارغ تماماً حتى لا يرفضه البنك
+      body: JSON.stringify({})
     });
 
     const data = await res.json();
@@ -27,8 +26,7 @@ export async function POST(req: Request) {
     if (res.ok && data.session?.id) {
       return NextResponse.json({
         success: true,
-        sessionId: data.session.id,
-        successIndicator: data.successIndicator
+        sessionId: data.session.id
       });
     }
 
@@ -45,4 +43,8 @@ export async function POST(req: Request) {
       { status: 500 }
     );
   }
+}
+
+export async function GET() {
+  return NextResponse.json({ status: 'Ready' });
 }
