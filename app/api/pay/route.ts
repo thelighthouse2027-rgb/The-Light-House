@@ -13,11 +13,14 @@ export async function POST(req: Request) {
 
     const authHeader = 'Basic ' + Buffer.from(`${username}:${password}`).toString('base64');
     const orderId = `LH-${Date.now()}`;
-    const formattedAmount = (Number(amount) > 0 ? Number(amount) : 20).toFixed(2);
+    
+    // تحويل المبلغ إلى الجنيه المصري ليتوافق مع قيود حساب التست [EGP]
+    // إذا كان المبلغ 20 يورو، يحسب بالجنيه (مثلاً سعر الصرف 54)
+    const eurAmount = Number(amount) > 0 ? Number(amount) : 20;
+    const egpAmount = (eurAmount * 54).toFixed(2);
 
     const endpoint = `https://${host}/api/rest/version/${version}/merchant/${merchantId}/session`;
 
-    // إرسال العملة EUR لتطابق حسابك في QNB بدقة
     const payload = {
       apiOperation: 'INITIATE_CHECKOUT',
       interaction: {
@@ -28,10 +31,10 @@ export async function POST(req: Request) {
         returnUrl: 'https://www.thelighthousee.com/en'
       },
       order: {
-        amount: formattedAmount,
-        currency: 'EUR',
+        amount: egpAmount,
+        currency: 'EGP',
         id: orderId,
-        description: 'Diving Center Booking'
+        description: 'The Light House Booking'
       }
     };
 
