@@ -26,6 +26,7 @@ export async function POST(req: Request) {
     const timestamp = Date.now();
     const orderId = `LH-${timestamp}`;
     const txRef = `LH-TX-${timestamp}`;
+    const expiryDateTime = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
 
     const eurAmount = Number(amount) > 0 ? Number(amount) : 20;
     const rate = Number(process.env.EUR_TO_EGP_RATE || 54);
@@ -38,6 +39,7 @@ export async function POST(req: Request) {
       apiOperation: 'INITIATE_CHECKOUT',
       checkoutMode: 'PAYMENT_LINK',
       paymentLink: {
+        expiryDateTime,
         numberOfAllowedAttempts: '5',
       },
       interaction: {
@@ -55,6 +57,7 @@ export async function POST(req: Request) {
       },
       order: {
         id: orderId,
+        reference: orderId,
         amount: egpAmount,
         currency: 'EGP',
         description: String(description).slice(0, 120),
@@ -85,10 +88,14 @@ export async function POST(req: Request) {
       });
     }
 
+    const detailedError = [data?.error?.explanation, data?.error?.field]
+      .filter(Boolean)
+      .join(' — ');
+
     return NextResponse.json(
       {
         success: false,
-        error: data?.error?.explanation || 'Failed to initiate payment',
+        error: detailedError || 'Failed to initiate payment',
         details: data,
       },
       { status: res.status || 400 }
