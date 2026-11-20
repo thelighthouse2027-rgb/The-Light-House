@@ -3,72 +3,98 @@ import { NextResponse } from 'next/server';
 export async function POST(req: Request) {
   try {
     const body = await req.json().catch(() => ({}));
-    const { amount = 20 } = body;
+    const {
+      amount = 20,
+      description = 'The Light House Diving & Safari Booking',
+      locale = 'en',
+    } = body;
 
     const host = process.env.QNB_MPGS_HOST || 'qnbalahli.test.gateway.mastercard.com';
-    const version = process.env.QNB_API_VERSION || '61';
+    const version = process.env.QNB_API_VERSION || '100';
     const merchantId = process.env.QNB_MERCHANT_ID || 'NWTOKEN';
     const username = process.env.QNB_API_USERNAME || `merchant.${merchantId}`;
-    const password = process.env.QNB_API_PASSWORD || 'cb0af0e0fefa7169b4b7374e145fe1c6';
+    const password = process.env.QNB_API_PASSWORD;
+
+    if (!password) {
+      return NextResponse.json(
+        { success: false, error: 'Missing QNB_API_PASSWORD environment variable' },
+        { status: 500 }
+      );
+    }
 
     const authHeader = 'Basic ' + Buffer.from(`${username}:${password}`).toString('base64');
-    const orderId = `LH-${Date.now()}`;
-    
-    // تحويل القيمة للجنيه المصري لاجتياز شرط حساب التست
+    const timestamp = Date.now();
+    const orderId = `LH-${timestamp}`;
+    const txRef = `LH-TX-${timestamp}`;
+
     const eurAmount = Number(amount) > 0 ? Number(amount) : 20;
-    const egpAmount = (eurAmount * 54).toFixed(2);
+    const rate = Number(process.env.EUR_TO_EGP_RATE || 54);
+    const egpAmount = (eurAmount * rate).toFixed(2);
+    const safeLocale = typeof locale === 'string' && /^[a-z]{2}$/i.test(locale) ? locale : 'en';
 
     const endpoint = `https://${host}/api/rest/version/${version}/merchant/${merchantId}/session`;
 
-    // تم حذف description وأي حقل غير أساسي نهائياً
     const payload = {
       apiOperation: 'INITIATE_CHECKOUT',
+      checkoutMode: 'PAYMENT_LINK',
+      paymentLink: {
+        numberOfAllowedAttempts: '5',
+      },
       interaction: {
         operation: 'PURCHASE',
-        merchant: {
-          name: 'The Light House Diving Center'
+        displayControl: {
+          billingAddress: 'HIDE',
+          shipping: 'HIDE',
+          customerEmail: 'OPTIONAL',
         },
-        returnUrl: 'https://www.thelighthousee.com/en'
+        merchant: {
+          name: 'The Light House Diving Center',
+          url: 'https://www.thelighthousee.com',
+        },
+        returnUrl: `https://www.thelighthousee.com/${safeLocale}/payment/callback?orderId=${orderId}`,
       },
       order: {
+        id: orderId,
         amount: egpAmount,
         currency: 'EGP',
-        id: orderId
-      }
+        description: String(description).slice(0, 120),
+      },
+      transaction: {
+        reference: txRef,
+      },
     };
 
     const res = await fetch(endpoint, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': authHeader
+        Authorization: authHeader,
       },
-      body: JSON.stringify(payload)
+      body: JSON.stringify(payload),
     });
 
     const data = await res.json();
 
-    if (res.ok && data.session && data.session.id) {
+    if (res.ok && data?.paymentLink?.url) {
       return NextResponse.json({
         success: true,
-        sessionId: data.session.id,
-        redirectUrl: `https://${host}/checkout/pay/${data.session.id}`
+        orderId,
+        paymentLinkId: data.paymentLink.id,
+        successIndicator: data.successIndicator,
+        redirectUrl: data.paymentLink.url,
       });
     }
 
     return NextResponse.json(
-      { 
-        success: false, 
-        error: data?.error?.explanation || 'Failed to initiate payment', 
-        details: data 
+      {
+        success: false,
+        error: data?.error?.explanation || 'Failed to initiate payment',
+        details: data,
       },
-      { status: 400 }
+      { status: res.status || 400 }
     );
-
-  } catch (error: any) {
-    return NextResponse.json(
-      { success: false, error: error.message || 'Internal server error' },
-      { status: 500 }
-    );
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Internal server error';
+    return NextResponse.json({ success: false, error: message }, { status: 500 });
   }
 }
