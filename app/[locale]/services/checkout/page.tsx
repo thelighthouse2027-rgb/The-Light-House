@@ -1,15 +1,9 @@
 'use client';
 
-import React, { Suspense, useState, useEffect } from 'react';
+import React, { Suspense, useState } from 'react';
 import { useSearchParams, useParams } from 'next/navigation';
 import Link from 'next/link';
 import { FaWhatsapp, FaCreditCard, FaShieldAlt } from 'react-icons/fa';
-
-declare global {
-  interface Window {
-    Checkout?: any;
-  }
-}
 
 function CheckoutContent() {
   const params = useParams();
@@ -28,20 +22,6 @@ function CheckoutContent() {
 
   const [loadingPay, setLoadingPay] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const [scriptLoaded, setScriptLoaded] = useState(false);
-
-  // تحميل سكريبت البنك بطريقة مضمونة ومباشرة في الـ DOM
-  useEffect(() => {
-    if (typeof window !== 'undefined' && !window.Checkout) {
-      const script = document.createElement('script');
-      script.src = 'https://qnbalahli.test.gateway.mastercard.com/static/checkout/checkout.min.js';
-      script.async = true;
-      script.onload = () => setScriptLoaded(true);
-      document.body.appendChild(script);
-    } else if (typeof window !== 'undefined' && window.Checkout) {
-      setScriptLoaded(true);
-    }
-  }, []);
 
   const whatsappMessage = 
 `🌊 *BOOKING SUPPORT / INQUIRY* 🤿
@@ -74,56 +54,28 @@ _I need assistance regarding my payment or booking._`;
 
       const numericTotal = parseFloat(total) || 20;
 
-      // 1. طلب session ID من السيرفر
+      // 1. طلب الرابط المباشر من السيرفر
       const res = await fetch('/api/pay', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           amount: numericTotal,
-          currency: 'EUR'
+          currency: 'EGP'
         })
       });
 
       const data = await res.json();
 
-      if (!res.ok || !data.success || !data.sessionId) {
+      if (!res.ok || !data.success || !data.redirectUrl) {
         throw new Error(data.error || 'Failed to initiate payment session');
       }
 
-      // 2. تشغيل شاشة الدفع فور توفر السكريبت
-      if (typeof window !== 'undefined' && window.Checkout) {
-        window.Checkout.configure({
-          merchant: 'NWTOKEN',
-          order: {
-            amount: data.amount,
-            currency: data.currency,
-            description: 'The Light House Diving Booking',
-            id: data.orderId
-          },
-          interaction: {
-            merchant: {
-              name: 'The Light House Diving Center'
-            },
-            operation: 'PURCHASE',
-            displayControl: {
-              billingAddress: 'HIDE',
-              customerEmail: 'HIDE'
-            }
-          },
-          session: {
-            id: data.sessionId
-          }
-        });
+      // 2. التحويل المباشر لصفحة الدفع الرسمية الخاصة بـ QNB
+      window.location.href = data.redirectUrl;
 
-        window.Checkout.showPaymentPage();
-      } else {
-        // تحويل احتياطي مباشر في حال تأخر السكريبت
-        window.location.href = `https://qnbalahli.test.gateway.mastercard.com/checkout/pay/${data.sessionId}`;
-      }
     } catch (err: any) {
       console.error('Payment Error:', err);
       setErrorMessage(err.message || 'Payment initiation failed.');
-    } finally {
       setLoadingPay(false);
     }
   };
