@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 export async function POST(req: Request) {
   try {
     const body = await req.json().catch(() => ({}));
-    const { amount = 20, currency = 'EGP' } = body;
+    const { amount = 20 } = body;
 
     const host = process.env.QNB_MPGS_HOST || 'qnbalahli.test.gateway.mastercard.com';
     const version = process.env.QNB_API_VERSION || '61';
@@ -17,6 +17,7 @@ export async function POST(req: Request) {
 
     const endpoint = `https://${host}/api/rest/version/${version}/merchant/${merchantId}/session`;
 
+    // إرسال العملة EUR لتطابق حسابك في QNB بدقة
     const payload = {
       apiOperation: 'INITIATE_CHECKOUT',
       interaction: {
@@ -28,7 +29,7 @@ export async function POST(req: Request) {
       },
       order: {
         amount: formattedAmount,
-        currency: currency === 'EUR' ? 'EGP' : currency,
+        currency: 'EUR',
         id: orderId,
         description: 'Diving Center Booking'
       }
