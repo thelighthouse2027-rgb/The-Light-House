@@ -14,13 +14,13 @@ export async function POST(req: Request) {
     const authHeader = 'Basic ' + Buffer.from(`${username}:${password}`).toString('base64');
     const orderId = `LH-${Date.now()}`;
     
-    // تحويل المبلغ إلى الجنيه المصري ليتوافق مع قيود حساب التست [EGP]
-    // إذا كان المبلغ 20 يورو، يحسب بالجنيه (مثلاً سعر الصرف 54)
+    // تحويل القيمة للجنيه المصري لاجتياز شرط حساب التست
     const eurAmount = Number(amount) > 0 ? Number(amount) : 20;
     const egpAmount = (eurAmount * 54).toFixed(2);
 
     const endpoint = `https://${host}/api/rest/version/${version}/merchant/${merchantId}/session`;
 
+    // تم حذف description وأي حقل غير أساسي نهائياً
     const payload = {
       apiOperation: 'INITIATE_CHECKOUT',
       interaction: {
@@ -33,8 +33,7 @@ export async function POST(req: Request) {
       order: {
         amount: egpAmount,
         currency: 'EGP',
-        id: orderId,
-        description: 'The Light House Booking'
+        id: orderId
       }
     };
 
