@@ -1,5 +1,29 @@
 import { NextResponse } from 'next/server';
 
+async function getLiveEurToEgpRate(): Promise<number> {
+  const fallbackRate = Number(process.env.EUR_TO_EGP_RATE || 54);
+  const markup = Number(process.env.EUR_TO_EGP_MARKUP || 0);
+
+  try {
+    const res = await fetch('https://open.er-api.com/v6/latest/EUR', {
+      next: { revalidate: 3600 },
+      signal: AbortSignal.timeout(4000),
+    });
+
+    if (res.ok) {
+      const data = await res.json();
+      const liveRate = Number(data?.rates?.EGP);
+      if (Number.isFinite(liveRate) && liveRate > 0) {
+        return Number((liveRate + markup).toFixed(4));
+      }
+    }
+  } catch {
+    // Fallback to configured rate if live API is unreachable
+  }
+
+  return fallbackRate;
+}
+
 export async function POST(req: Request) {
   try {
     const body = await req.json().catch(() => ({}));
@@ -29,7 +53,7 @@ export async function POST(req: Request) {
     const expiryDateTime = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
 
     const eurAmount = Number(amount) > 0 ? Number(amount) : 20;
-    const rate = Number(process.env.EUR_TO_EGP_RATE || 54);
+    const rate = await getLiveEurToEgpRate();
     const egpAmount = (eurAmount * rate).toFixed(2);
     const safeLocale = typeof locale === 'string' && /^[a-z]{2}$/i.test(locale) ? locale : 'en';
 
@@ -82,6 +106,8 @@ export async function POST(req: Request) {
       return NextResponse.json({
         success: true,
         orderId,
+        exchangeRate: rate,
+        egpAmount,
         paymentLinkId: data.paymentLink.id,
         successIndicator: data.successIndicator,
         redirectUrl: data.paymentLink.url,
