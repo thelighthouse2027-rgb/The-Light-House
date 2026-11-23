@@ -47,10 +47,7 @@ export async function POST(req: Request) {
     }
 
     const authHeader = 'Basic ' + Buffer.from(`${username}:${password}`).toString('base64');
-    const timestamp = Date.now();
-    const orderId = `LH-${timestamp}`;
-    const txRef = `LH-TX-${timestamp}`;
-    const expiryDateTime = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
+    const orderId = `LH-${Date.now()}`;
 
     const eurAmount = Number(amount) > 0 ? Number(amount) : 20;
     const rate = await getLiveEurToEgpRate();
@@ -61,33 +58,21 @@ export async function POST(req: Request) {
 
     const payload = {
       apiOperation: 'INITIATE_CHECKOUT',
-      checkoutMode: 'PAYMENT_LINK',
-      paymentLink: {
-        expiryDateTime,
-        numberOfAllowedAttempts: '5',
-      },
+      checkoutMode: 'WEBSITE',
       interaction: {
         operation: 'PURCHASE',
-        displayControl: {
-          billingAddress: 'HIDE',
-          shipping: 'HIDE',
-          customerEmail: 'OPTIONAL',
-        },
         merchant: {
           name: 'The Light House Diving Center',
           url: 'https://www.thelighthousee.com',
         },
+        saveCardForCredentialOnFile: 'PAYER_INITIATED_PAYMENTS',
         returnUrl: `https://www.thelighthousee.com/${safeLocale}/payment/callback?orderId=${orderId}`,
       },
       order: {
         id: orderId,
-        reference: orderId,
         amount: egpAmount,
         currency: 'EGP',
         description: String(description).slice(0, 120),
-      },
-      transaction: {
-        reference: txRef,
       },
     };
 
@@ -102,15 +87,15 @@ export async function POST(req: Request) {
 
     const data = await res.json();
 
-    if (res.ok && data?.paymentLink?.url) {
+    if (res.ok && data?.session?.id) {
       return NextResponse.json({
         success: true,
         orderId,
+        sessionId: data.session.id,
+        successIndicator: data.successIndicator,
+        checkoutScriptUrl: `https://${host}/static/checkout/checkout.min.js`,
         exchangeRate: rate,
         egpAmount,
-        paymentLinkId: data.paymentLink.id,
-        successIndicator: data.successIndicator,
-        redirectUrl: data.paymentLink.url,
       });
     }
 
