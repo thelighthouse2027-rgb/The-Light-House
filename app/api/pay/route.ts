@@ -1,39 +1,37 @@
 import { NextResponse } from 'next/server';
-import { cookies } from 'next/headers';
 
-function extractGatewayToken(data: Record<string, unknown>): string | null {
-  const topSof = data?.sourceOfFunds as Record<string, unknown> | undefined;
-  if (typeof topSof?.token === 'string' && topSof.token.trim()) {
-    return topSof.token.trim();
-  }
-  if (typeof data?.token === 'string' && data.token.trim()) {
-    return data.token.trim();
-  }
-  const txs = Array.isArray(data?.transaction) ? data.transaction : [];
-  for (let i = txs.length - 1; i >= 0; i--) {
-    const tx = txs[i] as Record<string, unknown> | undefined;
-    const txSof = tx?.sourceOfFunds as Record<string, unknown> | undefined;
-    if (typeof txSof?.token === 'string' && txSof.token.trim()) {
-      return txSof.token.trim();
+async function getLiveEurToEgpRate(): Promise<number> {
+  const fallbackRate = Number(process.env.EUR_TO_EGP_RATE || 54);
+  const markup = Number(process.env.EUR_TO_EGP_MARKUP || 0);
+
+  try {
+    const res = await fetch('https://open.er-api.com/v6/latest/EUR', {
+      next: { revalidate: 3600 },
+      signal: AbortSignal.timeout(4000),
+    });
+
+    if (res.ok) {
+      const data = await res.json();
+      const liveRate = Number(data?.rates?.EGP);
+      if (Number.isFinite(liveRate) && liveRate > 0) {
+        return Number((liveRate + markup).toFixed(4));
+      }
     }
-    if (typeof tx?.token === 'string' && tx.token.trim()) {
-      return tx.token.trim();
-    }
+  } catch {
+    // Fallback to configured rate if live API is unreachable
   }
-  return null;
+
+  return fallbackRate;
 }
 
-export async function GET(req: Request) {
+export async function POST(req: Request) {
   try {
-    const { searchParams } = new URL(req.url);
-    const orderId = searchParams.get('orderId') || '';
-
-    if (!/^LH-\d+$/.test(orderId)) {
-      return NextResponse.json(
-        { success: false, paid: false, error: 'Invalid orderId' },
-        { status: 400 }
-      );
-    }
+    const body = await req.json().catch(() => ({}));
+    const {
+      amount = 20,
+      description = 'The Light House Diving & Safari Booking',
+      locale = 'en',
+    } = body;
 
     const host = process.env.QNB_MPGS_HOST || 'qnbalahli.test.gateway.mastercard.com';
     const version = process.env.QNB_API_VERSION || '100';
@@ -43,63 +41,78 @@ export async function GET(req: Request) {
 
     if (!password) {
       return NextResponse.json(
-        { success: false, paid: false, error: 'Missing QNB_API_PASSWORD' },
+        { success: false, error: 'Missing QNB_API_PASSWORD environment variable' },
         { status: 500 }
       );
     }
 
     const authHeader = 'Basic ' + Buffer.from(`${username}:${password}`).toString('base64');
-    const endpoint = `https://${host}/api/rest/version/${version}/merchant/${merchantId}/order/${encodeURIComponent(orderId)}`;
+    const orderId = `LH-${Date.now()}`;
+
+    const eurAmount = Number(amount) > 0 ? Number(amount) : 20;
+    const rate = await getLiveEurToEgpRate();
+    const egpAmount = (eurAmount * rate).toFixed(2);
+    const safeLocale = typeof locale === 'string' && /^[a-z]{2}$/i.test(locale) ? locale : 'en';
+
+    const endpoint = `https://${host}/api/rest/version/${version}/merchant/${merchantId}/session`;
+
+    const payload = {
+      apiOperation: 'INITIATE_CHECKOUT',
+      checkoutMode: 'WEBSITE',
+      interaction: {
+        operation: 'PURCHASE',
+        merchant: {
+          name: 'The Light House Diving Center',
+          url: 'https://www.thelighthousee.com',
+        },
+        saveCardForCredentialOnFile: 'PAYER_INITIATED_PAYMENTS',
+        returnUrl: `https://www.thelighthousee.com/${safeLocale}/payment/callback?orderId=${orderId}`,
+      },
+      order: {
+        id: orderId,
+        amount: egpAmount,
+        currency: 'EGP',
+        description: String(description).slice(0, 120),
+      },
+    };
 
     const res = await fetch(endpoint, {
-      method: 'GET',
+      method: 'POST',
       headers: {
+        'Content-Type': 'application/json',
         Authorization: authHeader,
       },
-      cache: 'no-store',
+      body: JSON.stringify(payload),
     });
 
-    const data = (await res.json()) as Record<string, unknown>;
-    const status = String(data?.status || 'UNKNOWN').toUpperCase();
-    const paid = res.ok && status === 'CAPTURED';
-    const savedToken = paid ? extractGatewayToken(data) : null;
+    const data = await res.json();
 
-    const response = NextResponse.json({
-      success: res.ok,
-      paid,
-      status,
-      orderId,
-      amount: data?.amount ?? null,
-      currency: data?.currency ?? null,
-      savedToken,
-    });
-
-    if (savedToken) {
-      const cookieStore = await cookies();
-      const existingRaw = cookieStore.get('lh_qnb_tokens')?.value || '[]';
-      let existingTokens: string[] = [];
-      try {
-        const parsed = JSON.parse(existingRaw);
-        if (Array.isArray(parsed)) {
-          existingTokens = parsed.filter((t): t is string => typeof t === 'string' && t.length > 0);
-        }
-      } catch {
-        existingTokens = [];
-      }
-
-      const updatedTokens = Array.from(new Set([savedToken, ...existingTokens])).slice(0, 5);
-      response.cookies.set('lh_qnb_tokens', JSON.stringify(updatedTokens), {
-        httpOnly: true,
-        secure: true,
-        sameSite: 'lax',
-        path: '/',
-        maxAge: 60 * 60 * 24 * 180,
+    if (res.ok && data?.session?.id) {
+      return NextResponse.json({
+        success: true,
+        orderId,
+        sessionId: data.session.id,
+        successIndicator: data.successIndicator,
+        checkoutScriptUrl: `https://${host}/static/checkout/checkout.min.js`,
+        exchangeRate: rate,
+        egpAmount,
       });
     }
 
-    return response;
+    const detailedError = [data?.error?.explanation, data?.error?.field]
+      .filter(Boolean)
+      .join(' — ');
+
+    return NextResponse.json(
+      {
+        success: false,
+        error: detailedError || 'Failed to initiate payment',
+        details: data,
+      },
+      { status: res.status || 400 }
+    );
   } catch (error: unknown) {
-    const message = error instanceof Error ? error.message : 'Verification failed';
-    return NextResponse.json({ success: false, paid: false, error: message }, { status: 500 });
+    const message = error instanceof Error ? error.message : 'Internal server error';
+    return NextResponse.json({ success: false, error: message }, { status: 500 });
   }
 }
