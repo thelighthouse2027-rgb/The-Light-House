@@ -5,6 +5,40 @@ import { useSearchParams, useParams } from 'next/navigation';
 import Link from 'next/link';
 import { FaWhatsapp, FaShieldAlt, FaLock, FaCheckCircle } from 'react-icons/fa';
 
+interface MPGSCheckout {
+  configure: (config: { session: { id: string } }) => void;
+  showPaymentPage: () => void;
+}
+
+declare global {
+  interface Window {
+    Checkout?: MPGSCheckout;
+  }
+}
+
+function loadCheckoutScript(src: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    if (window.Checkout) {
+      resolve();
+      return;
+    }
+
+    const existing = document.querySelector<HTMLScriptElement>(`script[src="${src}"]`);
+    if (existing) {
+      existing.addEventListener('load', () => resolve(), { once: true });
+      existing.addEventListener('error', () => reject(new Error('Failed to load QNB Checkout script')), { once: true });
+      return;
+    }
+
+    const script = document.createElement('script');
+    script.src = src;
+    script.async = true;
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error('Failed to load QNB Checkout script'));
+    document.head.appendChild(script);
+  });
+}
+
 function CheckoutContent() {
   const params = useParams();
   const locale = (params?.locale as string) || 'en';
@@ -49,7 +83,7 @@ _I need assistance regarding my payment or booking._`;
 
   const handleCardPayment = async () => {
     if (!agreeTerms) {
-      setErrorMessage('Please accept the Terms & Refund Policy to proceed with payment.');
+      setErrorMessage('Please accept the Terms & Conditions before proceeding with the payment.');
       return;
     }
 
@@ -71,11 +105,22 @@ _I need assistance regarding my payment or booking._`;
 
       const data = await res.json();
 
-      if (!res.ok || !data.success || !data.redirectUrl) {
+      if (!res.ok || !data.success || !data.sessionId || !data.checkoutScriptUrl) {
         throw new Error(data.error || 'Failed to initiate payment session');
       }
 
-      window.location.href = data.redirectUrl;
+      await loadCheckoutScript(data.checkoutScriptUrl);
+
+      if (!window.Checkout) {
+        throw new Error('QNB Checkout gateway failed to initialize.');
+      }
+
+      window.Checkout.configure({
+        session: {
+          id: data.sessionId,
+        },
+      });
+      window.Checkout.showPaymentPage();
     } catch (err: unknown) {
       console.error('Payment Error:', err);
       const message = err instanceof Error ? err.message : 'Payment initiation failed.';
@@ -95,9 +140,6 @@ _I need assistance regarding my payment or booking._`;
           <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white">
             Complete Your Booking
           </h1>
-          <p className="text-zinc-400 text-sm mt-2">
-            Review your trip details below and proceed securely via QNB AlAhli.
-          </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10 bg-[#0d112b] border border-blue-500/25 rounded-3xl p-6 sm:p-8 shadow-2xl">
@@ -156,26 +198,34 @@ _I need assistance regarding my payment or booking._`;
               <h2 className="text-xl font-bold mb-5 text-white">Secure Payment</h2>
 
               <div className="bg-blue-950/40 border border-blue-500/30 rounded-2xl p-5 mb-4 space-y-3">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2 text-blue-400 font-semibold text-sm">
-                    <FaShieldAlt className="text-base" />
-                    <span>QNB AlAhli Secure Gateway</span>
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2 text-blue-300 font-bold text-sm">
+                    <FaShieldAlt className="text-base shrink-0" />
+                    <span>Pay with Visa, MasterCard, and Meeza through QNB Network.</span>
                   </div>
-                  <span className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
-                    3D Secure
-                  </span>
                 </div>
                 <p className="text-xs text-zinc-300 leading-relaxed">
-                  You will be redirected to QNB AlAhli&apos;s encrypted portal to complete your
-                  payment safely with Visa or Mastercard. We never store your card details.
+                  Complete your payment securely on QNB&apos;s encrypted checkout page. You can also
+                  choose to save your card for faster future bookings.
                 </p>
-                <div className="pt-2.5 border-t border-white/10 flex items-center justify-between text-xs">
+
+                {/* اللوجو الرسمي المرفق من QNB */}
+                <div className="bg-white rounded-xl p-3 flex items-center justify-center">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src="/qnb-logo.png"
+                    alt="Pay with Visa, MasterCard, and Meeza through QNB Network"
+                    className="max-h-12 w-auto object-contain"
+                  />
+                </div>
+
+                <div className="pt-2 border-t border-white/10 flex items-center justify-between text-xs">
                   <span className="text-zinc-400">Booking Total:</span>
                   <span className="font-bold text-white text-base">€ {total}</span>
                 </div>
               </div>
 
-              {/* مربع الموافقة الإلزامي للبنك */}
+              {/* مربع الموافقة الإلزامي على الشروط والأحكام */}
               <div
                 className={`rounded-2xl p-4 mb-4 border transition-colors ${
                   agreeTerms
@@ -201,7 +251,7 @@ _I need assistance regarding my payment or booking._`;
                       rel="noopener noreferrer"
                       className="text-blue-400 hover:text-blue-300 underline font-semibold"
                     >
-                      Terms &amp; Refund Policy
+                      Terms &amp; Conditions
                     </Link>{' '}
                     and{' '}
                     <Link
@@ -217,11 +267,11 @@ _I need assistance regarding my payment or booking._`;
                 </label>
                 {agreeTerms ? (
                   <p className="flex items-center gap-1.5 text-[11px] text-emerald-400 mt-2 pl-8">
-                    <FaCheckCircle /> Ready to proceed to secure payment.
+                    <FaCheckCircle /> Terms accepted — ready to pay.
                   </p>
                 ) : (
                   <p className="text-[11px] text-amber-400/90 mt-2 pl-8">
-                    * Please tick the box above to enable the Pay Now button.
+                    * You must accept the Terms &amp; Conditions before proceeding with payment.
                   </p>
                 )}
               </div>
@@ -267,45 +317,6 @@ _I need assistance regarding my payment or booking._`;
                 >
                   <FaWhatsapp className="text-2xl" />
                 </a>
-              </div>
-
-              {/* شعارات البطاقات المدعومة */}
-              <div className="pt-3 text-center space-y-2 border-t border-white/10">
-                <span className="text-[10px] text-zinc-400 block uppercase tracking-wider font-semibold">
-                  Accepted Payment Cards
-                </span>
-
-                <div className="flex items-center justify-center gap-3">
-                  <div className="h-8 px-3 rounded-lg bg-white flex items-center justify-center shadow-sm">
-                    <svg
-                      className="h-4 w-auto"
-                      viewBox="0 0 100 32"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M39.8 1.5L25.9 30.5H16.8L10.3 7.8C9.9 6.2 9.6 5.6 8.3 4.9C6.2 3.8 2.9 2.8 0 2.2L0.2 1.5H14.7C16.6 1.5 18.2 2.8 18.6 4.9L22.2 21.6L30.9 1.5H39.8ZM75.2 21.1C75.3 13.1 63.8 12.6 63.9 9.1C64 8 65.1 6.8 67.4 6.5C68.6 6.3 71.9 6.2 75.3 7.7L76.7 1.8C74.8 1.1 72.3 0.5 69.1 0.5C60.7 0.5 54.8 4.9 54.7 11.2C54.6 15.9 58.8 18.6 62 20.1C65.2 21.7 66.3 22.7 66.3 24.1C66.2 26.2 63.7 27.2 61.3 27.2C57.4 27.2 55.1 26.6 52.8 25.5L51.3 31.6C53.3 32.5 57 33.2 60.8 33.2C69.7 33.2 75.2 28.8 75.2 21.1ZM97.2 30.5H105L98.2 1.5H91C89.4 1.5 88.1 2.4 87.5 3.8L74.8 30.5H83.9L85.7 25.5H96.9L97.2 30.5ZM88.2 18.8L92.8 6.4L95.5 18.8H88.2ZM53 1.5L45.9 30.5H37.3L44.4 1.5H53Z"
-                        fill="#1434CB"
-                      />
-                    </svg>
-                  </div>
-
-                  <div className="h-8 px-3 rounded-lg bg-white flex items-center justify-center shadow-sm">
-                    <svg
-                      className="h-5 w-auto"
-                      viewBox="0 0 131 80"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <circle cx="40" cy="40" r="40" fill="#EB001B" />
-                      <circle cx="91" cy="40" r="40" fill="#F79E1B" />
-                      <path
-                        d="M65.5 15.2C72.8 21.9 77.4 30.4 77.4 40C77.4 49.6 72.8 58.1 65.5 64.8C58.2 58.1 53.6 49.6 53.6 40C53.6 30.4 58.2 21.9 65.5 15.2Z"
-                        fill="#FF5F00"
-                      />
-                    </svg>
-                  </div>
-                </div>
               </div>
 
               <div className="text-center pt-1">
