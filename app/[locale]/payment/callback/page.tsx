@@ -11,6 +11,7 @@ interface VerifyResult {
   orderId?: string;
   amount?: string | number | null;
   currency?: string | null;
+  savedToken?: string | null;
   error?: string;
 }
 
@@ -32,7 +33,22 @@ function PaymentCallbackContent() {
 
     fetch(`/api/pay/verify?orderId=${encodeURIComponent(orderId)}`)
       .then((res) => res.json())
-      .then((data: VerifyResult) => setResult(data))
+      .then((data: VerifyResult) => {
+        if (data?.paid && data?.savedToken) {
+          try {
+            const raw = localStorage.getItem('lh_qnb_tokens') || '[]';
+            const parsed = JSON.parse(raw);
+            const existing = Array.isArray(parsed)
+              ? parsed.filter((t): t is string => typeof t === 'string' && t.length > 0)
+              : [];
+            const updated = Array.from(new Set([data.savedToken, ...existing])).slice(0, 5);
+            localStorage.setItem('lh_qnb_tokens', JSON.stringify(updated));
+          } catch {
+            // Ignore storage errors
+          }
+        }
+        setResult(data);
+      })
       .catch(() =>
         setResult({ success: false, paid: false, error: 'Could not verify payment status.' })
       )
@@ -77,6 +93,11 @@ function PaymentCallbackContent() {
                 <span className="text-zinc-400">Status</span>
                 <span className="text-emerald-400 font-semibold">{result.status}</span>
               </div>
+              {result.savedToken && (
+                <div className="pt-2 border-t border-zinc-800 text-emerald-400 text-xs">
+                  ✓ Card saved securely for faster future checkouts.
+                </div>
+              )}
             </div>
             <div className="flex flex-col gap-3">
               <a
