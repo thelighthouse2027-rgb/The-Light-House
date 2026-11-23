@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { cookies } from 'next/headers';
 
 async function getLiveEurToEgpRate(): Promise<number> {
   const fallbackRate = Number(process.env.EUR_TO_EGP_RATE || 54);
@@ -18,7 +19,7 @@ async function getLiveEurToEgpRate(): Promise<number> {
       }
     }
   } catch {
-    // Fallback to configured rate if live API is unreachable
+    // Fallback to configured rate
   }
 
   return fallbackRate;
@@ -31,6 +32,7 @@ export async function POST(req: Request) {
       amount = 20,
       description = 'The Light House Diving & Safari Booking',
       locale = 'en',
+      tokens: bodyTokens = [],
     } = body;
 
     const host = process.env.QNB_MPGS_HOST || 'qnbalahli.test.gateway.mastercard.com';
@@ -46,6 +48,23 @@ export async function POST(req: Request) {
       );
     }
 
+    const cookieStore = await cookies();
+    let cookieTokens: string[] = [];
+    try {
+      const parsed = JSON.parse(cookieStore.get('lh_qnb_tokens')?.value || '[]');
+      if (Array.isArray(parsed)) {
+        cookieTokens = parsed.filter((t): t is string => typeof t === 'string' && t.trim().length > 0);
+      }
+    } catch {
+      cookieTokens = [];
+    }
+
+    const clientTokens = Array.isArray(bodyTokens)
+      ? bodyTokens.filter((t): t is string => typeof t === 'string' && t.trim().length > 0)
+      : [];
+
+    const savedTokens = Array.from(new Set([...cookieTokens, ...clientTokens])).slice(0, 5);
+
     const authHeader = 'Basic ' + Buffer.from(`${username}:${password}`).toString('base64');
     const orderId = `LH-${Date.now()}`;
 
@@ -56,18 +75,24 @@ export async function POST(req: Request) {
 
     const endpoint = `https://${host}/api/rest/version/${version}/merchant/${merchantId}/session`;
 
+    const interaction: Record<string, unknown> = {
+      operation: 'PURCHASE',
+      merchant: {
+        name: 'The Light House Diving Center',
+        url: 'https://www.thelighthousee.com',
+      },
+      saveCardForCredentialOnFile: 'PAYER_INITIATED_PAYMENTS',
+      returnUrl: `https://www.thelighthousee.com/${safeLocale}/payment/callback?orderId=${orderId}`,
+    };
+
+    if (savedTokens.length > 0) {
+      interaction.tokens = savedTokens;
+    }
+
     const payload = {
       apiOperation: 'INITIATE_CHECKOUT',
       checkoutMode: 'WEBSITE',
-      interaction: {
-        operation: 'PURCHASE',
-        merchant: {
-          name: 'The Light House Diving Center',
-          url: 'https://www.thelighthousee.com',
-        },
-        saveCardForCredentialOnFile: 'PAYER_INITIATED_PAYMENTS',
-        returnUrl: `https://www.thelighthousee.com/${safeLocale}/payment/callback?orderId=${orderId}`,
-      },
+      interaction,
       order: {
         id: orderId,
         amount: egpAmount,
@@ -96,6 +121,7 @@ export async function POST(req: Request) {
         checkoutScriptUrl: `https://${host}/static/checkout/checkout.min.js`,
         exchangeRate: rate,
         egpAmount,
+        hasSavedCards: savedTokens.length > 0,
       });
     }
 
