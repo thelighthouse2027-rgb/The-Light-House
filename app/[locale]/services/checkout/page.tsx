@@ -1,6 +1,6 @@
 'use client';
 
-import React, { Suspense, useState } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import { useSearchParams, useParams } from 'next/navigation';
 import Link from 'next/link';
 import {
@@ -72,6 +72,20 @@ function CheckoutContent() {
   const [loadingPay, setLoadingPay] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [agreeTerms, setAgreeTerms] = useState(false);
+  const [savedTokens, setSavedTokens] = useState<string[]>([]);
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem('lh_qnb_tokens') || '[]';
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed)) {
+        const valid = parsed.filter((t): t is string => typeof t === 'string' && t.trim().length > 0);
+        setSavedTokens(valid);
+      }
+    } catch {
+      setSavedTokens([]);
+    }
+  }, []);
 
   const whatsappMessage = `🌊 *BOOKING SUPPORT / INQUIRY* 🤿
 *The Light House Diving Center*
@@ -115,6 +129,7 @@ _I need assistance regarding my payment or booking._`;
           amount: numericTotal,
           description: `${service} (${date})`,
           locale,
+          tokens: savedTokens,
         }),
       });
 
@@ -146,14 +161,12 @@ _I need assistance regarding my payment or booking._`;
 
   return (
     <main className="relative min-h-screen bg-[#040712] text-white pt-28 pb-32 px-4 sm:px-6 overflow-hidden">
-      {/* خلفية إضاءة بحرية خفيفة */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 w-[720px] h-[420px] rounded-full bg-blue-600/15 blur-3xl"
       />
 
       <div className="relative max-w-5xl mx-auto">
-        {/* رأس الصفحة */}
         <div className="mb-10 text-center">
           <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-500/10 border border-blue-400/25 text-blue-300 text-xs font-semibold tracking-wide mb-4">
             <FaLock className="text-[11px]" />
@@ -168,9 +181,8 @@ _I need assistance regarding my payment or booking._`;
           </p>
         </div>
 
-        {/* البطاقة الرئيسية */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 bg-[#0b1026]/90 backdrop-blur-xl border border-blue-500/25 rounded-3xl p-6 sm:p-9 shadow-[0_24px_80px_rgba(0,0,0,0.65)]">
-          {/* العمود الأيسر: ملخص الحجز */}
+          {/* ملخص الحجز */}
           <div className="lg:col-span-5 flex flex-col justify-between border-b lg:border-b-0 lg:border-r border-white/10 pb-8 lg:pb-0 lg:pr-8">
             <div>
               <div className="flex items-center justify-between mb-5">
@@ -180,7 +192,6 @@ _I need assistance regarding my payment or booking._`;
                 </span>
               </div>
 
-              {/* اسم الخدمة */}
               <div className="rounded-2xl bg-white/[0.03] border border-white/10 p-4 mb-5">
                 <span className="text-[11px] uppercase tracking-wider text-zinc-400 block mb-1">
                   Selected Experience
@@ -188,7 +199,6 @@ _I need assistance regarding my payment or booking._`;
                 <p className="text-base font-bold text-white leading-snug">{service}</p>
               </div>
 
-              {/* التفاصيل بالأيقونات */}
               <div className="space-y-3 text-sm">
                 <div className="flex items-center justify-between gap-3 py-1.5 border-b border-white/5">
                   <span className="flex items-center gap-2 text-zinc-400">
@@ -236,7 +246,6 @@ _I need assistance regarding my payment or booking._`;
               </div>
             </div>
 
-            {/* الإجمالي */}
             <div className="mt-8 rounded-2xl bg-gradient-to-r from-blue-950/60 to-indigo-950/40 border border-blue-500/30 p-5">
               <div className="flex items-baseline justify-between">
                 <span className="text-sm font-semibold text-zinc-300">Total Amount</span>
@@ -250,7 +259,7 @@ _I need assistance regarding my payment or booking._`;
             </div>
           </div>
 
-          {/* العمود الأيمن: الدفع والشروط */}
+          {/* الدفع والشروط */}
           <div className="lg:col-span-7 flex flex-col justify-between space-y-6">
             <div className="space-y-5">
               <div className="flex items-center justify-between">
@@ -260,7 +269,6 @@ _I need assistance regarding my payment or booking._`;
                 </span>
               </div>
 
-              {/* صندوق خيار الدفع بالنص المطلوب من QNB */}
               <div className="rounded-2xl bg-gradient-to-br from-blue-950/60 via-[#10193d] to-[#0d1433] border border-blue-400/35 p-5 space-y-4">
                 <div className="flex items-start gap-3">
                   <div className="w-9 h-9 rounded-xl bg-blue-500/20 border border-blue-400/30 flex items-center justify-center shrink-0 mt-0.5">
@@ -274,75 +282,39 @@ _I need assistance regarding my payment or booking._`;
                       You will be redirected to QNB&apos;s encrypted hosted checkout page, where you
                       can also save your card securely for future bookings.
                     </p>
+                    {savedTokens.length > 0 && (
+                      <p className="text-xs text-emerald-300 mt-2 font-medium">
+                        ✓ Your saved card will be available on the QNB checkout screen.
+                      </p>
+                    )}
                   </div>
                 </div>
 
-                {/* شريط الشعارات الأربعة جنب بعض: QNB + Visa + MasterCard + Meeza */}
+                {/* الشعارات الرسمية المعتمدة من QNB */}
                 <div className="pt-3 border-t border-white/10">
                   <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2.5">
-                    {/* QNB */}
-                    <div className="h-10 px-3.5 rounded-xl bg-white flex items-center justify-center shadow-sm">
+                    <div className="h-10 px-3 rounded-xl bg-white flex items-center justify-center shadow-sm">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src="/qnb-logo.png" alt="QNB" className="h-5 w-auto object-contain" />
+                    </div>
+
+                    <div className="h-10 px-3 rounded-xl bg-white flex items-center justify-center shadow-sm">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src="/visa-logo.png" alt="Visa" className="h-4 w-auto object-contain" />
+                    </div>
+
+                    <div className="h-10 px-3 rounded-xl bg-zinc-950 border border-white/15 flex items-center justify-center shadow-sm">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
-                        src="/qnb-logo.png"
-                        alt="QNB"
-                        className="h-5 w-auto object-contain"
+                        src="/mastercard-logo.png"
+                        alt="MasterCard"
+                        className="h-7 w-auto object-contain"
                       />
                     </div>
 
-                    {/* Visa */}
-                    <div className="h-10 px-3.5 rounded-xl bg-white flex items-center justify-center shadow-sm">
-                      <svg
-                        className="h-4 w-auto"
-                        viewBox="0 0 100 32"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M39.8 1.5L25.9 30.5H16.8L10.3 7.8C9.9 6.2 9.6 5.6 8.3 4.9C6.2 3.8 2.9 2.8 0 2.2L0.2 1.5H14.7C16.6 1.5 18.2 2.8 18.6 4.9L22.2 21.6L30.9 1.5H39.8ZM75.2 21.1C75.3 13.1 63.8 12.6 63.9 9.1C64 8 65.1 6.8 67.4 6.5C68.6 6.3 71.9 6.2 75.3 7.7L76.7 1.8C74.8 1.1 72.3 0.5 69.1 0.5C60.7 0.5 54.8 4.9 54.7 11.2C54.6 15.9 58.8 18.6 62 20.1C65.2 21.7 66.3 22.7 66.3 24.1C66.2 26.2 63.7 27.2 61.3 27.2C57.4 27.2 55.1 26.6 52.8 25.5L51.3 31.6C53.3 32.5 57 33.2 60.8 33.2C69.7 33.2 75.2 28.8 75.2 21.1ZM97.2 30.5H105L98.2 1.5H91C89.4 1.5 88.1 2.4 87.5 3.8L74.8 30.5H83.9L85.7 25.5H96.9L97.2 30.5ZM88.2 18.8L92.8 6.4L95.5 18.8H88.2ZM53 1.5L45.9 30.5H37.3L44.4 1.5H53Z"
-                          fill="#1434CB"
-                        />
-                      </svg>
-                    </div>
-
-                    {/* MasterCard */}
-                    <div className="h-10 px-3.5 rounded-xl bg-white flex items-center justify-center shadow-sm">
-                      <svg
-                        className="h-5 w-auto"
-                        viewBox="0 0 131 80"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <circle cx="40" cy="40" r="40" fill="#EB001B" />
-                        <circle cx="91" cy="40" r="40" fill="#F79E1B" />
-                        <path
-                          d="M65.5 15.2C72.8 21.9 77.4 30.4 77.4 40C77.4 49.6 72.8 58.1 65.5 64.8C58.2 58.1 53.6 49.6 53.6 40C53.6 30.4 58.2 21.9 65.5 15.2Z"
-                          fill="#FF5F00"
-                        />
-                      </svg>
-                    </div>
-
-                    {/* Meeza */}
-                    <div className="h-10 px-3.5 rounded-xl bg-white flex items-center justify-center shadow-sm border border-zinc-200">
-                      <svg
-                        className="h-4 w-auto"
-                        viewBox="0 0 120 36"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <circle cx="18" cy="18" r="10" fill="#005B94" />
-                        <circle cx="26" cy="18" r="10" fill="#E31B23" fillOpacity="0.9" />
-                        <text
-                          x="44"
-                          y="23"
-                          fontFamily="sans-serif"
-                          fontSize="15"
-                          fontWeight="900"
-                          fill="#005B94"
-                        >
-                          meeza
-                        </text>
-                      </svg>
+                    <div className="h-10 px-3 rounded-xl bg-white flex items-center justify-center shadow-sm">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src="/meeza-logo.png" alt="Meeza" className="h-6 w-auto object-contain" />
                     </div>
                   </div>
                 </div>
@@ -407,7 +379,6 @@ _I need assistance regarding my payment or booking._`;
               )}
             </div>
 
-            {/* أزرار الدفع والدعم */}
             <div className="space-y-4 pt-2">
               <div className="flex items-center gap-3">
                 <button
