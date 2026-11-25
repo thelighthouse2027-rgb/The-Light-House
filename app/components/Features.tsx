@@ -39,7 +39,8 @@ export default function Features() {
         <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-4 tracking-tight">
           {t('heading')} <span className="text-blue-500">{t('headingHighlight')}</span>
         </h2>
-        <p className="text-zinc-400 text-lg max-w-xl mx-auto">
+        {/* لون zinc-100 متناسق هادئ ومجتاز لمعيار التباين */}
+        <p className="text-zinc-100 text-lg max-w-xl mx-auto font-light">
           {t('subtitle')}
         </p>
       </div>
@@ -98,7 +99,7 @@ export default function Features() {
               />
               
               <div className={`absolute inset-0 bg-gradient-to-t transition-opacity duration-700 z-10 ${
-                isActive ? 'from-black/90 via-black/40 to-transparent' : 'from-black/90 via-black/30 to-transparent'
+                isActive ? 'from-black/95 via-black/40 to-transparent' : 'from-black/90 via-black/30 to-transparent'
               }`} />
 
               <div className="absolute z-20 bottom-0 left-0 w-full h-full flex flex-col justify-end p-5 md:p-8">
@@ -115,7 +116,7 @@ export default function Features() {
                     {imageText}
                   </h3>
                   
-                  <p className="hidden md:block text-zinc-300 text-sm font-light max-w-sm drop-shadow-md leading-relaxed">
+                  <p className="hidden md:block text-zinc-200 text-sm font-light max-w-sm drop-shadow-md leading-relaxed">
                     {t(`items.${item.key}.desc`)}
                   </p>
                   
@@ -134,7 +135,7 @@ export default function Features() {
 
                 {!isActive && (
                   <div className="absolute inset-0 flex flex-col items-center justify-between p-4 z-25">
-                    <span className="text-white/60 font-mono text-xs font-bold tracking-widest bg-white/10 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/10">
+                    <span className="text-white/80 font-mono text-xs font-bold tracking-widest bg-white/10 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/10">
                       0{index + 1}
                     </span>
                     
