@@ -7,7 +7,7 @@ export default function AboutSection({ locale }: { locale: string }) {
   const t = useTranslations('AboutSection');
 
   return (
-    <section className="py-24 px-6 max-w-7xl mx-auto overflow-hidden">
+    <section className="py-24 px-6 max-w-7xl mx-auto overflow-hidden bg-black">
       <div className="flex flex-col lg:flex-row items-center gap-16">
         
         <div className="w-full lg:w-1/2 relative group perspective-1000">
@@ -35,7 +35,7 @@ export default function AboutSection({ locale }: { locale: string }) {
           
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-zinc-900/80 border border-zinc-700 backdrop-blur-md mb-6 shadow-lg">
             <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
-            <span className="text-zinc-300 text-xs md:text-sm font-bold uppercase tracking-wider">
+            <span className="text-zinc-200 text-xs md:text-sm font-bold uppercase tracking-wider">
               {t('badge')}
             </span>
           </div>
@@ -44,11 +44,11 @@ export default function AboutSection({ locale }: { locale: string }) {
             {t('title')}
           </h2>
           
-          <h3 className="text-xl md:text-2xl text-blue-400 font-semibold mb-6">
+          <h3 className="text-xl md:text-2xl text-blue-300 font-semibold mb-6">
             {t('subtitle')}
           </h3>
 
-          <p className="text-zinc-300 text-base md:text-lg font-light leading-relaxed mb-10 max-w-xl">
+          <p className="text-zinc-100 text-base md:text-lg font-light leading-relaxed mb-10 max-w-xl">
             {t('description')}
           </p>
 
