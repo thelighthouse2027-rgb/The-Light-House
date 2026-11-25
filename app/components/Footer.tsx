@@ -215,14 +215,14 @@ export default function Footer() {
           <div className="flex items-center gap-6 text-xs font-medium">
             <Link 
               href={`/${locale}/privacy`} 
-              className="text-zinc-400 hover:text-blue-400 transition-colors underline-offset-4 hover:underline"
+              className="text-zinc-200 hover:text-blue-400 transition-colors underline-offset-4 hover:underline"
             >
               {currentLegal.privacy}
             </Link>
-            <span className="text-zinc-600">|</span>
+            <span className="text-zinc-400">|</span>
             <Link 
               href={`/${locale}/terms`} 
-              className="text-zinc-400 hover:text-blue-400 transition-colors underline-offset-4 hover:underline"
+              className="text-zinc-200 hover:text-blue-400 transition-colors underline-offset-4 hover:underline"
             >
               {currentLegal.terms}
             </Link>
