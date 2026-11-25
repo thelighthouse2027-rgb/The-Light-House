@@ -13,7 +13,6 @@ export default async function DivingCoursesSection() {
   const currentLang = ['en', 'de', 'fr', 'pl'].includes(locale) ? locale : 'en';
   const isRtl = locale === 'ar';
 
-  // استعلام متطابق 100% مع أسماء الحقول في السكيما
   const COURSES_QUERY = `
     *[_type == "flexiblePage" && defined(slug.current) && isActive != false && (
       pageCategory == "courses" || 
@@ -76,7 +75,7 @@ export default async function DivingCoursesSection() {
             <h2 className="text-3xl md:text-5xl font-extrabold text-white mb-3 tracking-tight">
               {t('heading')} <span className="text-blue-500">{t('headingHighlight')}</span>
             </h2>
-            <p className="text-zinc-400 text-sm md:text-base max-w-xl">
+            <p className="text-gray-200 text-sm md:text-base max-w-xl">
               {t('subtitle')}
             </p>
           </div>
@@ -89,7 +88,7 @@ export default async function DivingCoursesSection() {
                 aria-label="Previous"
                 className="w-11 h-11 rounded-full border border-neutral-800 bg-[#0b0f19]/90 hover:border-blue-500/50 text-white flex items-center justify-center transition-all duration-300 shadow cursor-pointer active:scale-95"
               >
-                <ChevronLeft className="w-5 h-5 pointer-events-none text-zinc-300" />
+                <ChevronLeft className="w-5 h-5 pointer-events-none text-gray-200" />
               </button>
               <button
                 type="button"
@@ -97,13 +96,13 @@ export default async function DivingCoursesSection() {
                 aria-label="Next"
                 className="w-11 h-11 rounded-full border border-neutral-800 bg-[#0b0f19]/90 hover:border-blue-500/50 text-white flex items-center justify-center transition-all duration-300 shadow cursor-pointer active:scale-95"
               >
-                <ChevronRight className="w-5 h-5 pointer-events-none text-zinc-300" />
+                <ChevronRight className="w-5 h-5 pointer-events-none text-gray-200" />
               </button>
             </div>
           )}
         </div>
 
-        {/* السلايدر بمقاس أكبر وأكثر فخامة */}
+        {/* السلايدر */}
         {courses.length > 0 ? (
           <div
             id="courses-slider-track"
@@ -116,7 +115,6 @@ export default async function DivingCoursesSection() {
                 href={`/${locale}/services/${course.slug}`}
                 className="snap-start shrink-0 w-[320px] md:w-[380px] bg-[#0b0f19]/90 border border-neutral-800/80 rounded-[2rem] overflow-hidden shadow-2xl flex flex-col justify-between relative group hover:border-blue-500/50 transition duration-300 cursor-pointer"
               >
-                {/* مساحة الصورة أكبر */}
                 <div className="relative w-full h-[225px] overflow-hidden bg-neutral-900">
                   <Image
                     src={course.img}
@@ -130,21 +128,19 @@ export default async function DivingCoursesSection() {
                   <div className="absolute inset-0 bg-gradient-to-t from-[#0b0f19] via-transparent to-transparent pointer-events-none" />
                 </div>
 
-                {/* المحتوى الداخلي مع إتاحة سطرين للعنوان بالكامل */}
                 <div className="p-6 flex flex-col justify-between flex-grow">
                   <div>
                     <h3 className="text-xl font-bold text-white mb-2 line-clamp-2 min-h-[3.25rem] group-hover:text-blue-400 transition leading-snug">
                       {course.title}
                     </h3>
-                    <p className="text-zinc-400 text-xs line-clamp-2 font-light leading-relaxed mb-1">
+                    <p className="text-white/80 text-xs line-clamp-2 font-light leading-relaxed mb-1">
                       {course.desc}
                     </p>
                   </div>
 
-                  {/* الجزء السفلي: السعر وزر Details & Book */}
                   <div className="pt-4 mt-4 border-t border-neutral-800/80 flex items-center justify-between gap-3">
                     <div className="flex flex-col">
-                      <span className="text-[11px] text-zinc-400 font-medium">
+                      <span className="text-[11px] text-gray-300 font-medium">
                         Diving Course
                       </span>
                       <div className="flex items-baseline gap-1">
@@ -153,12 +149,12 @@ export default async function DivingCoursesSection() {
                             <span className="text-2xl font-black text-white tracking-tight">
                               €{course.price}
                             </span>
-                            <span className="text-[11px] text-zinc-400 font-normal">
+                            <span className="text-[11px] text-gray-300 font-normal">
                               / person
                             </span>
                           </>
                         ) : (
-                          <span className="text-sm font-semibold text-zinc-400">
+                          <span className="text-sm font-semibold text-gray-300">
                             Check Details
                           </span>
                         )}
@@ -178,14 +174,13 @@ export default async function DivingCoursesSection() {
             ))}
           </div>
         ) : (
-          <div className="w-full text-center text-gray-500 py-12">
+          <div className="w-full text-center text-gray-400 py-12">
             {isRtl ? 'لا توجد كورسات مضافة حالياً في لوحة التحكم.' : 'No courses found in studio.'}
           </div>
         )}
 
       </div>
 
-      {/* سكريبت التمرير السلس المعدل لمقاس الكارت الجديد (380px) */}
       <script dangerouslySetInnerHTML={{ __html: `
         (function() {
           const track = document.getElementById('courses-slider-track');
