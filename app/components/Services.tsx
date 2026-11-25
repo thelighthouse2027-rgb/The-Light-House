@@ -20,7 +20,7 @@ export default function Services({ locale }: { locale: string }) {
   const t = useTranslations('ServicesSection');
 
   return (
-    <section className="py-24 px-6 max-w-7xl mx-auto">
+    <section className="py-24 px-6 max-w-7xl mx-auto bg-black">
       <header className="text-center mb-16">
         <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-4 tracking-tight">
           {t('title')}
