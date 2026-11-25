@@ -69,7 +69,7 @@ export default async function LocaleLayout({
     'image': 'https://www.thelighthousee.com/images/hero-bg.jpg',
     '@id': 'https://www.thelighthousee.com',
     'url': 'https://www.thelighthousee.com',
-    'telephone': '+201000000000',
+    'telephone': '+201036930803',
     'priceRange': '€€',
     'address': {
       '@type': 'PostalAddress',
@@ -107,9 +107,17 @@ export default async function LocaleLayout({
   return (
     <html lang={locale} dir={locale === 'ar' ? 'rtl' : 'ltr'}>
       <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
+      <body className="bg-black text-white antialiased min-h-screen relative selection:bg-red-600 selection:text-white overflow-x-hidden">
+        
+        {/* تحميل GTM بخاصية lazyOnload بعد رسم الشاشة وتفادي إبطاء المعالج */}
         <Script
           id="google-tag-manager"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
           dangerouslySetInnerHTML={{
             __html: `
               (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -120,12 +128,7 @@ export default async function LocaleLayout({
             `,
           }}
         />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-        />
-      </head>
-      <body className="bg-black text-white antialiased min-h-screen relative selection:bg-red-600 selection:text-white overflow-x-hidden">
+
         <noscript>
           <iframe
             src="https://www.googletagmanager.com/ns.html?id=GTM-T9ZSGSH4"
@@ -134,20 +137,8 @@ export default async function LocaleLayout({
             style={{ display: 'none', visibility: 'hidden' }}
           />
         </noscript>
-        <Script
-          strategy="afterInteractive"
-          src="https://www.googletagmanager.com/gtag/js?id=GTM-55X8232T"
-        />
-        <Script id="google-analytics" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'GTM-55X8232T');
-          `}
-        </Script>
+
         <NextIntlClientProvider messages={messages} locale={locale}>
-          
           <div className="fixed top-0 left-0 w-full h-full z-[-1] overflow-hidden pointer-events-none bg-black">
             <div className="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] bg-red-950/20 rounded-full blur-[120px]"></div>
             <div className="absolute bottom-[-10%] right-[-10%] w-[50vw] h-[50vw] bg-zinc-900/30 rounded-full blur-[120px]"></div>
@@ -162,8 +153,8 @@ export default async function LocaleLayout({
           <Footer />
 
           <AIChatWidget />
-
         </NextIntlClientProvider>
+
         <Analytics />
         <SpeedInsights />
       </body>
