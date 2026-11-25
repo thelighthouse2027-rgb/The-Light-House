@@ -83,7 +83,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   const bannerData = await getPromoBanner();
 
   return (
-    <main className="w-full">
+    <main className="w-full bg-black min-h-screen text-white">
       <PromoPopup data={bannerData} locale={locale} />
       
       <div className="w-full">
