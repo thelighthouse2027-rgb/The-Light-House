@@ -2,16 +2,29 @@
 import { useTranslations, useLocale } from 'next-intl';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useState, useEffect } from 'react';
 
 export default function Hero() {
   const t = useTranslations('HomePage');
   const locale = useLocale();
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  useEffect(() => {
+    // التحقق من أن العرض شاشة كمبيوتر/تابلت كبير قبل إدراج الفيديو
+    const checkIsDesktop = () => {
+      setIsDesktop(window.innerWidth >= 768);
+    };
+
+    checkIsDesktop();
+    window.addEventListener('resize', checkIsDesktop);
+    return () => window.removeEventListener('resize', checkIsDesktop);
+  }, []);
 
   return (
     <section className="relative h-[85vh] w-full flex items-center justify-center text-center overflow-hidden rounded-3xl border border-zinc-800/80 shadow-[0_25px_60px_rgba(0,0,0,0.9)] bg-black">
       
-      {/* صورة مخصصة وسريعة جداً للموبايل لتحقيق أعلى مقياس LCP فوري */}
-      <div className="absolute inset-0 w-full h-full block md:hidden z-0">
+      {/* صورة أساسية فائقة السرعة تظهر فوراً للجميع وللموبايل */}
+      <div className={`absolute inset-0 w-full h-full z-0 ${isDesktop ? 'md:hidden' : 'block'}`}>
         <Image
           src="/diving.webp"
           alt="The Light House Diving Center Hurghada"
@@ -25,20 +38,21 @@ export default function Hero() {
         />
       </div>
 
-      {/* الفيديو يعمل بسلاسة على الشاشات المتوسطة والكبيرة دون حظر الشبكة */}
-      <video
-        autoPlay
-        loop
-        muted
-        playsInline
-        preload="none"
-        poster="/diving.webp"
-        className="absolute inset-0 w-full h-full object-cover z-0 hidden md:block"
-      >
-        <source src="/videos/hero.webm" type="video/webm" />
-        <source src="/videos/hero.mp4" type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
+      {/* الفيديو لا يتم حقنه في الصفحة إطلاقاً على الموبايل، مما يوفر 6MB بالكامل */}
+      {isDesktop && (
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="none"
+          poster="/diving.webp"
+          className="absolute inset-0 w-full h-full object-cover z-0 hidden md:block"
+        >
+          <source src="/videos/hero.webm" type="video/webm" />
+          <source src="/videos/hero.mp4" type="video/mp4" />
+        </video>
+      )}
 
       <div className="absolute inset-0 bg-black/70 z-10 pointer-events-none"></div>
 
@@ -58,7 +72,6 @@ export default function Hero() {
         </p>
 
         <div className="flex flex-col sm:flex-row items-center gap-4 mt-6">
-          
           <Link 
             href={`/${locale}/services`}
             title="Explore Tours"
