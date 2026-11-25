@@ -1,6 +1,7 @@
 'use client';
 import { useTranslations, useLocale } from 'next-intl';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function Hero() {
   const t = useTranslations('HomePage');
@@ -9,21 +10,37 @@ export default function Hero() {
   return (
     <section className="relative h-[85vh] w-full flex items-center justify-center text-center overflow-hidden rounded-3xl border border-zinc-800/80 shadow-[0_25px_60px_rgba(0,0,0,0.9)] bg-black">
       
+      {/* صورة مخصصة وسريعة جداً للموبايل لتحقيق أعلى مقياس LCP فوري */}
+      <div className="absolute inset-0 w-full h-full block md:hidden z-0">
+        <Image
+          src="/diving.webp"
+          alt="The Light House Diving Center Hurghada"
+          title="The Light House Diving Center Hurghada"
+          fill
+          priority
+          fetchPriority="high"
+          quality={75}
+          sizes="100vw"
+          className="object-cover"
+        />
+      </div>
+
+      {/* الفيديو يعمل بسلاسة على الشاشات المتوسطة والكبيرة دون حظر الشبكة */}
       <video
         autoPlay
         loop
         muted
         playsInline
-        preload="auto"
+        preload="none"
         poster="/diving.webp"
-        className="absolute inset-0 w-full h-full object-cover z-0"
+        className="absolute inset-0 w-full h-full object-cover z-0 hidden md:block"
       >
         <source src="/videos/hero.webm" type="video/webm" />
         <source src="/videos/hero.mp4" type="video/mp4" />
         Your browser does not support the video tag.
       </video>
 
-      <div className="absolute inset-0 bg-black/70 z-10"></div>
+      <div className="absolute inset-0 bg-black/70 z-10 pointer-events-none"></div>
 
       <div className="absolute z-20 flex flex-col items-center gap-6 px-4 max-w-4xl mx-auto mt-10">
         
