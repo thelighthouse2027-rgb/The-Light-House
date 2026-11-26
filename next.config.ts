@@ -15,32 +15,33 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
-      // 1. تحويل روابط features القديمة في كل اللغات إلى مسار services الصحيح
+      // 1. أي رابط قديم فيه features يتحول فوراً لصفحة الخدمات الرئيسية لكل لغة
       {
         source: '/:locale(en|de|fr|pl)/features/:slug*',
-        destination: '/:locale/services/:slug*',
+        destination: '/:locale/services',
         permanent: true,
       },
-      // 2. تحويل أي رابط features بدون لغة إلى en/services
       {
         source: '/features/:slug*',
-        destination: '/en/services/:slug*',
+        destination: '/en/services',
         permanent: true,
       },
-      // 3. تصحيح الصفحات الثابتة إذا تم طلبها تحت services بالخطأ
+
+      // 2. تحويل الروابط القديمة المحددة اللي جوجل ماسك فيها لصفحة الخدمات
+      {
+        source: '/:locale(en|de|fr|pl)/:slug(coral-reefs|underwater-photography|night-diving|diving-experience|wreck-diving|snorkeling|hurghada-giftun-islands|vip-dolphin|5-days-diving-10-dives|padi-open-water-referral|underwater-navigator-specialty|peak-performance-buoyancy-specialty)',
+        destination: '/:locale/services',
+        permanent: true,
+      },
+
+      // 3. تصحيح الصفحات الثابتة لو اتطلبت غلط تحت services
       {
         source: '/:locale(en|de|fr|pl)/services/:page(about|contact|media|search|privacy|terms|faq)',
         destination: '/:locale/:page',
         permanent: false,
       },
-      // 4. تحويل روابط الكورسات والرحلات المباشرة بدون services إلى services/slug
-      {
-        source:
-          '/:locale(en|de|fr|pl)/:slug((?!services$|about$|contact$|media$|search$|privacy$|terms$|faq$|studio$|api$|_next$|favicon\\.ico$|robots\\.txt$|sitemap\\.xml$)[^/]+)',
-        destination: '/:locale/services/:slug',
-        permanent: true,
-      },
-      // 5. تحويل أي مسار خدمات بدون لغة إلى /en/services
+
+      // 4. تحويل أي رابط خدمات بدون لغة إلى الإنجليزية
       {
         source: '/services/:path*',
         destination: '/en/services/:path*',
